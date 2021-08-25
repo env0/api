@@ -485,27 +485,43 @@ components:
     ConfigurationApi.CreateSshKey.Request.Body:
       type: object
       properties:
-        userId:
-          type: string
-        user:
-          $ref: '#/components/schemas/User'
         name:
           type: string
         organizationId:
           type: string
         value:
           type: string
-        sensitiveValueSalt:
+      required:
+        - name
+        - organizationId
+        - value
+      additionalProperties: false
+    ConfigurationApi.AbstractSecretResponse<ConfigurationApi.SshKey>:
+      type: object
+      properties:
+        userId:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+        value:
           type: string
       required:
         - userId
+        - id
         - name
         - organizationId
         - value
       additionalProperties: false
     ConfigurationApi.CreateSshKey.Response:
-      $ref: '#/components/schemas/ConfigurationApi.SshKey'
-    ConfigurationApi.AbstractSecretResponse<ConfigurationApi.Token>:
+      $ref: >-
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.SshKey%3E
+    ConfigurationApi.AbstractSecretResponse<ConfigurationApi.PersistentToken>:
       type: object
       properties:
         name:
@@ -516,11 +532,14 @@ components:
           type: string
         type:
           $ref: '#/components/schemas/TokenTypes'
+        id:
+          type: string
       required:
         - name
         - value
         - organizationId
         - type
+        - id
       additionalProperties: false
     TokenTypes:
       type: string
@@ -529,10 +548,10 @@ components:
         - GitLab
     ConfigurationApi.FindTokenByType.Response:
       $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.Token%3E
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
     ConfigurationApi.FindTokenById.Response:
       $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.Token%3E
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
     ConfigurationApi.Token:
       type: object
       properties:
@@ -554,7 +573,7 @@ components:
       $ref: '#/components/schemas/ConfigurationApi.Token'
     ConfigurationApi.CreateToken.Response:
       $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.Token%3E
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
     ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty:
       type: object
       additionalProperties: false
@@ -590,6 +609,10 @@ components:
           $ref: '#/components/schemas/ConfigurationScope'
         type:
           $ref: '#/components/schemas/ConfigurationType'
+          description: |-
+            Wether it is an Environment or Terraform variable
+            0 value maps to an Environment variable
+            1 value maps to an Terraform variable
         toDelete:
           type: boolean
         organizationId:
@@ -616,46 +639,15 @@ components:
         - DEPLOYMENT
     PartialJSONSchema7:
       type: object
-      additionalProperties: false
       properties:
         type:
-          anyOf:
-            - $ref: '#/components/schemas/JSONSchema7TypeName'
-            - type: array
-              items:
-                $ref: '#/components/schemas/JSONSchema7TypeName'
+          type: string
+          const: string
         enum:
           type: array
           items:
-            $ref: '#/components/schemas/JSONSchema7Type'
-    JSONSchema7TypeName:
-      type: string
-      enum:
-        - string
-        - number
-        - integer
-        - boolean
-        - object
-        - array
-        - 'null'
-      description: Primitive type
-    JSONSchema7Type:
-      anyOf:
-        - type: string
-        - type: number
-        - type: boolean
-        - $ref: '#/components/schemas/JSONSchema7Object'
-        - $ref: '#/components/schemas/JSONSchema7Array'
-        - type: 'null'
-      description: Primitive type
-    JSONSchema7Object:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/JSONSchema7Type'
-    JSONSchema7Array:
-      type: array
-      items:
-        $ref: '#/components/schemas/JSONSchema7Type'
+            type: string
+      additionalProperties: false
     ConfigurationType:
       type: number
       enum:
@@ -666,7 +658,7 @@ components:
       items:
         $ref: >-
           #/components/schemas/ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty
-    ConfigurationApi.ConfigurationPropertyPayload:
+    ConfigurationApi.CreateOrUpdateVariable.ConfigurationPropertySignlePayload:
       type: object
       properties:
         name:
@@ -679,6 +671,10 @@ components:
           $ref: '#/components/schemas/ConfigurationScope'
         type:
           $ref: '#/components/schemas/ConfigurationType'
+          description: |-
+            Wether it is an Environment or Terraform variable
+            0 value maps to an Environment variable
+            1 value maps to an Terraform variable
         toDelete:
           type: boolean
         organizationId:
@@ -699,11 +695,13 @@ components:
     ConfigurationApi.CreateOrUpdateVariable.Request.Body:
       type: array
       items:
-        $ref: '#/components/schemas/ConfigurationApi.ConfigurationPropertyPayload'
+        $ref: >-
+          #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.ConfigurationPropertySignlePayload
     ConfigurationApi.CreateOrUpdateVariable.Response:
       type: array
       items:
-        $ref: '#/components/schemas/ConfigurationApi.ConfigurationPropertyPayload'
+        $ref: >-
+          #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.ConfigurationPropertySignlePayload
     TransiantCredential:
       type: object
       properties:
@@ -711,19 +709,37 @@ components:
           $ref: '#/components/schemas/CredentialType'
         createdByUser:
           $ref: '#/components/schemas/User'
+        value:
+          type: object
+          description: >-
+            A JSON string representation of the cloud provider credentials.
+
+            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types
+            use:
+
+            { roleArn: "your-role-arn", externalId: "your-external-id" }
+
+
+            - For GCP_CREDENTIALS type use:
+
+            { tableId: "your-table-id", secret: "your-secret" }
+
+
+            - For AZURE_CREDENTIALS type use:
+
+            { clientId: "your-clientId", clientSecret: "your-clientSecret",
+            tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
         name:
           type: string
         organizationId:
           type: string
-        value:
-          type: object
         sensitiveValueSalt:
           type: string
       required:
         - type
+        - value
         - name
         - organizationId
-        - value
       additionalProperties: false
     CredentialType:
       type: string
@@ -749,6 +765,24 @@ components:
           type: string
         value:
           type: object
+          description: >-
+            A JSON string representation of the cloud provider credentials.
+
+            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types
+            use:
+
+            { roleArn: "your-role-arn", externalId: "your-external-id" }
+
+
+            - For GCP_CREDENTIALS type use:
+
+            { tableId: "your-table-id", secret: "your-secret" }
+
+
+            - For AZURE_CREDENTIALS type use:
+
+            { clientId: "your-clientId", clientSecret: "your-clientSecret",
+            tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
         sensitiveValueSalt:
           type: string
         type:
@@ -1926,7 +1960,7 @@ paths:
         - Configuration
     post:
       operationId: createOrUpdateVariable
-      summary: Creates or updates a variable
+      summary: Create or update variable
       requestBody:
         content:
           application/json:
@@ -2369,7 +2403,14 @@ paths:
     get:
       operationId: findNotificationEndpoints
       summary: List Notification Endpoints
-      parameters: []
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
       responses:
         '200':
           description: ''
