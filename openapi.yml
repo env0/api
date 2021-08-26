@@ -46,12 +46,16 @@ components:
       anyOf:
         - $ref: '#/components/schemas/BlueprintApi.ModuleType'
         - $ref: '#/components/schemas/BlueprintApi.TemplateType'
+        - $ref: '#/components/schemas/BlueprintApi.ModuleType'
+        - $ref: '#/components/schemas/BlueprintApi.TemplateType'
     BlueprintApi.ModuleType:
       type: string
       const: module
     BlueprintApi.TemplateType:
       type: string
       enum:
+        - terraform
+        - terragrunt
         - terraform
         - terragrunt
     BlueprintApi.CreateBlueprint.Request.Body:
@@ -243,6 +247,10 @@ components:
                     type: string
                 additionalProperties: false
             required:
+              - connection
+              - user_id
+              - provider
+              - isSocial
               - connection
               - user_id
               - provider
@@ -637,6 +645,11 @@ components:
         - PROJECT
         - ENVIRONMENT
         - DEPLOYMENT
+        - GLOBAL
+        - BLUEPRINT
+        - PROJECT
+        - ENVIRONMENT
+        - DEPLOYMENT
     PartialJSONSchema7:
       type: object
       properties:
@@ -651,6 +664,8 @@ components:
     ConfigurationType:
       type: number
       enum:
+        - 0
+        - 1
         - 0
         - 1
     ConfigurationApi.FindVariablesByScope.Response:
@@ -940,6 +955,618 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/CredentialsApi.ApiKey'
+    EnvironmentApi.UpdateDownstreamEnvironments.Request.Body:
+      type: object
+      properties:
+        downstreamEnvironmentIds:
+          type: array
+          items:
+            type: string
+      required:
+        - downstreamEnvironmentIds
+      additionalProperties: false
+    EnvironmentApi.DownstreamEnvironment:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        workspaceName:
+          type: string
+        projectId:
+          type: string
+        latestDeploymentLog:
+          type: object
+          properties:
+            blueprintName:
+              type: string
+          required:
+            - blueprintName
+          additionalProperties: false
+      required:
+        - id
+        - name
+        - workspaceName
+        - projectId
+        - latestDeploymentLog
+      additionalProperties: false
+    EnvironmentApi.UpdateDownstreamEnvironments.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/EnvironmentApi.DownstreamEnvironment'
+    EnvironmentApi.CreateEnvironmentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        projectId:
+          type: string
+        workspaceName:
+          type: string
+        requiresApproval:
+          type: boolean
+        ttl:
+          $ref: '#/components/schemas/EnvironmentApi.TTLRequest'
+        configurationChanges:
+          $ref: '#/components/schemas/EnvironmentApi.ConfigurationChanges'
+        deployRequest:
+          $ref: '#/components/schemas/DeployRequest'
+        continuousDeployment:
+          type: boolean
+        pullRequestPlanDeployments:
+          type: boolean
+        autoDeployOnPathChangesOnly:
+          type: boolean
+        autoDeployByCustomGlob:
+          type: string
+      required:
+        - name
+        - projectId
+        - deployRequest
+      additionalProperties: false
+    EnvironmentApi.TTLRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/EnvironmentApi.TTLType'
+        value:
+          type: string
+          $comment: >-
+            { "schema": { "anyOf": [{ "type": "string" }, { "type": "object",
+            "instanceof": "Date" }] } }
+      required:
+        - type
+      additionalProperties: false
+    EnvironmentApi.TTLType:
+      type: string
+      enum:
+        - INFINITE
+        - HOURS
+        - DATE
+    EnvironmentApi.ConfigurationChanges:
+      anyOf:
+        - $ref: '#/components/schemas/EnvironmentApi.ConfigurationChangePayload'
+        - type: array
+          items:
+            $ref: '#/components/schemas/EnvironmentApi.ConfigurationChangePayload'
+    EnvironmentApi.ConfigurationChangePayload:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        scopeId:
+          type: string
+        scope:
+          $ref: '#/components/schemas/ConfigurationScope'
+        type:
+          $ref: '#/components/schemas/ConfigurationType'
+          description: |-
+            Wether it is an Environment or Terraform variable
+            0 value maps to an Environment variable
+            1 value maps to an Terraform variable
+        toDelete:
+          type: boolean
+        schema:
+          $ref: '#/components/schemas/PartialJSONSchema7'
+        isSensitive:
+          type: boolean
+      required:
+        - name
+        - value
+        - scope
+        - type
+      additionalProperties: false
+    DeployRequest:
+      type: object
+      properties:
+        blueprintId:
+          type: string
+        blueprintRevision:
+          type: string
+        blueprintRepository:
+          type: string
+        configurationChanges:
+          $ref: '#/components/schemas/EnvironmentApi.ConfigurationChanges'
+        ttl:
+          $ref: '#/components/schemas/EnvironmentApi.TTLRequest'
+        envName:
+          type: string
+        userRequiresApproval:
+          type: boolean
+        targets:
+          type: string
+        prPlanOnly:
+          type: boolean
+        customEnv0EnvironmentVariables:
+          type: object
+          additionalProperties:
+            type: string
+        gitUserData:
+          $ref: '#/components/schemas/GitUserData'
+        triggerName:
+          $ref: '#/components/schemas/TriggerName'
+      additionalProperties: false
+    GitUserData:
+      type: object
+      properties:
+        gitUser:
+          type: string
+        gitAvatarUrl:
+          type: string
+        prNumber:
+          type: string
+      additionalProperties: false
+    TriggerName:
+      type: string
+      enum:
+        - cd
+        - prPlan
+        - user
+        - ttl
+        - scheduled
+        - workflow
+    EnvironmentApi.Create.Request.Body:
+      $ref: '#/components/schemas/EnvironmentApi.CreateEnvironmentRequest'
+    EnvironmentApi.Environment:
+      type: object
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        name:
+          type: string
+        organizationId:
+          type: string
+        projectId:
+          type: string
+        userId:
+          type: string
+        workspaceName:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        requiresApproval:
+          type: boolean
+        status:
+          $ref: '#/components/schemas/EnvironmentApi.EnvironmentStatus'
+        latestDeploymentLogId:
+          type: string
+        latestDeploymentLog:
+          $ref: '#/components/schemas/EnvironmentApi.DeploymentLog'
+        lifespanEndAt:
+          type: string
+          format: date-time
+        markedForAutoDestroy:
+          $ref: '#/components/schemas/AutoDestroyStatus'
+        isArchived:
+          type: boolean
+        nextScheduledDates:
+          $ref: '#/components/schemas/EnvironmentApi.EnvironmentNextScheduledDates'
+        continuousDeployment:
+          type: boolean
+        pullRequestPlanDeployments:
+          type: boolean
+        autoDeployOnPathChangesOnly:
+          type: boolean
+        autoDeployByCustomGlob:
+          type: string
+      required:
+        - name
+        - organizationId
+        - projectId
+        - userId
+        - workspaceName
+        - user
+        - requiresApproval
+        - status
+        - latestDeploymentLogId
+        - latestDeploymentLog
+        - lifespanEndAt
+        - markedForAutoDestroy
+        - isArchived
+        - nextScheduledDates
+        - continuousDeployment
+        - pullRequestPlanDeployments
+        - autoDeployOnPathChangesOnly
+      additionalProperties: false
+    EnvironmentApi.EnvironmentStatus:
+      type: string
+      enum:
+        - CREATED
+        - INACTIVE
+        - ACTIVE
+        - FAILED
+        - TIMEOUT
+        - WAITING_FOR_USER
+        - DEPLOY_IN_PROGRESS
+        - DESTROY_IN_PROGRESS
+        - PR_PLAN_IN_PROGRESS
+        - ABORTING
+        - ABORTED
+    EnvironmentApi.DeploymentLog:
+      type: object
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        type:
+          $ref: '#/components/schemas/EnvironmentApi.DeploymentType'
+        startedBy:
+          type: string
+        queuedAt:
+          type: string
+          format: date-time
+        startedAt:
+          type: string
+          format: date-time
+        finishedAt:
+          type: string
+          format: date-time
+        output:
+          type: object
+          additionalProperties: {}
+        error:
+          type: object
+          additionalProperties: {}
+        costEstimation:
+          $ref: '#/components/schemas/Infracost.TotalOutput'
+        status:
+          $ref: '#/components/schemas/EnvironmentApi.DeploymentLogStatus'
+        blueprintId:
+          type: string
+        blueprintName:
+          type: string
+        blueprintRepository:
+          type: string
+        blueprintRevision:
+          type: string
+        blueprintPath:
+          type: string
+        blueprintType:
+          $ref: '#/components/schemas/BlueprintApi.BlueprintType'
+        environmentId:
+          type: string
+        resourceCount:
+          type: number
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnvironmentApi.EnvironmentResource'
+        startedByUser:
+          $ref: '#/components/schemas/User'
+        isScheduledRun:
+          type: boolean
+        abortedBy:
+          type: string
+        abortedByUser:
+          $ref: '#/components/schemas/User'
+        gitUser:
+          type: string
+        gitAvatarUrl:
+          type: string
+        prNumber:
+          type: string
+        triggerName:
+          $ref: '#/components/schemas/TriggerName'
+      required:
+        - type
+        - startedBy
+        - queuedAt
+        - startedAt
+        - finishedAt
+        - output
+        - error
+        - costEstimation
+        - status
+        - blueprintId
+        - blueprintName
+        - blueprintRepository
+        - blueprintRevision
+        - blueprintPath
+        - blueprintType
+        - environmentId
+        - resourceCount
+        - startedByUser
+        - isScheduledRun
+        - abortedBy
+        - abortedByUser
+      additionalProperties: false
+    EnvironmentApi.DeploymentType:
+      type: string
+      enum:
+        - deploy
+        - destroy
+        - prPlan
+    Infracost.TotalOutput:
+      type: object
+      additionalProperties: false
+      properties:
+        version:
+          type: string
+        projects:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+              metadata: {}
+              pastBreakdown:
+                $ref: '#/components/schemas/Infracost.Output'
+              breakdown:
+                $ref: '#/components/schemas/Infracost.Output'
+              diff:
+                $ref: '#/components/schemas/Infracost.Output'
+            required:
+              - path
+              - metadata
+              - pastBreakdown
+              - breakdown
+              - diff
+            additionalProperties: false
+        timeGenerated:
+          type: string
+        summary:
+          type: object
+          properties:
+            unsupportedResourceCounts: {}
+          required:
+            - unsupportedResourceCounts
+          additionalProperties: false
+        resources:
+          type: array
+          items: {}
+        totalHourlyCost:
+          type: string
+        totalMonthlyCost:
+          type: string
+      required:
+        - projects
+        - resources
+        - summary
+        - timeGenerated
+        - totalHourlyCost
+        - totalMonthlyCost
+        - version
+    Infracost.Output:
+      type: object
+      properties:
+        resources:
+          type: array
+          items: {}
+        totalHourlyCost:
+          type: string
+        totalMonthlyCost:
+          type: string
+      required:
+        - resources
+        - totalHourlyCost
+        - totalMonthlyCost
+      additionalProperties: false
+    EnvironmentApi.DeploymentLogStatus:
+      type: string
+      enum:
+        - IN_PROGRESS
+        - WAITING_FOR_USER
+        - TIMEOUT
+        - FAILURE
+        - SUCCESS
+        - CANCELLED
+        - INTERNAL_FAILURE
+        - ABORTING
+        - ABORTED
+        - QUEUED
+    EnvironmentApi.EnvironmentResource:
+      type: object
+      properties:
+        provider:
+          type: string
+        type:
+          type: string
+        name:
+          type: string
+        moduleName:
+          type: string
+      required:
+        - provider
+        - type
+        - name
+      additionalProperties: false
+    AutoDestroyStatus:
+      type: number
+      enum:
+        - 0
+        - 1
+        - 2
+    EnvironmentApi.EnvironmentNextScheduledDates:
+      type: object
+      properties:
+        deploy:
+          type: string
+          format: date-time
+        destroy:
+          type: string
+          format: date-time
+      additionalProperties: false
+    EnvironmentApi.Create.Response:
+      $ref: '#/components/schemas/EnvironmentApi.Environment'
+    EnvironmentApi.Update.Request.Body:
+      type: object
+      properties:
+        name:
+          type: string
+        requiresApproval:
+          type: boolean
+        isArchived:
+          type: boolean
+        continuousDeployment:
+          type: boolean
+        pullRequestPlanDeployments:
+          type: boolean
+        autoDeployOnPathChangesOnly:
+          type: boolean
+        autoDeployByCustomGlob:
+          type: string
+      additionalProperties: false
+    EnvironmentApi.Update.Response:
+      $ref: '#/components/schemas/EnvironmentApi.Environment'
+    EnvironmentApi.Ttl.Request.Body:
+      $ref: '#/components/schemas/EnvironmentApi.TTLRequest'
+    EnvironmentApi.Ttl.Response:
+      $ref: '#/components/schemas/EnvironmentApi.Environment'
+    EnvironmentApi.Deploy.Request.Body:
+      $ref: '#/components/schemas/DeployRequest'
+    DeployResult:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
+    EnvironmentApi.Deploy.Response:
+      $ref: '#/components/schemas/DeployResult'
+    EnvironmentApi.Cancel.Request.Body:
+      type: 'null'
+    EnvironmentApi.Cancel.Response:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
+    EnvironmentApi.Abort.Request.Body:
+      type: 'null'
+    EnvironmentApi.Abort.Response:
+      type: 'null'
+    EnvironmentApi.Destroy.Request.Body:
+      type: 'null'
+    EnvironmentApi.Destroy.Response:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
+    EnvironmentApi.Resume.Request.Body:
+      type: 'null'
+    EnvironmentApi.Resume.Response:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
+    EnvironmentApi.FindDeploymentLogById.Response:
+      $ref: '#/components/schemas/EnvironmentApi.DeploymentLog'
+    EnvironmentApi.FindDeploymentLogsByEnvironmentId.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/EnvironmentApi.DeploymentLog'
+    EnvironmentApi.FindById.Response:
+      $ref: '#/components/schemas/EnvironmentApi.Environment'
+    EnvironmentApi.FindAll.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/EnvironmentApi.Environment'
+    EnvironmentApi.FindResources.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/EnvironmentApi.EnvironmentResource'
+    EnvironmentApi.UpdatePolicies.Request.Body:
+      type: object
+      properties:
+        projectId:
+          type: string
+        numberOfEnvironments:
+          type:
+            - number
+            - 'null'
+          $comment: >-
+            { "schema": { "anyOf": [{ "type": "integer", "minimum": 1 }, {
+            "type": "null" }] } }
+        requiresApprovalDefault:
+          type: boolean
+        includeCostEstimation:
+          type: boolean
+        skipApplyWhenPlanIsEmpty:
+          type: boolean
+        disableDestroyEnvironments:
+          type: boolean
+      required:
+        - projectId
+      additionalProperties: false
+    EnvironmentApi.Policy:
+      type: object
+      properties:
+        id:
+          type: string
+        projectId:
+          type: string
+        numberOfEnvironments:
+          type:
+            - number
+            - 'null'
+        requiresApprovalDefault:
+          type: boolean
+        includeCostEstimation:
+          type: boolean
+        skipApplyWhenPlanIsEmpty:
+          type: boolean
+        disableDestroyEnvironments:
+          type: boolean
+        updatedBy:
+          type: string
+      required:
+        - id
+        - projectId
+        - numberOfEnvironments
+        - requiresApprovalDefault
+        - includeCostEstimation
+        - skipApplyWhenPlanIsEmpty
+        - disableDestroyEnvironments
+        - updatedBy
+      additionalProperties: false
+    EnvironmentApi.UpdatePolicies.Response:
+      $ref: '#/components/schemas/EnvironmentApi.Policy'
+    EnvironmentApi.GetPolicies.Response:
+      $ref: '#/components/schemas/EnvironmentApi.Policy'
     NotificationsApi.NotificationEndpointModel:
       type: object
       properties:
@@ -2378,6 +3005,436 @@ paths:
           content: {}
       tags:
         - Credentials
+  /environments/{id}/downstream:
+    put:
+      operationId: updateDownstreamEnvironments
+      summary: Create Workflow Trigger
+      description: >
+        Env0 allows you to configure chained dependent environments to your
+        current environment.
+
+        Using workflow triggers, you can define which environments would trigger
+
+        a deployment downstream in response to a deployment of your current
+        environment.
+
+        This allows you to configure a cascading series of environment
+        deployments."
+
+        More on https://docs.env0.com/docs/workflow-triggers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/EnvironmentApi.UpdateDownstreamEnvironments.Request.Body
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/EnvironmentApi.UpdateDownstreamEnvironments.Response
+      tags:
+        - Environments
+  /environments:
+    post:
+      operationId: create
+      summary: Create Environment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentApi.Create.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.Create.Response'
+      tags:
+        - Environments
+    get:
+      operationId: findAll
+      summary: List Environments
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: projectId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: onlyMy
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: isActive
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.FindAll.Response'
+      tags:
+        - Environments
+  /environments/{id}:
+    put:
+      operationId: update
+      summary: Update Environment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentApi.Update.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.Update.Response'
+      tags:
+        - Environments
+    get:
+      operationId: findById
+      summary: Get Environment
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.FindById.Response'
+      tags:
+        - Environments
+  /environments/{id}/ttl:
+    put:
+      operationId: ttl
+      summary: Update Environment TTL
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentApi.Ttl.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.Ttl.Response'
+      tags:
+        - Environments
+  /environments/{id}/deployments:
+    post:
+      operationId: deploy
+      summary: Deploy Environment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentApi.Deploy.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.Deploy.Response'
+      tags:
+        - Environments
+    get:
+      operationId: findDeploymentLogsByEnvironmentId
+      summary: List Deployments
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/EnvironmentApi.FindDeploymentLogsByEnvironmentId.Response
+      tags:
+        - Environments
+  /environments/deployments/{id}/cancel:
+    put:
+      operationId: cancel
+      summary: Cancel Deployment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentApi.Cancel.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.Cancel.Response'
+      tags:
+        - Environments
+  /environments/deployments/{id}/abort:
+    post:
+      operationId: abort
+      summary: Abort Deployment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentApi.Abort.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.Abort.Response'
+      tags:
+        - Environments
+  /environments/{id}/destroy:
+    post:
+      operationId: destroy
+      summary: Destroy Environment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentApi.Destroy.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: checkoutUpdatedCode
+          in: query
+          description: Checkout updated code
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+            enum:
+              - 'true'
+              - 'false'
+        - name: isScheduledRun
+          in: query
+          description: Is scheduled run
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+            enum:
+              - 'true'
+              - 'false'
+        - name: revision
+          in: query
+          description: Revision
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.Destroy.Response'
+      tags:
+        - Environments
+  /environments/deployments/{id}:
+    put:
+      operationId: resume
+      summary: Resume Deployment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentApi.Resume.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.Resume.Response'
+      tags:
+        - Environments
+    get:
+      operationId: findDeploymentLogById
+      summary: Get Deployment
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/EnvironmentApi.FindDeploymentLogById.Response
+      tags:
+        - Environments
+  /environments/deployments/{id}/resources:
+    get:
+      operationId: findResources
+      summary: List Resources
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.FindResources.Response'
+      tags:
+        - Environments
+  /policies:
+    put:
+      operationId: updatePolicies
+      summary: Update Policy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentApi.UpdatePolicies.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.UpdatePolicies.Response'
+      tags:
+        - Environments
+    get:
+      operationId: getPolicies
+      summary: Get Policy
+      parameters:
+        - name: projectId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.GetPolicies.Response'
+      tags:
+        - Environments
   /notifications/endpoints:
     post:
       operationId: createNotificationEndpoint
@@ -3146,6 +4203,14 @@ tags:
 
 
       More on https://docs.env0.com/reference/authentication
+  - name: Environments
+    description: |
+      An environment is an entity representing a deployment managed by env0.
+
+      Your users manage their environments in env0 in Projects.
+      They can create, destroy, and redeploy environments.
+
+      More on https://docs.env0.com/docs/environments
   - name: Notifications
     description: >
       env0 can send notifications for deployment events to your Slack or
