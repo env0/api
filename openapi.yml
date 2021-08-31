@@ -2156,6 +2156,22 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/TeamApi.TeamProjectAssignment'
+    TeamApi.CreateOrUpdateSingleAssignment.Request.Body:
+      type: object
+      properties:
+        teamId:
+          type: string
+        projectId:
+          type: string
+        projectRole:
+          $ref: '#/components/schemas/ProjectRoles'
+      required:
+        - teamId
+        - projectId
+        - projectRole
+      additionalProperties: false
+    TeamApi.CreateOrUpdateSingleAssignment.Response:
+      $ref: '#/components/schemas/TeamApi.TeamProjectAssignment'
   securitySchemes:
     env0 API Key:
       type: http
@@ -4170,6 +4186,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TeamApi.UpdateAssignments.Response'
+      tags:
+        - Teams
+    post:
+      operationId: createOrUpdateSingleAssignment
+      summary: Create or Update a single Team to Project Assignment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/TeamApi.CreateOrUpdateSingleAssignment.Request.Body
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/TeamApi.CreateOrUpdateSingleAssignment.Response
+      tags:
+        - Teams
+  /teams/assignments/{assignmentId}:
+    delete:
+      operationId: deleteSingleAssignment
+      summary: Delete a single Team to Project Assignment
+      parameters:
+        - name: assignmentId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
       tags:
         - Teams
 tags:
