@@ -66,10 +66,7 @@ components:
           type: string
         terraformVersion:
           $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
-          description: >-
-            A string representing semantic version of Terraform. If set to
-            "RESOLVE_FROM_TERRAFORM_CODE", the version will be determined by
-            using tfenv's 'min-required'
+          description: 'A string representing semantic version of Terraform. If set to "RESOLVE_FROM_TERRAFORM_CODE", the version will be determined by using tfenv''s ''min-required'''
         gitlabProjectId:
           type:
             - number
@@ -120,9 +117,8 @@ components:
         - repository
         - type
     BlueprintApi.BlueprintWithProjectIds:
-      $ref: >-
-        #/components/schemas/AugmentedRequired%3CBlueprintApi.Blueprint%2C%22projectIds%22%3E
-    AugmentedRequired<BlueprintApi.Blueprint,"projectIds">:
+      $ref: '#/components/schemas/AugmentedRequired%3CBlueprintApi.Blueprint%2C%22projectIds%22%3E'
+    'AugmentedRequired<BlueprintApi.Blueprint,"projectIds">':
       type: object
       additionalProperties: false
       properties:
@@ -162,10 +158,7 @@ components:
           type: string
         terraformVersion:
           $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
-          description: >-
-            A string representing semantic version of Terraform. If set to
-            "RESOLVE_FROM_TERRAFORM_CODE", the version will be determined by
-            using tfenv's 'min-required'
+          description: 'A string representing semantic version of Terraform. If set to "RESOLVE_FROM_TERRAFORM_CODE", the version will be determined by using tfenv''s ''min-required'''
         tokenId:
           type: string
         tokenName:
@@ -201,109 +194,18 @@ components:
       properties:
         email:
           type: string
-        email_verified:
-          type: boolean
-        username:
-          type: string
-        phone_number:
-          type: string
-        phone_verified:
-          type: boolean
         user_id:
           type: string
         created_at:
           type: string
-        updated_at:
-          type: string
-        identities:
-          type: array
-          items:
-            type: object
-            properties:
-              connection:
-                type: string
-              user_id:
-                type: string
-              provider:
-                type: string
-              isSocial:
-                type: boolean
-              access_token:
-                type: string
-              profileData:
-                type: object
-                properties:
-                  email:
-                    type: string
-                  email_verified:
-                    type: boolean
-                  name:
-                    type: string
-                  phone_number:
-                    type: string
-                  phone_verified:
-                    type: boolean
-                  request_language:
-                    type: string
-                additionalProperties: false
-            required:
-              - connection
-              - user_id
-              - provider
-              - isSocial
-              - connection
-              - user_id
-              - provider
-              - isSocial
-              - connection
-              - user_id
-              - provider
-              - isSocial
-              - connection
-              - user_id
-              - provider
-              - isSocial
-              - connection
-              - user_id
-              - provider
-              - isSocial
-              - connection
-              - user_id
-              - provider
-              - isSocial
-              - connection
-              - user_id
-              - provider
-              - isSocial
-              - connection
-              - user_id
-              - provider
-              - isSocial
-            additionalProperties: false
         app_metadata:
-          type: object
-        user_metadata:
           type: object
         picture:
           type: string
         name:
           type: string
-        nickname:
-          type: string
-        multifactor:
-          type: array
-          items:
-            type: string
-        last_ip:
-          type: string
         last_login:
           type: string
-        last_password_reset:
-          type: string
-        logins_count:
-          type: number
-        blocked:
-          type: boolean
         given_name:
           type: string
         family_name:
@@ -329,10 +231,7 @@ components:
           type: string
         terraformVersion:
           $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
-          description: >-
-            A string representing semantic version of Terraform. If set to
-            "RESOLVE_FROM_TERRAFORM_CODE", the version will be determined by
-            using tfenv's 'min-required'
+          description: 'A string representing semantic version of Terraform. If set to "RESOLVE_FROM_TERRAFORM_CODE", the version will be determined by using tfenv''s ''min-required'''
         tokenId:
           type: string
         tokenName:
@@ -393,10 +292,7 @@ components:
           type: string
         terraformVersion:
           $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
-          description: >-
-            A string representing semantic version of Terraform. If set to
-            "RESOLVE_FROM_TERRAFORM_CODE", the version will be determined by
-            using tfenv's 'min-required'
+          description: 'A string representing semantic version of Terraform. If set to "RESOLVE_FROM_TERRAFORM_CODE", the version will be determined by using tfenv''s ''min-required'''
         tokenId:
           type: string
         tokenName:
@@ -527,8 +423,7 @@ components:
         - value
       additionalProperties: false
     ConfigurationApi.CreateSshKey.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.SshKey%3E
+      $ref: '#/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.SshKey%3E'
     ConfigurationApi.AbstractSecretResponse<ConfigurationApi.PersistentToken>:
       type: object
       properties:
@@ -555,11 +450,9 @@ components:
         - GIT
         - GitLab
     ConfigurationApi.FindTokenByType.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
+      $ref: '#/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E'
     ConfigurationApi.FindTokenById.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
+      $ref: '#/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E'
     ConfigurationApi.Token:
       type: object
       properties:
@@ -580,8 +473,7 @@ components:
     ConfigurationApi.CreateToken.Request.Body:
       $ref: '#/components/schemas/ConfigurationApi.Token'
     ConfigurationApi.CreateToken.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
+      $ref: '#/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E'
     ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty:
       type: object
       additionalProperties: false
@@ -671,8 +563,7 @@ components:
     ConfigurationApi.FindVariablesByScope.Response:
       type: array
       items:
-        $ref: >-
-          #/components/schemas/ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty
+        $ref: '#/components/schemas/ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty'
     ConfigurationApi.CreateOrUpdateVariable.ConfigurationPropertySignlePayload:
       type: object
       properties:
@@ -710,13 +601,11 @@ components:
     ConfigurationApi.CreateOrUpdateVariable.Request.Body:
       type: array
       items:
-        $ref: >-
-          #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.ConfigurationPropertySignlePayload
+        $ref: '#/components/schemas/ConfigurationApi.CreateOrUpdateVariable.ConfigurationPropertySignlePayload'
     ConfigurationApi.CreateOrUpdateVariable.Response:
       type: array
       items:
-        $ref: >-
-          #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.ConfigurationPropertySignlePayload
+        $ref: '#/components/schemas/ConfigurationApi.CreateOrUpdateVariable.ConfigurationPropertySignlePayload'
     TransiantCredential:
       type: object
       properties:
@@ -726,24 +615,16 @@ components:
           $ref: '#/components/schemas/User'
         value:
           type: object
-          description: >-
+          description: |-
             A JSON string representation of the cloud provider credentials.
-
-            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types
-            use:
-
+            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types use:
             { roleArn: "your-role-arn", externalId: "your-external-id" }
 
-
             - For GCP_CREDENTIALS type use:
-
             { tableId: "your-table-id", secret: "your-secret" }
 
-
             - For AZURE_CREDENTIALS type use:
-
-            { clientId: "your-clientId", clientSecret: "your-clientSecret",
-            tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
+            { clientId: "your-clientId", clientSecret: "your-clientSecret", tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
         name:
           type: string
         organizationId:
@@ -780,24 +661,16 @@ components:
           type: string
         value:
           type: object
-          description: >-
+          description: |-
             A JSON string representation of the cloud provider credentials.
-
-            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types
-            use:
-
+            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types use:
             { roleArn: "your-role-arn", externalId: "your-external-id" }
 
-
             - For GCP_CREDENTIALS type use:
-
             { tableId: "your-table-id", secret: "your-secret" }
 
-
             - For AZURE_CREDENTIALS type use:
-
-            { clientId: "your-clientId", clientSecret: "your-clientSecret",
-            tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
+            { clientId: "your-clientId", clientSecret: "your-clientSecret", tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
         sensitiveValueSalt:
           type: string
         type:
@@ -937,7 +810,7 @@ components:
         createdBy:
           type: string
         createdByUser:
-          $ref: '#/components/schemas/User'
+          $ref: '#/components/schemas/ApiKeyUser'
         apiKeySecret:
           type: string
       required:
@@ -948,6 +821,22 @@ components:
         - organizationId
         - createdAt
         - createdBy
+      additionalProperties: false
+    ApiKeyUser:
+      type: object
+      properties:
+        user_id:
+          type: string
+        username:
+          type: string
+        created_at:
+          type: string
+        app_metadata:
+          type: object
+        name:
+          type: string
+        last_login:
+          type: string
       additionalProperties: false
     CredentialsApi.CreateApiKey.Response:
       $ref: '#/components/schemas/CredentialsApi.ApiKey'
@@ -1032,9 +921,7 @@ components:
           $ref: '#/components/schemas/EnvironmentApi.TTLType'
         value:
           type: string
-          $comment: >-
-            { "schema": { "anyOf": [{ "type": "string" }, { "type": "object",
-            "instanceof": "Date" }] } }
+          $comment: '{ "schema": { "anyOf": [{ "type": "string" }, { "type": "object", "instanceof": "Date" }] } }'
       required:
         - type
       additionalProperties: false
@@ -1518,9 +1405,7 @@ components:
           type:
             - number
             - 'null'
-          $comment: >-
-            { "schema": { "anyOf": [{ "type": "integer", "minimum": 1 }, {
-            "type": "null" }] } }
+          $comment: '{ "schema": { "anyOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] } }'
         requiresApprovalDefault:
           type: boolean
         includeCostEstimation:
@@ -1985,11 +1870,9 @@ components:
       type: object
       properties:
         deploy:
-          $ref: >-
-            #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction
+          $ref: '#/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction'
         destroy:
-          $ref: >-
-            #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction
+          $ref: '#/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction'
       additionalProperties: false
     SchedulingApi.SetEnvironmentSchedule.Response:
       $ref: '#/components/schemas/SchedulingApi.GetScheduleByEnvironmentId.Response'
@@ -2176,65 +2059,40 @@ components:
     env0 API Key:
       type: http
       scheme: basic
-      description: >
+      description: |
 
         Authentication against the env0 API is done via API Keys.
 
-
-        An API Key is created by an organization administrator, but is not
-        connected to any specific user when it's being used.
-
+        An API Key is created by an organization administrator, but is not connected to any specific user when it's being used.
 
         ### Creating an API Key
-
-        - Once you've created your own organization, you can create and manage
-        API Keys.
-
+        - Once you've created your own organization, you can create and manage API Keys.
         - Navigate to the Organization Settings page and click the API Keys tab.
-
-        - Click Add API Key, and enter a name for your key in the Name field.
-        This name is for your reference and isn't used directly in
-        authentication.
+        - Click Add API Key, and enter a name for your key in the Name field. This name is for your reference and isn't used directly in authentication.
 
           > ❗️Save Your API Key ID & Secret
           > The secret will not be available after you close this modal
 
         ### Using an API Key to Authenticate
-
-        Authentication to the env0 API is done using the Basic Authentication
-        method.
-
-        Each request made should include the API Key ID as the username, and the
-        API Key Secret as the password.
-
-        For example - when Using curl, we can include these parameters using the
-        flag --user {API Key ID}:{API Key Secret}.
-
+        Authentication to the env0 API is done using the Basic Authentication method.
+        Each request made should include the API Key ID as the username, and the API Key Secret as the password.
+        For example - when Using curl, we can include these parameters using the flag --user {API Key ID}:{API Key Secret}.
 
         ### API Key Permissions
-
-        API Keys are given the role of an Organization Admin, meaning they can
-        be used to perform any action, in any project, under the scope of the
-        organization.
+        API Keys are given the role of an Organization Admin, meaning they can be used to perform any action, in any project, under the scope of the organization.
 info:
   title: env0 API
-  description: >
-    This document describes the resources that make up the official env0 REST
-    API
-
+  description: |
+    This document describes the resources that make up the official env0 REST API
 
     ### BaseURL
-
     https://api.env0.com/
 
-
     ### Content Types
-
-    All requests should be in JSON format, and include the `accept:
-    application/json` header
+    All requests should be in JSON format, and include the `accept: application/json` header
   version: 1.0.0
   x-logo:
-    url: https://github.com/env0/api/raw/gh-pages/env0-color.png
+    url: 'https://github.com/env0/api/raw/gh-pages/env0-color.png'
     altText: env0 logo
 paths:
   /blueprints:
@@ -2260,9 +2118,7 @@ paths:
     get:
       operationId: findAll
       summary: List Templates
-      description: >-
-        Returns all Templates associated with either an Organization or Project.
-        At least one of these must be set.
+      description: Returns all Templates associated with either an Organization or Project. At least one of these must be set.
       parameters:
         - name: organizationId
           in: query
@@ -2287,7 +2143,7 @@ paths:
                 $ref: '#/components/schemas/BlueprintApi.FindAll.Response'
       tags:
         - Templates
-  /blueprints/{id}:
+  '/blueprints/{id}':
     put:
       operationId: updateBlueprint
       summary: Update Template
@@ -2348,7 +2204,7 @@ paths:
           content: {}
       tags:
         - Templates
-  /blueprints/{id}/projects:
+  '/blueprints/{id}/projects':
     patch:
       operationId: addBlueprintToProject
       summary: Add Template to Project
@@ -2356,8 +2212,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/BlueprintApi.AddBlueprintToProject.Request.Body
+              $ref: '#/components/schemas/BlueprintApi.AddBlueprintToProject.Request.Body'
         description: ''
       parameters:
         - name: id
@@ -2372,11 +2227,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/BlueprintApi.AddBlueprintToProject.Response
+                $ref: '#/components/schemas/BlueprintApi.AddBlueprintToProject.Response'
       tags:
         - Templates
-  /blueprints/{id}/projects/{projectId}:
+  '/blueprints/{id}/projects/{projectId}':
     delete:
       operationId: removeBlueprintFromProject
       summary: Remove Template from Project
@@ -2417,8 +2271,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.FindSshKeysByOrganization.Response
+                $ref: '#/components/schemas/ConfigurationApi.FindSshKeysByOrganization.Response'
       tags:
         - Configuration
     post:
@@ -2440,7 +2293,7 @@ paths:
                 $ref: '#/components/schemas/ConfigurationApi.CreateSshKey.Response'
       tags:
         - Configuration
-  /ssh-keys/{id}:
+  '/ssh-keys/{id}':
     delete:
       operationId: deleteSshKey
       summary: Delete SSH key
@@ -2505,7 +2358,7 @@ paths:
                 $ref: '#/components/schemas/ConfigurationApi.CreateToken.Response'
       tags:
         - Configuration
-  /tokens/{id}:
+  '/tokens/{id}':
     get:
       operationId: findTokenById
       summary: Get git token by id
@@ -2545,16 +2398,11 @@ paths:
     get:
       operationId: findVariablesByScope
       summary: List Variables by Scope
-      description: >
+      description: |
         Lists all variables for the provided scope(s).
-
-        If more than one scope is given - variables will be overridden by lower
-        level scopes - just like env0 does.
-
+        If more than one scope is given - variables will be overridden by lower level scopes - just like env0 does.
         For example - Provided both organizationId and projectId,
-
-        if a variable exists on both scopes, a single instance of it will be
-        returned, with its Project scope value
+        if a variable exists on both scopes, a single instance of it will be returned, with its Project scope value
       parameters:
         - name: organizationId
           in: query
@@ -2597,8 +2445,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.FindVariablesByScope.Response
+                $ref: '#/components/schemas/ConfigurationApi.FindVariablesByScope.Response'
       tags:
         - Configuration
     post:
@@ -2608,8 +2455,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Request.Body
+              $ref: '#/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Request.Body'
         description: ''
       parameters: []
       responses:
@@ -2618,11 +2464,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Response
+                $ref: '#/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Response'
       tags:
         - Configuration
-  /configuration/{id}:
+  '/configuration/{id}':
     delete:
       operationId: deleteVariable
       summary: Delete a variable
@@ -2643,15 +2488,12 @@ paths:
     post:
       operationId: createCredential
       summary: Create Cloud Provider / Cost Credentials
-      description: >-
-        Create a set of new cloud provider credentials or cost credentials for
-        an Organization which may then be associated with a Project
+      description: Create a set of new cloud provider credentials or cost credentials for an Organization which may then be associated with a Project
       requestBody:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/ConfigurationApi.CreateCredential.Request.Body
+              $ref: '#/components/schemas/ConfigurationApi.CreateCredential.Request.Body'
         description: ''
       parameters: []
       responses:
@@ -2660,8 +2502,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.CreateCredential.Response
+                $ref: '#/components/schemas/ConfigurationApi.CreateCredential.Response'
       tags:
         - Configuration
     get:
@@ -2684,7 +2525,7 @@ paths:
                 $ref: '#/components/schemas/ConfigurationApi.FindCredentials.Response'
       tags:
         - Configuration
-  /credentials/{id}:
+  '/credentials/{id}':
     delete:
       operationId: deleteCredential
       summary: Delete Credentials
@@ -2701,7 +2542,7 @@ paths:
           content: {}
       tags:
         - Configuration
-  /credentials/deployment/{credentialId}/project/{projectId}:
+  '/credentials/deployment/{credentialId}/project/{projectId}':
     delete:
       operationId: removeDeployCredsFromProject
       summary: Dissociate credentials with project
@@ -2733,8 +2574,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/ConfigurationApi.AddDeployCredsToProject.Request.Body
+              $ref: '#/components/schemas/ConfigurationApi.AddDeployCredsToProject.Request.Body'
         description: ''
       parameters:
         - name: credentialId
@@ -2755,11 +2595,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.AddDeployCredsToProject.Response
+                $ref: '#/components/schemas/ConfigurationApi.AddDeployCredsToProject.Response'
       tags:
         - Configuration
-  /credentials/deployment/project/{projectId}:
+  '/credentials/deployment/project/{projectId}':
     get:
       operationId: getDeployCredsForProject
       summary: List deployment a Project's deployment credentials
@@ -2777,23 +2616,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.GetDeployCredsForProject.Response
+                $ref: '#/components/schemas/ConfigurationApi.GetDeployCredsForProject.Response'
       tags:
         - Configuration
-  /costs/project/{projectId}/credentials:
+  '/costs/project/{projectId}/credentials':
     put:
       operationId: addProjectCostsCredentials
       summary: Associate Cost Credentials with Project
-      description: >-
-        Associate Cloud provider Cost Credentials to a Project. This will enable
-        cost tagging in deployments in the project.
+      description: Associate Cloud provider Cost Credentials to a Project. This will enable cost tagging in deployments in the project.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/CostApi.AddProjectCostsCredentials.Request.Body
+              $ref: '#/components/schemas/CostApi.AddProjectCostsCredentials.Request.Body'
         description: ''
       parameters:
         - name: projectId
@@ -2808,8 +2643,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/CostApi.AddProjectCostsCredentials.Response
+                $ref: '#/components/schemas/CostApi.AddProjectCostsCredentials.Response'
       tags:
         - Cost
     get:
@@ -2828,11 +2662,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/CostApi.GetProjectCostsCredentials.Response
+                $ref: '#/components/schemas/CostApi.GetProjectCostsCredentials.Response'
       tags:
         - Cost
-  /costs/project/{projectId}/enabled:
+  '/costs/project/{projectId}/enabled':
     get:
       operationId: isCostEnabled
       summary: Return wether or not cost is enabled for a project
@@ -2852,13 +2685,11 @@ paths:
                 $ref: '#/components/schemas/CostApi.IsCostEnabled.Response'
       tags:
         - Cost
-  /costs/project/{projectId}/credentials/{credentialsId}:
+  '/costs/project/{projectId}/credentials/{credentialsId}':
     delete:
       operationId: removeProjectCostsCredentials
       summary: Dissociate Cost Credentials from Project
-      description: >-
-        Dissociate Cloud provider Cost Credentials to a Project. This will
-        disable cost tagging in deployments in the project.
+      description: Dissociate Cloud provider Cost Credentials to a Project. This will disable cost tagging in deployments in the project.
       parameters:
         - name: projectId
           in: path
@@ -2878,7 +2709,7 @@ paths:
           content: {}
       tags:
         - Cost
-  /costs/environments/{environmentId}:
+  '/costs/environments/{environmentId}':
     get:
       operationId: getEnvironmentCosts
       summary: Get costs for an Environment
@@ -2921,7 +2752,7 @@ paths:
                 $ref: '#/components/schemas/CostApi.GetEnvironmentCosts.Response'
       tags:
         - Cost
-  /costs/projects/{projectId}:
+  '/costs/projects/{projectId}':
     get:
       operationId: getProjectCosts
       summary: Get costs for an Project
@@ -3004,7 +2835,7 @@ paths:
                 $ref: '#/components/schemas/CredentialsApi.FindAllApiKeys.Response'
       tags:
         - Credentials
-  /api-keys/{id}:
+  '/api-keys/{id}':
     delete:
       operationId: deleteApiKey
       summary: Delete an API Key endpoint
@@ -3021,29 +2852,21 @@ paths:
           content: {}
       tags:
         - Credentials
-  /environments/{id}/downstream:
+  '/environments/{id}/downstream':
     put:
       operationId: updateDownstreamEnvironments
       summary: Create Workflow Trigger
-      description: >
-        Env0 allows you to configure chained dependent environments to your
-        current environment.
-
+      description: |
+        Env0 allows you to configure chained dependent environments to your current environment.
         Using workflow triggers, you can define which environments would trigger
-
-        a deployment downstream in response to a deployment of your current
-        environment.
-
-        This allows you to configure a cascading series of environment
-        deployments."
-
+        a deployment downstream in response to a deployment of your current environment.
+        This allows you to configure a cascading series of environment deployments."
         More on https://docs.env0.com/docs/workflow-triggers
       requestBody:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/EnvironmentApi.UpdateDownstreamEnvironments.Request.Body
+              $ref: '#/components/schemas/EnvironmentApi.UpdateDownstreamEnvironments.Request.Body'
         description: ''
       parameters:
         - name: id
@@ -3058,8 +2881,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/EnvironmentApi.UpdateDownstreamEnvironments.Response
+                $ref: '#/components/schemas/EnvironmentApi.UpdateDownstreamEnvironments.Response'
       tags:
         - Environments
   /environments:
@@ -3123,7 +2945,7 @@ paths:
                 $ref: '#/components/schemas/EnvironmentApi.FindAll.Response'
       tags:
         - Environments
-  /environments/{id}:
+  '/environments/{id}':
     put:
       operationId: update
       summary: Update Environment
@@ -3168,7 +2990,7 @@ paths:
                 $ref: '#/components/schemas/EnvironmentApi.FindById.Response'
       tags:
         - Environments
-  /environments/{id}/ttl:
+  '/environments/{id}/ttl':
     put:
       operationId: ttl
       summary: Update Environment TTL
@@ -3194,7 +3016,7 @@ paths:
                 $ref: '#/components/schemas/EnvironmentApi.Ttl.Response'
       tags:
         - Environments
-  /environments/{id}/deployments:
+  '/environments/{id}/deployments':
     post:
       operationId: deploy
       summary: Deploy Environment
@@ -3236,11 +3058,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/EnvironmentApi.FindDeploymentLogsByEnvironmentId.Response
+                $ref: '#/components/schemas/EnvironmentApi.FindDeploymentLogsByEnvironmentId.Response'
       tags:
         - Environments
-  /environments/deployments/{id}/cancel:
+  '/environments/deployments/{id}/cancel':
     put:
       operationId: cancel
       summary: Cancel Deployment
@@ -3266,7 +3087,7 @@ paths:
                 $ref: '#/components/schemas/EnvironmentApi.Cancel.Response'
       tags:
         - Environments
-  /environments/deployments/{id}/abort:
+  '/environments/deployments/{id}/abort':
     post:
       operationId: abort
       summary: Abort Deployment
@@ -3292,7 +3113,7 @@ paths:
                 $ref: '#/components/schemas/EnvironmentApi.Abort.Response'
       tags:
         - Environments
-  /environments/{id}/destroy:
+  '/environments/{id}/destroy':
     post:
       operationId: destroy
       summary: Destroy Environment
@@ -3345,7 +3166,7 @@ paths:
                 $ref: '#/components/schemas/EnvironmentApi.Destroy.Response'
       tags:
         - Environments
-  /environments/deployments/{id}:
+  '/environments/deployments/{id}':
     put:
       operationId: resume
       summary: Resume Deployment
@@ -3387,11 +3208,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/EnvironmentApi.FindDeploymentLogById.Response
+                $ref: '#/components/schemas/EnvironmentApi.FindDeploymentLogById.Response'
       tags:
         - Environments
-  /environments/deployments/{id}/resources:
+  '/environments/deployments/{id}/resources':
     get:
       operationId: findResources
       summary: List Resources
@@ -3459,8 +3279,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/NotificationsApi.CreateNotificationEndpoint.Request.Body
+              $ref: '#/components/schemas/NotificationsApi.CreateNotificationEndpoint.Request.Body'
         description: ''
       parameters: []
       responses:
@@ -3469,8 +3288,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/NotificationsApi.CreateNotificationEndpoint.Response
+                $ref: '#/components/schemas/NotificationsApi.CreateNotificationEndpoint.Response'
       tags:
         - Notifications
     get:
@@ -3490,11 +3308,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/NotificationsApi.FindNotificationEndpoints.Response
+                $ref: '#/components/schemas/NotificationsApi.FindNotificationEndpoints.Response'
       tags:
         - Notifications
-  /notifications/endpoints/{endpointId}:
+  '/notifications/endpoints/{endpointId}':
     delete:
       operationId: deleteNotificationEndpoint
       summary: Delete Notification Endpoint
@@ -3518,8 +3335,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/NotificationsApi.UpdateNotificationEndpoint.Request.Body
+              $ref: '#/components/schemas/NotificationsApi.UpdateNotificationEndpoint.Request.Body'
         description: ''
       parameters:
         - name: endpointId
@@ -3534,11 +3350,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/NotificationsApi.UpdateNotificationEndpoint.Response
+                $ref: '#/components/schemas/NotificationsApi.UpdateNotificationEndpoint.Response'
       tags:
         - Notifications
-  /notifications/projects/{projectId}/endpoints/{endpointId}:
+  '/notifications/projects/{projectId}/endpoints/{endpointId}':
     put:
       operationId: updateProjectNotificationSettings
       summary: Update Notification Settings
@@ -3546,8 +3361,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/NotificationsApi.UpdateProjectNotificationSettings.Request.Body
+              $ref: '#/components/schemas/NotificationsApi.UpdateProjectNotificationSettings.Request.Body'
         description: ''
       parameters:
         - name: projectId
@@ -3568,11 +3382,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/NotificationsApi.UpdateProjectNotificationSettings.Response
+                $ref: '#/components/schemas/NotificationsApi.UpdateProjectNotificationSettings.Response'
       tags:
         - Notifications
-  /notifications/projects/{projectId}:
+  '/notifications/projects/{projectId}':
     get:
       operationId: findProjectNotificationSettings
       summary: Get Notification Endpoint settings
@@ -3589,11 +3402,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/NotificationsApi.FindProjectNotificationSettings.Response
+                $ref: '#/components/schemas/NotificationsApi.FindProjectNotificationSettings.Response'
       tags:
         - Notifications
-  /organizations/{id}:
+  '/organizations/{id}':
     get:
       operationId: findOrganizationById
       summary: Get Organization
@@ -3610,8 +3422,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/OrganizationApi.FindOrganizationById.Response
+                $ref: '#/components/schemas/OrganizationApi.FindOrganizationById.Response'
       tags:
         - Organization
     put:
@@ -3621,8 +3432,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/OrganizationApi.UpdateOrganization.Request.Body
+              $ref: '#/components/schemas/OrganizationApi.UpdateOrganization.Request.Body'
         description: ''
       parameters:
         - name: id
@@ -3637,8 +3447,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/OrganizationApi.UpdateOrganization.Response
+                $ref: '#/components/schemas/OrganizationApi.UpdateOrganization.Response'
       tags:
         - Organization
   /organizations:
@@ -3652,11 +3461,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/OrganizationApi.FindOrganizations.Response
+                $ref: '#/components/schemas/OrganizationApi.FindOrganizations.Response'
       tags:
         - Organization
-  /organizations/{id}/policies:
+  '/organizations/{id}/policies':
     post:
       operationId: updatePolicy
       summary: Update Policy
@@ -3682,7 +3490,7 @@ paths:
                 $ref: '#/components/schemas/OrganizationApi.UpdatePolicy.Response'
       tags:
         - Organization
-  /organizations/{id}/users:
+  '/organizations/{id}/users':
     get:
       operationId: getUsers
       summary: List Users
@@ -3702,7 +3510,7 @@ paths:
                 $ref: '#/components/schemas/OrganizationApi.GetUsers.Response'
       tags:
         - Organization
-  /organizations/{id}/users/{userId}:
+  '/organizations/{id}/users/{userId}':
     delete:
       operationId: removeUserFromOrganization
       summary: Remove User
@@ -3745,7 +3553,7 @@ paths:
                 $ref: '#/components/schemas/OrganizationApi.CreateInvite.Response'
       tags:
         - Organization
-  /organizations/{id}/users/{userId}/role:
+  '/organizations/{id}/users/{userId}/role':
     put:
       operationId: updateRole
       summary: Update Role
@@ -3777,13 +3585,11 @@ paths:
                 $ref: '#/components/schemas/OrganizationApi.UpdateRole.Response'
       tags:
         - Organization
-  /projects/{id}:
+  '/projects/{id}':
     delete:
       operationId: archive
       summary: Archive a Project
-      description: >-
-        This can not be undone. Running Environments will NOT be destroyed and
-        continuous and scheduled Deployments will continue to occur.
+      description: This can not be undone. Running Environments will NOT be destroyed and continuous and scheduled Deployments will continue to occur.
       parameters:
         - name: id
           in: path
@@ -3874,7 +3680,7 @@ paths:
                 $ref: '#/components/schemas/ProjectApi.CreateProject.Response'
       tags:
         - Projects
-  /scheduling/environments/{id}:
+  '/scheduling/environments/{id}':
     get:
       operationId: getScheduleByEnvironmentId
       summary: Get Environment Scheduling
@@ -3891,8 +3697,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/SchedulingApi.GetScheduleByEnvironmentId.Response
+                $ref: '#/components/schemas/SchedulingApi.GetScheduleByEnvironmentId.Response'
       tags:
         - Scheduling
     put:
@@ -3902,8 +3707,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.Body
+              $ref: '#/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.Body'
         description: ''
       parameters:
         - name: id
@@ -3918,11 +3722,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Response
+                $ref: '#/components/schemas/SchedulingApi.SetEnvironmentSchedule.Response'
       tags:
         - Scheduling
-  /scheduling/projects/{id}:
+  '/scheduling/projects/{id}':
     get:
       operationId: getScheduleByProjectId
       summary: Get Project Scheduling
@@ -3939,11 +3742,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/SchedulingApi.GetScheduleByProjectId.Response
+                $ref: '#/components/schemas/SchedulingApi.GetScheduleByProjectId.Response'
       tags:
         - Scheduling
-  /permissions/projects/{projectId}:
+  '/permissions/projects/{projectId}':
     get:
       operationId: getProjectPermissions
       summary: Get the users' permissions for the project
@@ -3960,8 +3762,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/SharedApi.Authorization.GetProjectPermissions.Response
+                $ref: '#/components/schemas/SharedApi.Authorization.GetProjectPermissions.Response'
       tags:
         - Role Based Access
     post:
@@ -3971,8 +3772,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/SharedApi.Authorization.AddProjectPermission.Request.Body
+              $ref: '#/components/schemas/SharedApi.Authorization.AddProjectPermission.Request.Body'
         description: ''
       parameters:
         - name: projectId
@@ -3987,11 +3787,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/SharedApi.Authorization.AddProjectPermission.Response
+                $ref: '#/components/schemas/SharedApi.Authorization.AddProjectPermission.Response'
       tags:
         - Role Based Access
-  /permissions/projects/{projectId}/users/{userId}:
+  '/permissions/projects/{projectId}/users/{userId}':
     put:
       operationId: updateProjectPermission
       summary: Alter a user's permissions for a project
@@ -3999,8 +3798,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/SharedApi.Authorization.UpdateProjectPermission.Request.Body
+              $ref: '#/components/schemas/SharedApi.Authorization.UpdateProjectPermission.Request.Body'
         description: ''
       parameters:
         - name: projectId
@@ -4021,8 +3819,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/SharedApi.Authorization.UpdateProjectPermission.Response
+                $ref: '#/components/schemas/SharedApi.Authorization.UpdateProjectPermission.Response'
       tags:
         - Role Based Access
     delete:
@@ -4067,7 +3864,7 @@ paths:
                 $ref: '#/components/schemas/TeamApi.CreateTeam.Response'
       tags:
         - Teams
-  /teams/organizations/{organizationId}:
+  '/teams/organizations/{organizationId}':
     get:
       operationId: getTeams
       summary: List Teams
@@ -4087,7 +3884,7 @@ paths:
                 $ref: '#/components/schemas/TeamApi.GetTeams.Response'
       tags:
         - Teams
-  /teams/{teamId}:
+  '/teams/{teamId}':
     get:
       operationId: getTeam
       summary: Get Team
@@ -4195,8 +3992,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: >-
-                #/components/schemas/TeamApi.CreateOrUpdateSingleAssignment.Request.Body
+              $ref: '#/components/schemas/TeamApi.CreateOrUpdateSingleAssignment.Request.Body'
         description: ''
       parameters: []
       responses:
@@ -4205,11 +4001,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/TeamApi.CreateOrUpdateSingleAssignment.Response
+                $ref: '#/components/schemas/TeamApi.CreateOrUpdateSingleAssignment.Response'
       tags:
         - Teams
-  /teams/assignments/{assignmentId}:
+  '/teams/assignments/{assignmentId}':
     delete:
       operationId: deleteSingleAssignment
       summary: Delete a single Team to Project Assignment
@@ -4228,33 +4023,23 @@ paths:
         - Teams
 tags:
   - name: Templates
-    description: >
+    description: |
       A template in env0 defines a type of environment that can be deployed.
-
       Click Run Now on a template to create a new environment.
-
-      A template consists of a name, a description, a valid set of configuration
-      files describing the deployment, and a set of Variables and Secrets.
-
+      A template consists of a name, a description, a valid set of configuration files describing the deployment, and a set of Variables and Secrets.
       More on https://docs.env0.com/docs/templates
   - name: Configuration
-    description: >
-      This API covers all deployment Configuration including: Variables, Tokens,
-      SSH Keys and Deployment Credentials
+    description: |
+      This API covers all deployment Configuration including: Variables, Tokens, SSH Keys and Deployment Credentials
   - name: Cost
-    description: >
-      With cost monitoring enabled in env0, you will be able to see how much
-      each Environment you are running costs.
-
+    description: |
+      With cost monitoring enabled in env0, you will be able to see how much each Environment you are running costs.
       More on https://docs.env0.com/docs/cost-monitoring
   - name: Credentials
-    description: >
+    description: |
       Authentication against the env0 API is done via API Keys.
 
-
-      An API Key is created by an organization administrator, but is not
-      connected to any specific user when it's being used. 
-
+      An API Key is created by an organization administrator, but is not connected to any specific user when it's being used. 
 
       More on https://docs.env0.com/reference/authentication
   - name: Environments
@@ -4266,70 +4051,42 @@ tags:
 
       More on https://docs.env0.com/docs/environments
   - name: Notifications
-    description: >
-      env0 can send notifications for deployment events to your Slack or
-      Microsoft Teams workspace.
-
-      You can define several Notification Targets, corresponding to different
-      channels.
-
-      You can also associate these Notification Targets to different env0
-      projects, controlling which events go to which channel.
-
+    description: |
+      env0 can send notifications for deployment events to your Slack or Microsoft Teams workspace.
+      You can define several Notification Targets, corresponding to different channels.
+      You can also associate these Notification Targets to different env0 projects, controlling which events go to which channel.
       More on https://docs.env0.com/docs/notifications
   - name: Organization
-    description: >
+    description: |
       An Organization is the highest level logical entity in env0.
 
-
-      All Projects, Templates, Variable, Policies, and Environments, are defined
-      for a specific organization. Organizations are logically separate from
-      each other, and do not share any entities.
-
+      All Projects, Templates, Variable, Policies, and Environments, are defined for a specific organization. Organizations are logically separate from each other, and do not share any entities.
       More on https://docs.env0.com/docs/organizations
   - name: Projects
-    description: >
-      Projects are used in env0 to provide granular access control to
-      Environments.
-
-      Every environment in env0 exists under a project, and users are given
-      access on a per-project basis.
-
-      Projects are also useful for managing multiple cloud accounts within a
-      single Organization.
-
-      We recommend using projects to separate dev environments from production
-      environments, each with its own access rights and policies.
-
+    description: |
+      Projects are used in env0 to provide granular access control to Environments.
+      Every environment in env0 exists under a project, and users are given access on a per-project basis.
+      Projects are also useful for managing multiple cloud accounts within a single Organization.
+      We recommend using projects to separate dev environments from production environments, each with its own access rights and policies.
       More on https://docs.env0.com/docs/projects
   - name: Scheduling
-    description: >
-      Scheduling allows you to automatically trigger destroys and deploys of
-      your environments on a scheduled basis.
-
-      Scheduling is configured based on cron expressions, and can be attached to
-      an already deployed environment only.
-
+    description: |
+      Scheduling allows you to automatically trigger destroys and deploys of your environments on a scheduled basis.
+      Scheduling is configured based on cron expressions, and can be attached to an already deployed environment only.
 
       More on https://docs.env0.com/docs/scheduling
   - name: Role Based Access
-    description: >
+    description: |
       In order to have access to a project, users need to be associated with it.
+      Each user associated with a project has a specific project Role assigned to them.
 
-      Each user associated with a project has a specific project Role assigned
-      to them.
-
-
-      More on
-      https://docs.env0.com/docs/user-management#manage-users-of-a-project
+      More on https://docs.env0.com/docs/user-management#manage-users-of-a-project
   - name: Teams
-    description: >
-      Teams allow you to more easily manage your project level permissions in
-      env0 by setting the role for an entire group of users as a single entity.
-
-      A team belongs to a single Organization, are managed at the Organization
-      Settings level, and are not shared between multiple organizations
-
+    description: |
+      Teams allow you to more easily manage your project level permissions in env0 by setting the role for an entire group of users as a single entity.
+      A team belongs to a single Organization, are managed at the Organization Settings level, and are not shared between multiple organizations
       More on https://docs.env0.com/docs/teams
+servers:
+  - url: 'https://api.env0.com'
 security:
   - env0 API Key: []
