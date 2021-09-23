@@ -379,6 +379,40 @@ components:
       additionalProperties: false
     BlueprintApi.AddBlueprintToProject.Response:
       $ref: '#/components/schemas/BlueprintApi.Blueprint'
+    BlueprintApi.GetModuleVersions.Response:
+      type: array
+      items:
+        $ref: >-
+          #/components/schemas/BlueprintApi.GetModuleVersions.ModuleVersionMetadata
+    BlueprintApi.GetModuleVersions.ModuleVersionMetadata:
+      type: object
+      properties:
+        version:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - version
+        - createdAt
+      additionalProperties: false
+    BlueprintApi.ModuleRegistryListVersions.Response:
+      type: object
+      properties:
+        modules:
+          type: array
+          items:
+            type: object
+            properties:
+              versions:
+                $ref: '#/components/schemas/BlueprintApi.GetModuleVersions.Response'
+            required:
+              - versions
+            additionalProperties: false
+          minItems: 1
+          maxItems: 1
+      required:
+        - modules
+      additionalProperties: false
     ConfigurationApi.SshKey:
       type: object
       properties:
@@ -1476,6 +1510,10 @@ components:
           type:
             - number
             - 'null'
+        numberOfEnvironmentsPerProject:
+          type:
+            - number
+            - 'null'
         requiresApprovalDefault:
           type: boolean
         includeCostEstimation:
@@ -1490,6 +1528,7 @@ components:
         - id
         - projectId
         - numberOfEnvironments
+        - numberOfEnvironmentsPerProject
         - requiresApprovalDefault
         - includeCostEstimation
         - skipApplyWhenPlanIsEmpty
@@ -2330,6 +2369,39 @@ paths:
         '204':
           description: Status 204 Response
           content: {}
+      tags:
+        - Templates
+  /modules/v1/{organizationId}/{moduleName}/{providerName}/versions:
+    get:
+      operationId: moduleRegistryListVersions
+      summary: Get the list of versions for module
+      parameters:
+        - name: organizationId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: moduleName
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: providerName
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/BlueprintApi.ModuleRegistryListVersions.Response
       tags:
         - Templates
   /ssh-keys:
