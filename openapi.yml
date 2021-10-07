@@ -411,8 +411,6 @@ components:
           type:
             - string
             - 'null'
-        isBitbucketServer:
-          type: boolean
         isGitLab:
           type: boolean
         author:
@@ -2148,8 +2146,12 @@ components:
           type: string
         teamId:
           type: string
+          maxLength: 36
+          minLength: 1
         projectId:
           type: string
+          maxLength: 36
+          minLength: 1
         projectRole:
           $ref: '#/components/schemas/ProjectRoles'
       required:
@@ -2195,8 +2197,12 @@ components:
       properties:
         teamId:
           type: string
+          maxLength: 36
+          minLength: 1
         projectId:
           type: string
+          maxLength: 36
+          minLength: 1
         projectRole:
           $ref: '#/components/schemas/ProjectRoles'
       required:
