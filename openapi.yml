@@ -435,9 +435,15 @@ components:
         - organizationId
         - repository
         - type
+    BlueprintApi.FindAllModules.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/BlueprintApi.Module'
     BlueprintApi.CreateModule.Request.Body:
       $ref: '#/components/schemas/BlueprintApi.Module'
     BlueprintApi.CreateModule.Response:
+      $ref: '#/components/schemas/BlueprintApi.Module'
+    BlueprintApi.GetModule.Response:
       $ref: '#/components/schemas/BlueprintApi.Module'
     BlueprintApi.GetModuleVersions.Response:
       type: array
@@ -2440,6 +2446,27 @@ paths:
       tags:
         - Templates
   /modules:
+    get:
+      operationId: findAllModules
+      summary: List Modules
+      description: Returns all modules associated with an organization.
+      parameters:
+        - name: organizationId
+          in: query
+          description: An Organization ID to filter by
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlueprintApi.FindAllModules.Response'
+      tags:
+        - Templates
     post:
       operationId: createModule
       summary: Create module
@@ -2457,6 +2484,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BlueprintApi.CreateModule.Response'
+      tags:
+        - Templates
+  /modules/{id}:
+    delete:
+      operationId: deleteModuleById
+      summary: Delete module
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Templates
+    get:
+      operationId: getModule
+      summary: Get module
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlueprintApi.GetModule.Response'
       tags:
         - Templates
   /modules/v1/{organizationId}/{moduleName}/{providerName}/versions:
