@@ -379,25 +379,36 @@ components:
       additionalProperties: false
     BlueprintApi.AddBlueprintToProject.Response:
       $ref: '#/components/schemas/BlueprintApi.Blueprint'
-    BlueprintApi.Module:
+    BlueprintApi.ExistingModule:
+      $ref: >-
+        #/components/schemas/AugmentedRequired%3CBlueprintApi.Module%2C(%22id%22%7C%22organizationId%22)%3E
+    AugmentedRequired<BlueprintApi.Module,("id"|"organizationId")>:
       type: object
       additionalProperties: false
       properties:
-        moduleName:
-          type: string
-        moduleProvider:
-          type: string
-        type:
-          $ref: '#/components/schemas/BlueprintApi.ModuleType'
         id:
           type: string
         organizationId:
           type: string
+        author:
+          $ref: '#/components/schemas/User'
+        authorId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+        type:
+          $ref: '#/components/schemas/BlueprintApi.ModuleType'
+        repository:
+          type: string
         description:
           type: string
         logoUrl:
-          type: string
-        repository:
           type: string
         tokenId:
           type: string
@@ -413,6 +424,62 @@ components:
             - 'null'
         isGitLab:
           type: boolean
+        sshKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlueprintApi.SshKey'
+        moduleName:
+          type: string
+        moduleProvider:
+          type: string
+      required:
+        - moduleName
+        - moduleProvider
+        - repository
+        - type
+      description: Required
+    BlueprintApi.FindAllModules.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/BlueprintApi.ExistingModule'
+    BlueprintApi.Module:
+      type: object
+      additionalProperties: false
+      properties:
+        moduleName:
+          type: string
+        moduleProvider:
+          type: string
+        repository:
+          type: string
+        description:
+          type: string
+        logoUrl:
+          type: string
+        tokenId:
+          type: string
+        tokenName:
+          type: string
+        githubInstallationId:
+          type:
+            - number
+            - 'null'
+        bitbucketClientKey:
+          type:
+            - string
+            - 'null'
+        isGitLab:
+          type: boolean
+        sshKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlueprintApi.SshKey'
+        type:
+          $ref: '#/components/schemas/BlueprintApi.ModuleType'
+        id:
+          type: string
+        organizationId:
+          type: string
         author:
           $ref: '#/components/schemas/User'
         authorId:
@@ -425,6 +492,46 @@ components:
           format: date-time
         isDeleted:
           type: boolean
+      required:
+        - moduleName
+        - moduleProvider
+        - organizationId
+        - repository
+        - type
+    BlueprintApi.CreateModule.Request.Body:
+      $ref: '#/components/schemas/BlueprintApi.Module'
+    BlueprintApi.CreateModule.Response:
+      $ref: '#/components/schemas/BlueprintApi.Module'
+    BlueprintApi.GetModule.Response:
+      $ref: '#/components/schemas/BlueprintApi.Module'
+    BlueprintApi.ModuleUserFields:
+      type: object
+      additionalProperties: false
+      properties:
+        moduleName:
+          type: string
+        moduleProvider:
+          type: string
+        repository:
+          type: string
+        description:
+          type: string
+        logoUrl:
+          type: string
+        tokenId:
+          type: string
+        tokenName:
+          type: string
+        githubInstallationId:
+          type:
+            - number
+            - 'null'
+        bitbucketClientKey:
+          type:
+            - string
+            - 'null'
+        isGitLab:
+          type: boolean
         sshKeys:
           type: array
           items:
@@ -432,18 +539,10 @@ components:
       required:
         - moduleName
         - moduleProvider
-        - organizationId
         - repository
-        - type
-    BlueprintApi.FindAllModules.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/BlueprintApi.Module'
-    BlueprintApi.CreateModule.Request.Body:
-      $ref: '#/components/schemas/BlueprintApi.Module'
-    BlueprintApi.CreateModule.Response:
-      $ref: '#/components/schemas/BlueprintApi.Module'
-    BlueprintApi.GetModule.Response:
+    BlueprintApi.UpdateModule.Request.Body:
+      $ref: '#/components/schemas/BlueprintApi.ModuleUserFields'
+    BlueprintApi.UpdateModule.Response:
       $ref: '#/components/schemas/BlueprintApi.Module'
     BlueprintApi.GetModuleVersions.Response:
       type: array
@@ -2520,6 +2619,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BlueprintApi.GetModule.Response'
+      tags:
+        - Templates
+    patch:
+      operationId: updateModule
+      summary: Update module
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlueprintApi.UpdateModule.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlueprintApi.UpdateModule.Response'
       tags:
         - Templates
   /modules/v1/{organizationId}/{moduleName}/{providerName}/versions:
