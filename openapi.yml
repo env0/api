@@ -442,6 +442,33 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/BlueprintApi.ExistingModule'
+    BlueprintApi.GetModuleVersions.ModuleVersionMetadata:
+      type: object
+      properties:
+        version:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - version
+        - createdAt
+      additionalProperties: false
+    BlueprintApi.GetModuleVersions.Response:
+      type: array
+      items:
+        $ref: >-
+          #/components/schemas/BlueprintApi.GetModuleVersions.ModuleVersionMetadata
+    BlueprintApi.GetModuleReadme.Response:
+      type: object
+      properties:
+        readme:
+          type: string
+        source:
+          type: string
+      required:
+        - readme
+        - source
+      additionalProperties: false
     BlueprintApi.Module:
       type: object
       additionalProperties: false
@@ -501,7 +528,7 @@ components:
     BlueprintApi.CreateModule.Request.Body:
       $ref: '#/components/schemas/BlueprintApi.Module'
     BlueprintApi.CreateModule.Response:
-      $ref: '#/components/schemas/BlueprintApi.Module'
+      $ref: '#/components/schemas/BlueprintApi.ExistingModule'
     BlueprintApi.GetModule.Response:
       $ref: '#/components/schemas/BlueprintApi.Module'
     BlueprintApi.ModuleUserFields:
@@ -543,41 +570,7 @@ components:
     BlueprintApi.UpdateModule.Request.Body:
       $ref: '#/components/schemas/BlueprintApi.ModuleUserFields'
     BlueprintApi.UpdateModule.Response:
-      $ref: '#/components/schemas/BlueprintApi.Module'
-    BlueprintApi.GetModuleVersions.Response:
-      type: array
-      items:
-        $ref: >-
-          #/components/schemas/BlueprintApi.GetModuleVersions.ModuleVersionMetadata
-    BlueprintApi.GetModuleVersions.ModuleVersionMetadata:
-      type: object
-      properties:
-        version:
-          type: string
-        createdAt:
-          type: string
-      required:
-        - version
-        - createdAt
-      additionalProperties: false
-    BlueprintApi.ModuleRegistryListVersions.Response:
-      type: object
-      properties:
-        modules:
-          type: array
-          items:
-            type: object
-            properties:
-              versions:
-                $ref: '#/components/schemas/BlueprintApi.GetModuleVersions.Response'
-            required:
-              - versions
-            additionalProperties: false
-          minItems: 1
-          maxItems: 1
-      required:
-        - modules
-      additionalProperties: false
+      $ref: '#/components/schemas/BlueprintApi.ExistingModule'
     ConfigurationApi.SshKey:
       type: object
       properties:
@@ -743,6 +736,8 @@ components:
           type: string
         schema:
           $ref: '#/components/schemas/PartialJSONSchema7'
+        description:
+          type: string
       required:
         - id
         - isSensitive
@@ -812,6 +807,8 @@ components:
           type: string
         schema:
           $ref: '#/components/schemas/PartialJSONSchema7'
+        description:
+          type: string
         id:
           type: string
         isSensitive:
@@ -1203,6 +1200,8 @@ components:
           type: boolean
         schema:
           $ref: '#/components/schemas/PartialJSONSchema7'
+        description:
+          type: string
         isSensitive:
           type: boolean
       required:
@@ -1653,6 +1652,13 @@ components:
           $comment: >-
             { "schema": { "anyOf": [{ "type": "integer", "minimum": 1 }, {
             "type": "null" }] } }
+        numberOfEnvironmentsPerProject:
+          type:
+            - number
+            - 'null'
+          $comment: >-
+            { "schema": { "anyOf": [{ "type": "integer", "minimum": 1 }, {
+            "type": "null" }] } }
         requiresApprovalDefault:
           type: boolean
         includeCostEstimation:
@@ -1660,6 +1666,8 @@ components:
         skipApplyWhenPlanIsEmpty:
           type: boolean
         disableDestroyEnvironments:
+          type: boolean
+        skipRedundantDeployments:
           type: boolean
       required:
         - projectId
@@ -1687,6 +1695,8 @@ components:
           type: boolean
         disableDestroyEnvironments:
           type: boolean
+        skipRedundantDeployments:
+          type: boolean
         updatedBy:
           type: string
       required:
@@ -1698,6 +1708,7 @@ components:
         - includeCostEstimation
         - skipApplyWhenPlanIsEmpty
         - disableDestroyEnvironments
+        - skipRedundantDeployments
         - updatedBy
       additionalProperties: false
     EnvironmentApi.UpdatePolicies.Response:
@@ -2386,6 +2397,7 @@ paths:
     post:
       operationId: createBlueprint
       summary: Create Template
+      description: Please note, you can only have 1 ssh key per template
       requestBody:
         content:
           application/json:
@@ -2436,6 +2448,7 @@ paths:
     put:
       operationId: updateBlueprint
       summary: Update Template
+      description: Please note, you can only have 1 ssh key per template
       requestBody:
         content:
           application/json:
@@ -2565,7 +2578,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BlueprintApi.FindAllModules.Response'
       tags:
-        - Templates
+        - Modules
     post:
       operationId: createModule
       summary: Create module
@@ -2584,7 +2597,51 @@ paths:
               schema:
                 $ref: '#/components/schemas/BlueprintApi.CreateModule.Response'
       tags:
-        - Templates
+        - Modules
+  /modules/{id}/versions:
+    get:
+      operationId: getModuleVersions
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlueprintApi.GetModuleVersions.Response'
+      tags:
+        - Modules
+  /modules/{id}/versions/{releaseId}:
+    get:
+      operationId: getModuleReadme
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: releaseId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlueprintApi.GetModuleReadme.Response'
+      tags:
+        - Modules
   /modules/{id}:
     delete:
       operationId: deleteModuleById
@@ -2601,7 +2658,7 @@ paths:
           description: Status 204 Response
           content: {}
       tags:
-        - Templates
+        - Modules
     get:
       operationId: getModule
       summary: Get module
@@ -2620,7 +2677,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BlueprintApi.GetModule.Response'
       tags:
-        - Templates
+        - Modules
     patch:
       operationId: updateModule
       summary: Update module
@@ -2630,7 +2687,13 @@ paths:
             schema:
               $ref: '#/components/schemas/BlueprintApi.UpdateModule.Request.Body'
         description: ''
-      parameters: []
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: ''
@@ -2639,40 +2702,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BlueprintApi.UpdateModule.Response'
       tags:
-        - Templates
-  /modules/v1/{organizationId}/{moduleName}/{providerName}/versions:
-    get:
-      operationId: moduleRegistryListVersions
-      summary: Get the list of versions for module
-      parameters:
-        - name: organizationId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: moduleName
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: providerName
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/BlueprintApi.ModuleRegistryListVersions.Response
-      tags:
-        - Templates
+        - Modules
   /ssh-keys:
     get:
       operationId: findSshKeysByOrganization
@@ -4511,6 +4541,8 @@ tags:
       files describing the deployment, and a set of Variables and Secrets.
 
       More on https://docs.env0.com/docs/templates
+  - name: Modules
+    description: Module Registry endpoints
   - name: Configuration
     description: >
       This API covers all deployment Configuration including: Variables, Tokens,
