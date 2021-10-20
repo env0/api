@@ -1520,6 +1520,7 @@ components:
         - ABORTING
         - ABORTED
         - QUEUED
+        - SKIPPED
     EnvironmentApi.EnvironmentResource:
       type: object
       properties:
@@ -1652,7 +1653,7 @@ components:
           $comment: >-
             { "schema": { "anyOf": [{ "type": "integer", "minimum": 1 }, {
             "type": "null" }] } }
-        numberOfEnvironmentsPerProject:
+        numberOfEnvironmentsTotal:
           type:
             - number
             - 'null'
@@ -1683,7 +1684,7 @@ components:
           type:
             - number
             - 'null'
-        numberOfEnvironmentsPerProject:
+        numberOfEnvironmentsTotal:
           type:
             - number
             - 'null'
@@ -1703,7 +1704,7 @@ components:
         - id
         - projectId
         - numberOfEnvironments
-        - numberOfEnvironmentsPerProject
+        - numberOfEnvironmentsTotal
         - requiresApprovalDefault
         - includeCostEstimation
         - skipApplyWhenPlanIsEmpty
