@@ -459,16 +459,9 @@ components:
         $ref: >-
           #/components/schemas/BlueprintApi.GetModuleVersions.ModuleVersionMetadata
     BlueprintApi.GetModuleReadme.Response:
-      type: object
-      properties:
-        readme:
-          type: string
-        source:
-          type: string
-      required:
-        - readme
-        - source
-      additionalProperties: false
+      type:
+        - string
+        - 'null'
     BlueprintApi.Module:
       type: object
       additionalProperties: false
