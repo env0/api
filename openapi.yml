@@ -379,10 +379,87 @@ components:
       additionalProperties: false
     BlueprintApi.AddBlueprintToProject.Response:
       $ref: '#/components/schemas/BlueprintApi.Blueprint'
+    BlueprintApi.GetVariablesFromRepository.RepositoryVariable:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        scopeId:
+          type: string
+        scope:
+          $ref: '#/components/schemas/ConfigurationScope'
+        type:
+          $ref: '#/components/schemas/ConfigurationType'
+          description: |-
+            Whether it is an Environment or Terraform variable
+            0 value maps to an Environment variable
+            1 value maps to an Terraform variable
+        toDelete:
+          type: boolean
+        schema:
+          $ref: '#/components/schemas/PartialJSONSchema7'
+        description:
+          type: string
+          maxLength: 255
+        id:
+          type: string
+        isSensitive:
+          type: boolean
+      required:
+        - name
+        - value
+        - scope
+        - type
+      additionalProperties: false
+    ConfigurationScope:
+      type: string
+      enum:
+        - GLOBAL
+        - BLUEPRINT
+        - PROJECT
+        - ENVIRONMENT
+        - DEPLOYMENT
+        - GLOBAL
+        - BLUEPRINT
+        - PROJECT
+        - ENVIRONMENT
+        - DEPLOYMENT
+        - GLOBAL
+        - BLUEPRINT
+        - PROJECT
+        - ENVIRONMENT
+        - DEPLOYMENT
+    ConfigurationType:
+      type: number
+      enum:
+        - 0
+        - 1
+        - 0
+        - 1
+        - 0
+        - 1
+    PartialJSONSchema7:
+      type: object
+      properties:
+        type:
+          type: string
+          const: string
+        enum:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    BlueprintApi.GetVariablesFromRepository.Response:
+      type: array
+      items:
+        $ref: >-
+          #/components/schemas/BlueprintApi.GetVariablesFromRepository.RepositoryVariable
     BlueprintApi.ExistingModule:
       $ref: >-
-        #/components/schemas/AugmentedRequired%3CBlueprintApi.Module%2C(%22id%22%7C%22organizationId%22)%3E
-    AugmentedRequired<BlueprintApi.Module,("id"|"organizationId")>:
+        #/components/schemas/AugmentedRequired%3CBlueprintApi.Module%2C(%22id%22%7C%22organizationId%22%7C%22author%22)%3E
+    AugmentedRequired<BlueprintApi.Module,("id"|"organizationId"|"author")>:
       type: object
       additionalProperties: false
       properties:
@@ -424,6 +501,10 @@ components:
             - 'null'
         isGitLab:
           type: boolean
+        gitlabProjectId:
+          type:
+            - number
+            - 'null'
         sshKeys:
           type: array
           items:
@@ -490,6 +571,10 @@ components:
             - 'null'
         isGitLab:
           type: boolean
+        gitlabProjectId:
+          type:
+            - number
+            - 'null'
         sshKeys:
           type: array
           items:
@@ -552,6 +637,10 @@ components:
             - 'null'
         isGitLab:
           type: boolean
+        gitlabProjectId:
+          type:
+            - number
+            - 'null'
         sshKeys:
           type: array
           items:
@@ -720,7 +809,7 @@ components:
         type:
           $ref: '#/components/schemas/ConfigurationType'
           description: |-
-            Wether it is an Environment or Terraform variable
+            Whether it is an Environment or Terraform variable
             0 value maps to an Environment variable
             1 value maps to an Terraform variable
         toDelete:
@@ -731,6 +820,7 @@ components:
           $ref: '#/components/schemas/PartialJSONSchema7'
         description:
           type: string
+          maxLength: 255
       required:
         - id
         - isSensitive
@@ -741,43 +831,12 @@ components:
         - type
         - userId
         - value
-    ConfigurationScope:
-      type: string
-      enum:
-        - GLOBAL
-        - BLUEPRINT
-        - PROJECT
-        - ENVIRONMENT
-        - DEPLOYMENT
-        - GLOBAL
-        - BLUEPRINT
-        - PROJECT
-        - ENVIRONMENT
-        - DEPLOYMENT
-    PartialJSONSchema7:
-      type: object
-      properties:
-        type:
-          type: string
-          const: string
-        enum:
-          type: array
-          items:
-            type: string
-      additionalProperties: false
-    ConfigurationType:
-      type: number
-      enum:
-        - 0
-        - 1
-        - 0
-        - 1
     ConfigurationApi.FindVariablesByScope.Response:
       type: array
       items:
         $ref: >-
           #/components/schemas/ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty
-    ConfigurationApi.CreateOrUpdateVariable.ConfigurationPropertySignlePayload:
+    ConfigurationApi.ConfigurationPropertySignlePayload:
       type: object
       properties:
         name:
@@ -791,7 +850,7 @@ components:
         type:
           $ref: '#/components/schemas/ConfigurationType'
           description: |-
-            Wether it is an Environment or Terraform variable
+            Whether it is an Environment or Terraform variable
             0 value maps to an Environment variable
             1 value maps to an Terraform variable
         toDelete:
@@ -802,6 +861,7 @@ components:
           $ref: '#/components/schemas/PartialJSONSchema7'
         description:
           type: string
+          maxLength: 255
         id:
           type: string
         isSensitive:
@@ -817,12 +877,12 @@ components:
       type: array
       items:
         $ref: >-
-          #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.ConfigurationPropertySignlePayload
+          #/components/schemas/ConfigurationApi.ConfigurationPropertySignlePayload
     ConfigurationApi.CreateOrUpdateVariable.Response:
       type: array
       items:
         $ref: >-
-          #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.ConfigurationPropertySignlePayload
+          #/components/schemas/ConfigurationApi.ConfigurationPropertySignlePayload
     TransiantCredential:
       type: object
       properties:
@@ -1186,7 +1246,7 @@ components:
         type:
           $ref: '#/components/schemas/ConfigurationType'
           description: |-
-            Wether it is an Environment or Terraform variable
+            Whether it is an Environment or Terraform variable
             0 value maps to an Environment variable
             1 value maps to an Terraform variable
         toDelete:
@@ -1195,6 +1255,7 @@ components:
           $ref: '#/components/schemas/PartialJSONSchema7'
         description:
           type: string
+          maxLength: 255
         isSensitive:
           type: boolean
       required:
@@ -1780,7 +1841,10 @@ components:
       enum:
         - environmentDeployStarted
         - environmentDestroyStarted
-        - deploymentCompleted
+        - deploySucceeded
+        - destroySucceeded
+        - deployFailed
+        - destroyFailed
         - deploymentWaitingForUser
         - deploymentCancelled
         - environmentDeployResumed
@@ -2549,6 +2613,67 @@ paths:
         '204':
           description: Status 204 Response
           content: {}
+      tags:
+        - Templates
+  /blueprints/variables-from-repository:
+    get:
+      operationId: getVariablesFromRepository
+      summary: Generate Terraform Variables from Repository
+      description: >-
+        Clones and searches through a Template git repository for any Terraform
+        variable blocks and returns a set of env0 Terraform Configuration
+        Variables that may be added to env0 via the Configuration API
+      parameters:
+        - name: repository
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: path
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: tokenId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: sshKeyIds
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: githubInstallationId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: bitbucketClientKey
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/BlueprintApi.GetVariablesFromRepository.Response
       tags:
         - Templates
   /modules:
