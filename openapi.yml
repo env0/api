@@ -2727,6 +2727,8 @@ paths:
   /modules/{id}/versions:
     get:
       operationId: getModuleVersions
+      summary: List Module Versions
+      description: Returns all versions of the module.
       parameters:
         - name: id
           in: path
@@ -2734,6 +2736,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: id
+          in: query
+          description: The Module Id
+          required: false
+          allowEmptyValue: false
       responses:
         '200':
           description: ''
@@ -2746,6 +2753,8 @@ paths:
   /modules/{id}/versions/{releaseId}:
     get:
       operationId: getModuleReadme
+      summary: Get Module README
+      description: Returns the Module README.md file content from a specific version
       parameters:
         - name: id
           in: path
@@ -2759,6 +2768,16 @@ paths:
           required: true
           schema:
             type: string
+        - name: id
+          in: query
+          description: The Module Id
+          required: false
+          allowEmptyValue: false
+        - name: releaseId
+          in: query
+          description: The release based on the tag of the module
+          required: false
+          allowEmptyValue: false
       responses:
         '200':
           description: ''
