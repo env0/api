@@ -1724,6 +1724,8 @@ components:
           type: boolean
         skipRedundantDeployments:
           type: boolean
+        runPullRequestPlanDefault:
+          type: boolean
       required:
         - projectId
       additionalProperties: false
@@ -1754,6 +1756,8 @@ components:
           type: boolean
         updatedBy:
           type: string
+        runPullRequestPlanDefault:
+          type: boolean
       required:
         - id
         - projectId
@@ -1765,6 +1769,7 @@ components:
         - disableDestroyEnvironments
         - skipRedundantDeployments
         - updatedBy
+        - runPullRequestPlanDefault
       additionalProperties: false
     EnvironmentApi.UpdatePolicies.Response:
       $ref: '#/components/schemas/EnvironmentApi.Policy'
