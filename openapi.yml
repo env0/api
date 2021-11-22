@@ -1726,6 +1726,8 @@ components:
           type: boolean
         runPullRequestPlanDefault:
           type: boolean
+        continuousDeploymentDefault:
+          type: boolean
       required:
         - projectId
       additionalProperties: false
@@ -1758,6 +1760,8 @@ components:
           type: string
         runPullRequestPlanDefault:
           type: boolean
+        continuousDeploymentDefault:
+          type: boolean
       required:
         - id
         - projectId
@@ -1770,6 +1774,7 @@ components:
         - skipRedundantDeployments
         - updatedBy
         - runPullRequestPlanDefault
+        - continuousDeploymentDefault
       additionalProperties: false
     EnvironmentApi.UpdatePolicies.Response:
       $ref: '#/components/schemas/EnvironmentApi.Policy'
