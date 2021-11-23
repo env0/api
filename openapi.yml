@@ -108,6 +108,8 @@ components:
           type: boolean
         isGitLabEnterprise:
           type: boolean
+        isGitHubEnterprise:
+          type: boolean
         isGitLab:
           type: boolean
         type:
@@ -116,6 +118,8 @@ components:
           type: array
           items:
             type: string
+        isGithubEnterprise:
+          type: boolean
       required:
         - name
         - organizationId
@@ -190,10 +194,14 @@ components:
           type: boolean
         isGitLabEnterprise:
           type: boolean
+        isGitHubEnterprise:
+          type: boolean
         isGitLab:
           type: boolean
         type:
           $ref: '#/components/schemas/BlueprintApi.BlueprintType'
+        isGithubEnterprise:
+          type: boolean
       required:
         - name
         - organizationId
@@ -268,6 +276,8 @@ components:
           type: boolean
         isGitLabEnterprise:
           type: boolean
+        isGitHubEnterprise:
+          type: boolean
         isGitLab:
           type: boolean
         type:
@@ -276,6 +286,8 @@ components:
           type: array
           items:
             type: string
+        isGithubEnterprise:
+          type: boolean
         gitlabProjectId:
           type:
             - number
@@ -334,6 +346,8 @@ components:
           type: boolean
         isGitLabEnterprise:
           type: boolean
+        isGitHubEnterprise:
+          type: boolean
         isGitLab:
           type: boolean
         type:
@@ -342,6 +356,8 @@ components:
           type: array
           items:
             type: string
+        isGithubEnterprise:
+          type: boolean
         id:
           type: string
         author:
