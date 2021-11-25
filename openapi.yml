@@ -118,8 +118,6 @@ components:
           type: array
           items:
             type: string
-        isGithubEnterprise:
-          type: boolean
       required:
         - name
         - organizationId
@@ -200,8 +198,6 @@ components:
           type: boolean
         type:
           $ref: '#/components/schemas/BlueprintApi.BlueprintType'
-        isGithubEnterprise:
-          type: boolean
       required:
         - name
         - organizationId
@@ -286,8 +282,6 @@ components:
           type: array
           items:
             type: string
-        isGithubEnterprise:
-          type: boolean
         gitlabProjectId:
           type:
             - number
@@ -356,8 +350,6 @@ components:
           type: array
           items:
             type: string
-        isGithubEnterprise:
-          type: boolean
         id:
           type: string
         author:
