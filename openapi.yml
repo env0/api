@@ -1145,6 +1145,239 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/CredentialsApi.ApiKey'
+    DashboardApi.Query.MaxActiveEnvironmentsPerDay.Response:
+      $ref: >-
+        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7265-7296-api.d.ts-7250-7297-api.d.ts-7220-7298-api.d.ts-7063-7304-api.d.ts-7013-7304-api.d.ts-231-9649-api.d.ts-206-9649-api.d.ts-204-9651-api.d.ts-121-9651-api.d.ts-0-9652%3E
+    DashboardApi.Query.Base.Response<structure-api.d.ts-7265-7296-api.d.ts-7250-7297-api.d.ts-7220-7298-api.d.ts-7063-7304-api.d.ts-7013-7304-api.d.ts-231-9649-api.d.ts-206-9649-api.d.ts-204-9651-api.d.ts-121-9651-api.d.ts-0-9652>:
+      type: array
+      items:
+        type: object
+        properties:
+          date:
+            type: string
+          count:
+            type: number
+        required:
+          - date
+          - count
+        additionalProperties: false
+    DashboardApi.Query.ActiveEnvironmentsPerDay.Response:
+      $ref: >-
+        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7550-7846-api.d.ts-7535-7847-api.d.ts-7505-7848-api.d.ts-7351-7854-api.d.ts-7304-7854-api.d.ts-231-9649-api.d.ts-206-9649-api.d.ts-204-9651-api.d.ts-121-9651-api.d.ts-0-9652%3E
+    DashboardApi.Query.Base.Response<structure-api.d.ts-7550-7846-api.d.ts-7535-7847-api.d.ts-7505-7848-api.d.ts-7351-7854-api.d.ts-7304-7854-api.d.ts-231-9649-api.d.ts-206-9649-api.d.ts-204-9651-api.d.ts-121-9651-api.d.ts-0-9652>:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          id:
+            type: string
+          projectName:
+            type: string
+          projectId:
+            type: string
+          status:
+            $ref: '#/components/schemas/EnvironmentApi.EnvironmentStatus'
+          user:
+            $ref: '#/components/schemas/User'
+          lastDeploymentDate:
+            type: string
+            format: date-time
+          createdAt:
+            type: string
+            format: date-time
+          blueprintId:
+            type: string
+          blueprintName:
+            type: string
+        required:
+          - name
+          - id
+          - projectName
+          - projectId
+          - status
+          - user
+          - lastDeploymentDate
+          - createdAt
+          - blueprintId
+          - blueprintName
+        additionalProperties: false
+    EnvironmentApi.EnvironmentStatus:
+      type: string
+      enum:
+        - CREATED
+        - INACTIVE
+        - ACTIVE
+        - FAILED
+        - TIMEOUT
+        - WAITING_FOR_USER
+        - DEPLOY_IN_PROGRESS
+        - DESTROY_IN_PROGRESS
+        - PR_PLAN_IN_PROGRESS
+        - ABORTING
+        - ABORTED
+        - CREATED
+        - INACTIVE
+        - ACTIVE
+        - FAILED
+        - TIMEOUT
+        - WAITING_FOR_USER
+        - DEPLOY_IN_PROGRESS
+        - DESTROY_IN_PROGRESS
+        - PR_PLAN_IN_PROGRESS
+        - ABORTING
+        - ABORTED
+    DashboardApi.Query.EnvironmentStatus.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: environmentStatus
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.CountTeams.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: countTeams
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.CountUsers.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: countUsers
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.CountProjects.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: countProjects
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.CountTemplates.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: countTemplates
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.ActiveEnvironments.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: activeEnvironments
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.CountDeploymentsPerDay.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        startTime:
+          type: string
+        endTime:
+          type: string
+        queryName:
+          type: string
+          const: countDeploymentsPerDay
+        organizationId:
+          type: string
+      required:
+        - endTime
+        - organizationId
+        - queryName
+        - startTime
+    DashboardApi.Query.CountDeploymentType.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        startTime:
+          type: string
+        endTime:
+          type: string
+        queryName:
+          type: string
+          const: countDeploymentType
+        organizationId:
+          type: string
+      required:
+        - endTime
+        - organizationId
+        - queryName
+        - startTime
+    DashboardApi.Query.CountDeployTypesByUserInTimeRange.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        startTime:
+          type: string
+        endTime:
+          type: string
+        queryName:
+          type: string
+          const: countDeployTypesByUserInTimeRange
+        organizationId:
+          type: string
+      required:
+        - endTime
+        - organizationId
+        - queryName
+        - startTime
+    DashboardApi.Query.Response:
+      anyOf:
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.MaxActiveEnvironmentsPerDay.Response
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.ActiveEnvironmentsPerDay.Response
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.EnvironmentStatus.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountTeams.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountUsers.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountProjects.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountTemplates.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.ActiveEnvironments.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountDeploymentsPerDay.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountDeploymentType.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountDeployTypesByUserInTimeRange.Request.QueryStringParameters
     EnvironmentApi.UpdateDownstreamEnvironments.Request.Body:
       type: object
       properties:
@@ -1373,6 +1606,8 @@ components:
           type: boolean
         autoDeployByCustomGlob:
           type: string
+        terragruntWorkingDirectory:
+          type: string
       required:
         - name
         - organizationId
@@ -1392,20 +1627,6 @@ components:
         - pullRequestPlanDeployments
         - autoDeployOnPathChangesOnly
       additionalProperties: false
-    EnvironmentApi.EnvironmentStatus:
-      type: string
-      enum:
-        - CREATED
-        - INACTIVE
-        - ACTIVE
-        - FAILED
-        - TIMEOUT
-        - WAITING_FOR_USER
-        - DEPLOY_IN_PROGRESS
-        - DESTROY_IN_PROGRESS
-        - PR_PLAN_IN_PROGRESS
-        - ABORTING
-        - ABORTED
     EnvironmentApi.DeploymentLog:
       type: object
       properties:
@@ -2752,15 +2973,10 @@ paths:
       parameters:
         - name: id
           in: path
-          description: ''
+          description: The Module Id
           required: true
           schema:
             type: string
-        - name: id
-          in: query
-          description: The Module Id
-          required: false
-          allowEmptyValue: false
       responses:
         '200':
           description: ''
@@ -2778,26 +2994,16 @@ paths:
       parameters:
         - name: id
           in: path
-          description: ''
+          description: The Module Id
           required: true
           schema:
             type: string
         - name: releaseId
           in: path
-          description: ''
+          description: The release based on the tag of the module
           required: true
           schema:
             type: string
-        - name: id
-          in: query
-          description: The Module Id
-          required: false
-          allowEmptyValue: false
-        - name: releaseId
-          in: query
-          description: The release based on the tag of the module
-          required: false
-          allowEmptyValue: false
       responses:
         '200':
           description: ''
@@ -3490,6 +3696,46 @@ paths:
           content: {}
       tags:
         - Credentials
+  /dashboards:
+    get:
+      operationId: query
+      summary: Get query result
+      parameters:
+        - name: queryName
+          in: query
+          description: the query to trigger
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+            enum:
+              - countTeams
+              - countUsers
+              - activeEnvironments
+              - environmentStatus
+              - maxActiveEnvironmentsPerDay
+              - activeEnvironmentsPerDay
+              - countProjects
+              - countTemplates
+              - countDeploymentType
+              - countDeploymentsPerDay
+              - countDeployTypesByUserInTimeRange
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardApi.Query.Response'
+      tags:
+        - Dashboard
   /environments/{id}/downstream:
     put:
       operationId: updateDownstreamEnvironments
@@ -4728,6 +4974,9 @@ tags:
 
 
       More on https://docs.env0.com/reference/authentication
+  - name: Dashboard
+    description: |
+      This API covers all dashboard queries
   - name: Environments
     description: |
       An environment is an entity representing a deployment managed by env0.
