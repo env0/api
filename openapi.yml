@@ -3829,6 +3829,13 @@ paths:
           allowEmptyValue: false
           schema:
             type: string
+        - name: name
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
       responses:
         '200':
           description: ''
