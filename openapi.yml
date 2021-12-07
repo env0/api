@@ -1378,6 +1378,120 @@ components:
             #/components/schemas/DashboardApi.Query.CountDeploymentType.Request.QueryStringParameters
         - $ref: >-
             #/components/schemas/DashboardApi.Query.CountDeployTypesByUserInTimeRange.Request.QueryStringParameters
+    DeploymentStepApi.DeploymentStep:
+      type: object
+      properties:
+        id:
+          type: string
+        deploymentLogId:
+          type: string
+        name:
+          type: string
+        order:
+          type: number
+        projectId:
+          type: string
+        organizationId:
+          type: string
+        status:
+          $ref: '#/components/schemas/DeploymentStepApi.DeploymentStepStatus'
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        logStreamName:
+          type: string
+        agentKey:
+          type: string
+        logSource:
+          $ref: '#/components/schemas/LogSource'
+        logSourceMetadata:
+          $ref: '#/components/schemas/DeploymentStepApi.LogSourceMetadata'
+      required:
+        - deploymentLogId
+        - name
+        - order
+        - projectId
+        - organizationId
+        - status
+      additionalProperties: false
+    DeploymentStepApi.DeploymentStepStatus:
+      $ref: '#/components/schemas/CommonDeploymentStepApi.DeploymentStepStatus'
+    CommonDeploymentStepApi.DeploymentStepStatus:
+      type: string
+      enum:
+        - NOT_STARTED
+        - IN_PROGRESS
+        - WAITING_FOR_USER
+        - TIMEOUT
+        - FAIL
+        - SUCCESS
+        - CANCELLED
+        - SKIPPED
+    LogSource:
+      type: number
+      enum:
+        - 0
+        - 1
+        - 2
+    DeploymentStepApi.LogSourceMetadata:
+      $ref: >-
+        #/components/schemas/DeploymentStepApi.SelfHostedDynamoLogSourceMetatdata
+    DeploymentStepApi.SelfHostedDynamoLogSourceMetatdata:
+      type: object
+      properties:
+        accountId:
+          type: string
+        region:
+          type: string
+      required:
+        - accountId
+        - region
+      additionalProperties: false
+    DeploymentStepApi.FindByDeploymentLogId.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/DeploymentStepApi.DeploymentStep'
+    CommonDeploymentStepApi.FindStepLog.Response:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonDeploymentStepApi.FindStepLog.LogEvent'
+        nextStartTime:
+          type:
+            - number
+            - string
+        hasMoreLogs:
+          type: boolean
+      required:
+        - events
+        - hasMoreLogs
+      additionalProperties: false
+    CommonDeploymentStepApi.FindStepLog.LogEvent:
+      type: object
+      properties:
+        eventId:
+          type: string
+        message:
+          type: string
+        level:
+          type: string
+        timestamp:
+          type:
+            - number
+            - string
+      required:
+        - eventId
+        - message
+        - level
+        - timestamp
+      additionalProperties: false
+    DeploymentStepApi.FindStepLog.Response:
+      $ref: '#/components/schemas/CommonDeploymentStepApi.FindStepLog.Response'
     EnvironmentApi.UpdateDownstreamEnvironments.Request.Body:
       type: object
       properties:
@@ -3736,6 +3850,55 @@ paths:
                 $ref: '#/components/schemas/DashboardApi.Query.Response'
       tags:
         - Dashboard
+  /deployments/{deploymentLogId}/steps:
+    get:
+      operationId: findByDeploymentLogId
+      summary: Find all steps by Deployment Id
+      parameters:
+        - name: deploymentLogId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/DeploymentStepApi.FindByDeploymentLogId.Response
+      tags:
+        - Deployment Logs
+  /deployments/{deploymentLogId}/steps/{name}/log:
+    get:
+      operationId: findStepLog
+      summary: Get logs for specific step
+      parameters:
+        - name: name
+          in: path
+          description: >-
+            In order to fetch the available step names first use
+            deployments/{deploymentLogId}/steps end point
+          required: true
+          schema:
+            type: string
+        - name: deploymentLogId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentStepApi.FindStepLog.Response'
+      tags:
+        - Deployment Logs
   /environments/{id}/downstream:
     put:
       operationId: updateDownstreamEnvironments
@@ -3950,6 +4113,13 @@ paths:
           in: path
           description: ''
           required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
           schema:
             type: string
       responses:
@@ -4984,6 +5154,12 @@ tags:
   - name: Dashboard
     description: |
       This API covers all dashboard queries
+  - name: Deployment Logs
+    description: |
+      env0 deployment consists of steps such as Init Variables
+      using this API you can reterive information about those steps
+  - name: Deployment Logs
+    description: The Deployment Logs Endpoint by steps
   - name: Environments
     description: |
       An environment is an entity representing a deployment managed by env0.
