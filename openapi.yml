@@ -1771,6 +1771,10 @@ components:
         error:
           type: object
           additionalProperties: {}
+        customEnv0EnvironmentVariables:
+          type: object
+          additionalProperties:
+            type: string
         costEstimation:
           $ref: '#/components/schemas/Infracost.TotalOutput'
         status:
@@ -4322,7 +4326,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/EnvironmentApi.UpdatePolicies.Response'
       tags:
-        - Environments
+        - Projects
     get:
       operationId: getPolicies
       summary: Get Policy
@@ -4342,7 +4346,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/EnvironmentApi.GetPolicies.Response'
       tags:
-        - Environments
+        - Projects
   /notifications/endpoints:
     post:
       operationId: createNotificationEndpoint
