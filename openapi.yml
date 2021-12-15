@@ -434,11 +434,6 @@ components:
         - PROJECT
         - ENVIRONMENT
         - DEPLOYMENT
-        - GLOBAL
-        - BLUEPRINT
-        - PROJECT
-        - ENVIRONMENT
-        - DEPLOYMENT
     ConfigurationType:
       type: number
       enum:
@@ -1598,8 +1593,6 @@ components:
           type: string
         scopeId:
           type: string
-        scope:
-          $ref: '#/components/schemas/ConfigurationScope'
         type:
           $ref: '#/components/schemas/ConfigurationType'
           description: |-
@@ -1618,7 +1611,6 @@ components:
       required:
         - name
         - value
-        - scope
         - type
       additionalProperties: false
     DeployRequest:
