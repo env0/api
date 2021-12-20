@@ -1142,8 +1142,8 @@ components:
         $ref: '#/components/schemas/CredentialsApi.ApiKey'
     DashboardApi.Query.MaxActiveEnvironmentsPerDay.Response:
       $ref: >-
-        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7351-7382-api.d.ts-7336-7383-api.d.ts-7306-7384-api.d.ts-7149-7390-api.d.ts-7099-7390-api.d.ts-231-9735-api.d.ts-206-9735-api.d.ts-204-9737-api.d.ts-121-9737-api.d.ts-0-9738%3E
-    DashboardApi.Query.Base.Response<structure-api.d.ts-7351-7382-api.d.ts-7336-7383-api.d.ts-7306-7384-api.d.ts-7149-7390-api.d.ts-7099-7390-api.d.ts-231-9735-api.d.ts-206-9735-api.d.ts-204-9737-api.d.ts-121-9737-api.d.ts-0-9738>:
+        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7476-7507-api.d.ts-7461-7508-api.d.ts-7431-7509-api.d.ts-7274-7515-api.d.ts-7224-7515-api.d.ts-231-9860-api.d.ts-206-9860-api.d.ts-204-9862-api.d.ts-121-9862-api.d.ts-0-9863%3E
+    DashboardApi.Query.Base.Response<structure-api.d.ts-7476-7507-api.d.ts-7461-7508-api.d.ts-7431-7509-api.d.ts-7274-7515-api.d.ts-7224-7515-api.d.ts-231-9860-api.d.ts-206-9860-api.d.ts-204-9862-api.d.ts-121-9862-api.d.ts-0-9863>:
       type: array
       items:
         type: object
@@ -1158,8 +1158,8 @@ components:
         additionalProperties: false
     DashboardApi.Query.ActiveEnvironmentsPerDay.Response:
       $ref: >-
-        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7636-7932-api.d.ts-7621-7933-api.d.ts-7591-7934-api.d.ts-7437-7940-api.d.ts-7390-7940-api.d.ts-231-9735-api.d.ts-206-9735-api.d.ts-204-9737-api.d.ts-121-9737-api.d.ts-0-9738%3E
-    DashboardApi.Query.Base.Response<structure-api.d.ts-7636-7932-api.d.ts-7621-7933-api.d.ts-7591-7934-api.d.ts-7437-7940-api.d.ts-7390-7940-api.d.ts-231-9735-api.d.ts-206-9735-api.d.ts-204-9737-api.d.ts-121-9737-api.d.ts-0-9738>:
+        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7761-8057-api.d.ts-7746-8058-api.d.ts-7716-8059-api.d.ts-7562-8065-api.d.ts-7515-8065-api.d.ts-231-9860-api.d.ts-206-9860-api.d.ts-204-9862-api.d.ts-121-9862-api.d.ts-0-9863%3E
+    DashboardApi.Query.Base.Response<structure-api.d.ts-7761-8057-api.d.ts-7746-8058-api.d.ts-7716-8059-api.d.ts-7562-8065-api.d.ts-7515-8065-api.d.ts-231-9860-api.d.ts-206-9860-api.d.ts-204-9862-api.d.ts-121-9862-api.d.ts-0-9863>:
       type: array
       items:
         type: object
@@ -1373,45 +1373,6 @@ components:
             #/components/schemas/DashboardApi.Query.CountDeploymentType.Request.QueryStringParameters
         - $ref: >-
             #/components/schemas/DashboardApi.Query.CountDeployTypesByUserInTimeRange.Request.QueryStringParameters
-    DeploymentStepApi.DeploymentStep:
-      type: object
-      properties:
-        id:
-          type: string
-        deploymentLogId:
-          type: string
-        name:
-          type: string
-        order:
-          type: number
-        projectId:
-          type: string
-        organizationId:
-          type: string
-        status:
-          $ref: '#/components/schemas/DeploymentStepApi.DeploymentStepStatus'
-        startedAt:
-          type: string
-          format: date-time
-        completedAt:
-          type: string
-          format: date-time
-        logStreamName:
-          type: string
-        agentKey:
-          type: string
-        logSource:
-          $ref: '#/components/schemas/LogSource'
-        logSourceMetadata:
-          $ref: '#/components/schemas/DeploymentStepApi.LogSourceMetadata'
-      required:
-        - deploymentLogId
-        - name
-        - order
-        - projectId
-        - organizationId
-        - status
-      additionalProperties: false
     DeploymentStepApi.DeploymentStepStatus:
       $ref: '#/components/schemas/CommonDeploymentStepApi.DeploymentStepStatus'
     CommonDeploymentStepApi.DeploymentStepStatus:
@@ -1425,30 +1386,39 @@ components:
         - SUCCESS
         - CANCELLED
         - SKIPPED
-    LogSource:
-      type: number
-      enum:
-        - 0
-        - 1
-        - 2
-    DeploymentStepApi.LogSourceMetadata:
-      $ref: >-
-        #/components/schemas/DeploymentStepApi.SelfHostedDynamoLogSourceMetatdata
-    DeploymentStepApi.SelfHostedDynamoLogSourceMetatdata:
-      type: object
-      properties:
-        accountId:
-          type: string
-        region:
-          type: string
-      required:
-        - accountId
-        - region
-      additionalProperties: false
     DeploymentStepApi.FindByDeploymentLogId.Response:
       type: array
       items:
-        $ref: '#/components/schemas/DeploymentStepApi.DeploymentStep'
+        type: object
+        properties:
+          id:
+            type: string
+          deploymentLogId:
+            type: string
+          name:
+            type: string
+          order:
+            type: number
+          projectId:
+            type: string
+          organizationId:
+            type: string
+          status:
+            $ref: '#/components/schemas/DeploymentStepApi.DeploymentStepStatus'
+          startedAt:
+            type: string
+            format: date-time
+          completedAt:
+            type: string
+            format: date-time
+        required:
+          - deploymentLogId
+          - name
+          - order
+          - projectId
+          - organizationId
+          - status
+        additionalProperties: false
     CommonDeploymentStepApi.FindStepLog.Response:
       type: object
       properties:
