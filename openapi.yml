@@ -1718,6 +1718,8 @@ components:
           $ref: '#/components/schemas/EnvironmentApi.DeploymentType'
         startedBy:
           type: string
+        reviewedBy:
+          type: string
         queuedAt:
           type: string
           format: date-time
@@ -1763,6 +1765,8 @@ components:
             $ref: '#/components/schemas/EnvironmentApi.EnvironmentResource'
         startedByUser:
           $ref: '#/components/schemas/User'
+        reviewedByUser:
+          $ref: '#/components/schemas/User'
         isScheduledRun:
           type: boolean
         abortedBy:
@@ -1780,6 +1784,7 @@ components:
       required:
         - type
         - startedBy
+        - reviewedBy
         - queuedAt
         - startedAt
         - finishedAt
@@ -1796,6 +1801,7 @@ components:
         - environmentId
         - resourceCount
         - startedByUser
+        - reviewedByUser
         - isScheduledRun
         - abortedBy
         - abortedByUser
@@ -2091,6 +2097,10 @@ components:
       $ref: '#/components/schemas/EnvironmentApi.Policy'
     EnvironmentApi.GetPolicies.Response:
       $ref: '#/components/schemas/EnvironmentApi.Policy'
+    EnvironmentApi.RerunDeployment.Request.Body:
+      type: 'null'
+    EnvironmentApi.RerunDeployment.Response:
+      type: 'null'
     NotificationsApi.NotificationEndpointModel:
       type: object
       properties:
@@ -4320,6 +4330,32 @@ paths:
                 $ref: '#/components/schemas/EnvironmentApi.GetPolicies.Response'
       tags:
         - Projects
+  /environments/deployments/{id}/rerun:
+    post:
+      operationId: rerunDeployment
+      summary: Rerun PR plan
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentApi.RerunDeployment.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.RerunDeployment.Response'
+      tags:
+        - Environments
   /notifications/endpoints:
     post:
       operationId: createNotificationEndpoint
