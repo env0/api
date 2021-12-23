@@ -394,6 +394,10 @@ components:
           type: string
         value:
           type: string
+        isReadonly:
+          type: boolean
+        isRequired:
+          type: boolean
         scopeId:
           type: string
         scope:
@@ -453,6 +457,9 @@ components:
           type: array
           items:
             type: string
+        format:
+          type: string
+          const: HCL
       additionalProperties: false
     BlueprintApi.GetVariablesFromRepository.Response:
       type: array
@@ -514,8 +521,21 @@ components:
             $ref: '#/components/schemas/BlueprintApi.SshKey'
         moduleName:
           type: string
+          description: >-
+            Module Name. Can be made of up to 64 characters, containing
+            alphanumeric, hyphens and underscores. Must not contain
+            leading/trailing hyphens/underscores.
+
+            /**
+          pattern: ^[0-9A-Za-z](?:[0-9A-Za-z-_]{0,62}[0-9A-Za-z])?$
         moduleProvider:
           type: string
+          description: >-
+            Module Provider. Can be made of up to 64 characters, containing
+            lowercase alphanumeric characters only.
+
+            /**
+          pattern: ^[0-9a-z]{0,64}$
       required:
         - moduleName
         - moduleProvider
@@ -552,8 +572,21 @@ components:
       properties:
         moduleName:
           type: string
+          description: >-
+            Module Name. Can be made of up to 64 characters, containing
+            alphanumeric, hyphens and underscores. Must not contain
+            leading/trailing hyphens/underscores.
+
+            /**
+          pattern: ^[0-9A-Za-z](?:[0-9A-Za-z-_]{0,62}[0-9A-Za-z])?$
         moduleProvider:
           type: string
+          description: >-
+            Module Provider. Can be made of up to 64 characters, containing
+            lowercase alphanumeric characters only.
+
+            /**
+          pattern: ^[0-9a-z]{0,64}$
         repository:
           type: string
         description:
@@ -618,8 +651,21 @@ components:
       properties:
         moduleName:
           type: string
+          description: >-
+            Module Name. Can be made of up to 64 characters, containing
+            alphanumeric, hyphens and underscores. Must not contain
+            leading/trailing hyphens/underscores.
+
+            /**
+          pattern: ^[0-9A-Za-z](?:[0-9A-Za-z-_]{0,62}[0-9A-Za-z])?$
         moduleProvider:
           type: string
+          description: >-
+            Module Provider. Can be made of up to 64 characters, containing
+            lowercase alphanumeric characters only.
+
+            /**
+          pattern: ^[0-9a-z]{0,64}$
         repository:
           type: string
         description:
@@ -805,6 +851,10 @@ components:
           type: string
         isSensitive:
           type: boolean
+        isReadonly:
+          type: boolean
+        isRequired:
+          type: boolean
         scopeId:
           type: string
         scope:
@@ -846,6 +896,10 @@ components:
           type: string
         value:
           type: string
+        isReadonly:
+          type: boolean
+        isRequired:
+          type: boolean
         scopeId:
           type: string
         scope:
@@ -1561,6 +1615,10 @@ components:
           type: string
         value:
           type: string
+        isReadonly:
+          type: boolean
+        isRequired:
+          type: boolean
         scopeId:
           type: string
         type:
