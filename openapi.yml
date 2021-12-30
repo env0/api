@@ -998,7 +998,7 @@ components:
         - AZURE_CREDENTIALS
     ConfigurationApi.CreateCredential.Request.Body:
       $ref: '#/components/schemas/TransiantCredential'
-    Credential:
+    CredentialWithoutValue:
       type: object
       properties:
         id:
@@ -1008,25 +1008,7 @@ components:
         organizationId:
           type: string
         value:
-          type: object
-          description: >-
-            A JSON string representation of the cloud provider credentials.
-
-            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types
-            use:
-
-            { roleArn: "your-role-arn", externalId: "your-external-id" }
-
-
-            - For GCP_CREDENTIALS type use:
-
-            { tableId: "your-table-id", secret: "your-secret" }
-
-
-            - For AZURE_CREDENTIALS type use:
-
-            { clientId: "your-clientId", clientSecret: "your-clientSecret",
-            tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
+          type: 'null'
         sensitiveValueSalt:
           type: string
         type:
@@ -1041,11 +1023,11 @@ components:
         - value
       additionalProperties: false
     ConfigurationApi.CreateCredential.Response:
-      $ref: '#/components/schemas/Credential'
+      $ref: '#/components/schemas/CredentialWithoutValue'
     ConfigurationApi.FindCredentials.Response:
       type: array
       items:
-        $ref: '#/components/schemas/Credential'
+        $ref: '#/components/schemas/CredentialWithoutValue'
     ConfigurationApi.AddDeployCredsToProject.Request.Body:
       type: 'null'
     ConfigurationApi.DeploymentCredentialToProject:
