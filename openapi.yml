@@ -461,11 +461,11 @@ components:
           type: string
           enum:
             - HCL
-            - json
+            - JSON
             - HCL
-            - json
+            - JSON
             - HCL
-            - json
+            - JSON
       additionalProperties: false
     BlueprintApi.GetVariablesFromRepository.Response:
       type: array
