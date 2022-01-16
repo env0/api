@@ -842,6 +842,10 @@ components:
                   type: string
                 schema:
                   $ref: '#/components/schemas/PartialJSONSchema7'
+                isReadonly:
+                  type: boolean
+                isRequired:
+                  type: boolean
               required:
                 - scope
                 - value
