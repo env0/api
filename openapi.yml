@@ -1,6 +1,37 @@
 openapi: 3.1.0
 components:
   schemas:
+    AgentSettingsApi.ListAgents.Response:
+      type: array
+      items:
+        type: object
+        properties:
+          agentKey:
+            type: string
+        required:
+          - agentKey
+        additionalProperties: false
+    AgentSettingsApi.GetAgentValues.Response:
+      type: string
+    AgentSettingsApi.ProjectIdToAgentKeyMap:
+      type: object
+      additionalProperties:
+        type: string
+    AgentSettingsApi.GetAgentAssignments.Response:
+      type: object
+      properties:
+        defaultAgent:
+          type: string
+        projectsAgents:
+          $ref: '#/components/schemas/AgentSettingsApi.ProjectIdToAgentKeyMap'
+      required:
+        - defaultAgent
+        - projectsAgents
+      additionalProperties: false
+    AgentSettingsApi.AssignAgents.Request.Body:
+      $ref: '#/components/schemas/AgentSettingsApi.ProjectIdToAgentKeyMap'
+    AgentSettingsApi.AssignAgents.Response:
+      $ref: '#/components/schemas/AgentSettingsApi.GetAgentAssignments.Response'
     BlueprintApi.TerraformVersion:
       anyOf:
         - type: string
@@ -2843,6 +2874,101 @@ info:
     url: https://github.com/env0/api/raw/gh-pages/env0-color.png
     altText: env0 logo
 paths:
+  /agents:
+    get:
+      operationId: listAgents
+      summary: List agents
+      description: Get a list of the organization agents
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentSettingsApi.ListAgents.Response'
+      tags:
+        - Agents Settings
+  /agents/{agentKey}/values:
+    get:
+      operationId: getAgentValues
+      summary: Get agent values file content
+      description: Save it to a yaml file for helm
+      parameters:
+        - name: agentKey
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentSettingsApi.GetAgentValues.Response'
+      tags:
+        - Agents Settings
+  /agents/projects-assignments:
+    get:
+      operationId: getAgentAssignments
+      summary: Get agent assignments of projects
+      description: >-
+        returns the current default agent key and a map of project ids to agent
+        key assignments
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/AgentSettingsApi.GetAgentAssignments.Response
+      tags:
+        - Agents Settings
+    post:
+      operationId: assignAgents
+      summary: Assign agents to projects
+      description: gets a map of project ids to agent-key assignments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentSettingsApi.AssignAgents.Request.Body'
+        description: ''
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentSettingsApi.AssignAgents.Response'
+      tags:
+        - Agents Settings
   /blueprints:
     post:
       operationId: createBlueprint
@@ -5182,6 +5308,8 @@ paths:
       tags:
         - Teams
 tags:
+  - name: Agents Settings
+    description: ''
   - name: Templates
     description: >
       A template in env0 defines a type of environment that can be deployed.
