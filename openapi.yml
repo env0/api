@@ -1574,6 +1574,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/EnvironmentApi.DownstreamEnvironment'
+    EnvironmentApi.FindDownstreamEnvironments.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/EnvironmentApi.DownstreamEnvironment'
     EnvironmentApi.CreateEnvironmentRequest:
       type: object
       properties:
@@ -4065,7 +4069,7 @@ paths:
   /environments/{id}/downstream:
     put:
       operationId: updateDownstreamEnvironments
-      summary: Create Workflow Trigger
+      summary: Create or Update Workflow Trigger
       description: >
         Env0 allows you to configure chained dependent environments to your
         current environment.
@@ -4101,6 +4105,28 @@ paths:
               schema:
                 $ref: >-
                   #/components/schemas/EnvironmentApi.UpdateDownstreamEnvironments.Response
+      tags:
+        - Environments
+    get:
+      operationId: findDownstreamEnvironments
+      summary: >-
+        Get downstream environments that will be triggered by this environment
+        deployment
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/EnvironmentApi.FindDownstreamEnvironments.Response
       tags:
         - Environments
   /environments:
