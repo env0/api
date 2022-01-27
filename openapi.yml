@@ -1291,6 +1291,7 @@ components:
         - PR_PLAN_IN_PROGRESS
         - ABORTING
         - ABORTED
+        - NEVER_DEPLOYED
         - CREATED
         - INACTIVE
         - ACTIVE
@@ -1302,6 +1303,7 @@ components:
         - PR_PLAN_IN_PROGRESS
         - ABORTING
         - ABORTED
+        - NEVER_DEPLOYED
     DashboardApi.Query.EnvironmentStatus.Request.QueryStringParameters:
       type: object
       additionalProperties: false
