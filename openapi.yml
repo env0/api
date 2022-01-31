@@ -2343,9 +2343,9 @@ components:
         isSelfHostedK8s:
           type: boolean
       required:
+        - createdBy
         - id
         - name
-        - createdBy
         - role
       additionalProperties: false
     OrganizationApi.OrganizationRolesString:
