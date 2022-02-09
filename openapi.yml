@@ -1701,6 +1701,8 @@ components:
           $ref: '#/components/schemas/GitUserData'
         triggerName:
           $ref: '#/components/schemas/TriggerName'
+        upstreamEnvironmentId:
+          type: string
       additionalProperties: false
     GitUserData:
       type: object
@@ -2066,7 +2068,11 @@ components:
     EnvironmentApi.Abort.Response:
       type: 'null'
     EnvironmentApi.Destroy.Request.Body:
-      type: 'null'
+      type: object
+      properties:
+        triggerName:
+          $ref: '#/components/schemas/TriggerName'
+      additionalProperties: false
     EnvironmentApi.Destroy.Response:
       type: object
       properties:
