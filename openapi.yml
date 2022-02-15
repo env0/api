@@ -1289,6 +1289,7 @@ components:
         - DEPLOY_IN_PROGRESS
         - DESTROY_IN_PROGRESS
         - PR_PLAN_IN_PROGRESS
+        - DRIFT_DETECTION_IN_PROGRESS
         - ABORTING
         - ABORTED
         - NEVER_DEPLOYED
@@ -1301,6 +1302,7 @@ components:
         - DEPLOY_IN_PROGRESS
         - DESTROY_IN_PROGRESS
         - PR_PLAN_IN_PROGRESS
+        - DRIFT_DETECTION_IN_PROGRESS
         - ABORTING
         - ABORTED
         - NEVER_DEPLOYED
@@ -1903,6 +1905,7 @@ components:
         - deploy
         - destroy
         - prPlan
+        - driftDetection
     Infracost.TotalOutput:
       type: object
       additionalProperties: false
