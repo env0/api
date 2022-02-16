@@ -1677,6 +1677,12 @@ components:
     DeployRequest:
       type: object
       properties:
+        deploymentType:
+          type: string
+          enum:
+            - deploy
+            - prPlan
+            - driftDetection
         blueprintId:
           type: string
         blueprintRevision:
@@ -1693,8 +1699,6 @@ components:
           type: boolean
         targets:
           type: string
-        prPlanOnly:
-          type: boolean
         customEnv0EnvironmentVariables:
           type: object
           additionalProperties:
@@ -1721,6 +1725,7 @@ components:
       enum:
         - cd
         - prPlan
+        - driftDetection
         - user
         - ttl
         - scheduled
