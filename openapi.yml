@@ -425,12 +425,14 @@ components:
           type: string
         value:
           type: string
+        id:
+          type: string
+        isSensitive:
+          type: boolean
         isReadonly:
           type: boolean
         isRequired:
           type: boolean
-        scopeId:
-          type: string
         scope:
           $ref: '#/components/schemas/ConfigurationScope'
         type:
@@ -446,13 +448,8 @@ components:
         description:
           type: string
           maxLength: 255
-        id:
-          type: string
-        isSensitive:
-          type: boolean
       required:
         - name
-        - value
         - scope
         - type
       additionalProperties: false
@@ -739,13 +736,22 @@ components:
       $ref: '#/components/schemas/BlueprintApi.ModuleUserFields'
     BlueprintApi.UpdateModule.Response:
       $ref: '#/components/schemas/BlueprintApi.ExistingModule'
-    ConfigurationApi.ConfigurationPropertySinglePayload:
+    ConfigurationPropertyResponse:
       type: object
       properties:
+        createdAt:
+          type: string
+          format: date-time
         name:
           type: string
         value:
           type: string
+        id:
+          type: string
+        userId:
+          type: string
+        isSensitive:
+          type: boolean
         isReadonly:
           type: boolean
         isRequired:
@@ -760,8 +766,6 @@ components:
             Whether it is an Environment or Terraform variable
             0 value maps to an Environment variable
             1 value maps to an Terraform variable
-        toDelete:
-          type: boolean
         organizationId:
           type: string
         schema:
@@ -769,19 +773,9 @@ components:
         description:
           type: string
           maxLength: 255
-        id:
-          type: string
-        isSensitive:
-          type: boolean
-      required:
-        - name
-        - value
-        - scope
-        - type
-        - organizationId
       additionalProperties: false
     ConfigurationApi.FindVariableById.Response:
-      $ref: '#/components/schemas/ConfigurationApi.ConfigurationPropertySinglePayload'
+      $ref: '#/components/schemas/ConfigurationPropertyResponse'
     ConfigurationApi.SshKey:
       type: object
       properties:
@@ -922,9 +916,11 @@ components:
                   type: boolean
               required:
                 - scope
-                - value
               additionalProperties: false
             - type: 'null'
+        createdAt:
+          type: string
+          format: date-time
         name:
           type: string
         value:
@@ -959,30 +955,64 @@ components:
           type: string
           maxLength: 255
       required:
-        - id
-        - isSensitive
         - name
         - organizationId
         - overwrites
         - scope
         - type
-        - userId
-        - value
     ConfigurationApi.FindVariablesByScope.Response:
       type: array
       items:
         $ref: >-
           #/components/schemas/ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty
+    ConfigurationPropertyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        id:
+          type: string
+        isSensitive:
+          type: boolean
+        isReadonly:
+          type: boolean
+        isRequired:
+          type: boolean
+        scopeId:
+          type: string
+        scope:
+          $ref: '#/components/schemas/ConfigurationScope'
+        type:
+          $ref: '#/components/schemas/ConfigurationType'
+          description: |-
+            Whether it is an Environment or Terraform variable
+            0 value maps to an Environment variable
+            1 value maps to an Terraform variable
+        toDelete:
+          type: boolean
+        organizationId:
+          type: string
+        schema:
+          $ref: '#/components/schemas/PartialJSONSchema7'
+        description:
+          type: string
+          maxLength: 255
+      required:
+        - name
+        - scope
+        - type
+        - organizationId
+      additionalProperties: false
     ConfigurationApi.CreateOrUpdateVariable.Request.Body:
       type: array
       items:
-        $ref: >-
-          #/components/schemas/ConfigurationApi.ConfigurationPropertySinglePayload
+        $ref: '#/components/schemas/ConfigurationPropertyRequest'
     ConfigurationApi.CreateOrUpdateVariable.Response:
       type: array
       items:
-        $ref: >-
-          #/components/schemas/ConfigurationApi.ConfigurationPropertySinglePayload
+        $ref: '#/components/schemas/ConfigurationPropertyResponse'
     TransiantCredential:
       type: object
       properties:
@@ -1643,23 +1673,23 @@ components:
         - DATE
     EnvironmentApi.ConfigurationChanges:
       anyOf:
-        - $ref: '#/components/schemas/EnvironmentApi.ConfigurationChangePayload'
+        - $ref: '#/components/schemas/EnvironmentApi.ConfigurationPropertyChange'
         - type: array
           items:
-            $ref: '#/components/schemas/EnvironmentApi.ConfigurationChangePayload'
-    EnvironmentApi.ConfigurationChangePayload:
+            $ref: '#/components/schemas/EnvironmentApi.ConfigurationPropertyChange'
+    EnvironmentApi.ConfigurationPropertyChange:
       type: object
       properties:
         name:
           type: string
         value:
           type: string
+        isSensitive:
+          type: boolean
         isReadonly:
           type: boolean
         isRequired:
           type: boolean
-        scopeId:
-          type: string
         type:
           $ref: '#/components/schemas/ConfigurationType'
           description: |-
@@ -1673,11 +1703,8 @@ components:
         description:
           type: string
           maxLength: 255
-        isSensitive:
-          type: boolean
       required:
         - name
-        - value
         - type
       additionalProperties: false
     DeployRequest:
