@@ -914,6 +914,8 @@ components:
                   type: boolean
                 isRequired:
                   type: boolean
+                isSensitive:
+                  type: boolean
               required:
                 - scope
               additionalProperties: false
