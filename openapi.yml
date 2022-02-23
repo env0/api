@@ -1140,6 +1140,8 @@ components:
       properties:
         credentialsId:
           type: string
+          maxLength: 36
+          minLength: 1
       required:
         - credentialsId
       additionalProperties: false
