@@ -2321,6 +2321,8 @@ components:
         - environmentDeployResumed
         - environmentDestroyResumed
         - environmentMarkedForAutoDestroy
+        - driftDetected
+        - driftUndetected
     NotificationsApi.UpdateProjectNotificationSettings.Request.Body:
       type: object
       properties:
@@ -2676,6 +2678,9 @@ components:
           $ref: >-
             #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction
         destroy:
+          $ref: >-
+            #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction
+        drift:
           $ref: >-
             #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction
       additionalProperties: false
