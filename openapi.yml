@@ -117,6 +117,8 @@ components:
           type: string
         path:
           type: string
+        terragruntVersion:
+          type: string
         tokenId:
           type: string
         tokenName:
@@ -201,6 +203,8 @@ components:
             A string representing semantic version of Terraform. If set to
             "RESOLVE_FROM_TERRAFORM_CODE", the version will be determined by
             using tfenv's 'min-required'
+        terragruntVersion:
+          type: string
         tokenId:
           type: string
         tokenName:
@@ -281,6 +285,8 @@ components:
             A string representing semantic version of Terraform. If set to
             "RESOLVE_FROM_TERRAFORM_CODE", the version will be determined by
             using tfenv's 'min-required'
+        terragruntVersion:
+          type: string
         tokenId:
           type: string
         tokenName:
@@ -349,6 +355,8 @@ components:
             A string representing semantic version of Terraform. If set to
             "RESOLVE_FROM_TERRAFORM_CODE", the version will be determined by
             using tfenv's 'min-required'
+        terragruntVersion:
+          type: string
         tokenId:
           type: string
         tokenName:
@@ -2655,6 +2663,8 @@ components:
         deploy:
           $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
         destroy:
+          $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
+        driftDetection:
           $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
       additionalProperties: false
     SchedulingApi.GetScheduleByProjectId.Response:
