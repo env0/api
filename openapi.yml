@@ -2331,6 +2331,7 @@ components:
         - environmentMarkedForAutoDestroy
         - driftDetected
         - driftUndetected
+        - driftFailed
     NotificationsApi.UpdateProjectNotificationSettings.Request.Body:
       type: object
       properties:
@@ -4487,6 +4488,16 @@ paths:
         - name: isScheduledRun
           in: query
           description: Is scheduled run
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+            enum:
+              - 'true'
+              - 'false'
+        - name: skipStateRefresh
+          in: query
+          description: Skip automatic state refresh
           required: false
           allowEmptyValue: false
           schema:
