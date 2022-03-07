@@ -2665,8 +2665,6 @@ components:
           $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
         destroy:
           $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
-        driftDetection:
-          $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
       additionalProperties: false
     SchedulingApi.GetScheduleByProjectId.Response:
       type: array
@@ -2691,12 +2689,29 @@ components:
         destroy:
           $ref: >-
             #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction
-        drift:
-          $ref: >-
-            #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction
       additionalProperties: false
     SchedulingApi.SetEnvironmentSchedule.Response:
       $ref: '#/components/schemas/SchedulingApi.GetScheduleByEnvironmentId.Response'
+    SchedulingApi.DriftDetection:
+      $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
+    SchedulingApi.GetDriftDetectionByEnvironmentId.Response:
+      $ref: '#/components/schemas/SchedulingApi.DriftDetection'
+    SchedulingApi.SetDriftDetection.Request.ScheduledAction:
+      type: object
+      properties:
+        cron:
+          type: string
+        enabled:
+          type: boolean
+      required:
+        - cron
+      additionalProperties: false
+    SchedulingApi.SetDriftDetection.Request.Body:
+      $ref: >-
+        #/components/schemas/SchedulingApi.SetDriftDetection.Request.ScheduledAction
+    SchedulingApi.SetDriftDetection.Response:
+      $ref: >-
+        #/components/schemas/SchedulingApi.GetDriftDetectionByEnvironmentId.Response
     SharedApi.Authorization.Permission:
       type: object
       properties:
@@ -5143,6 +5158,53 @@ paths:
               schema:
                 $ref: >-
                   #/components/schemas/SchedulingApi.GetScheduleByProjectId.Response
+      tags:
+        - Scheduling
+  /scheduling/drift-detection/environments/{id}:
+    get:
+      operationId: getDriftDetectionByEnvironmentId
+      summary: Get Drift Detection Environment Scheduling
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/SchedulingApi.GetDriftDetectionByEnvironmentId.Response
+      tags:
+        - Scheduling
+    put:
+      operationId: setDriftDetection
+      summary: Set Drift Detection Environment Scheduling
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/SchedulingApi.SetDriftDetection.Request.Body
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchedulingApi.SetDriftDetection.Response'
       tags:
         - Scheduling
   /permissions/projects/{projectId}:
