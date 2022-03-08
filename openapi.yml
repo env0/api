@@ -1023,7 +1023,7 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ConfigurationPropertyResponse'
-    TransiantCredential:
+    TransientCredential:
       type: object
       properties:
         type:
@@ -1080,7 +1080,7 @@ components:
         - GCP_SERVICE_ACCOUNT_FOR_DEPLOYMENT
         - AZURE_SERVICE_PRINCIPAL_FOR_DEPLOYMENT
     ConfigurationApi.CreateCredential.Request.Body:
-      $ref: '#/components/schemas/TransiantCredential'
+      $ref: '#/components/schemas/TransientCredential'
     CredentialWithoutValue:
       type: object
       properties:
@@ -2704,7 +2704,7 @@ components:
         enabled:
           type: boolean
       required:
-        - cron
+        - enabled
       additionalProperties: false
     SchedulingApi.SetDriftDetection.Request.Body:
       $ref: >-
@@ -5181,7 +5181,7 @@ paths:
                   #/components/schemas/SchedulingApi.GetDriftDetectionByEnvironmentId.Response
       tags:
         - Scheduling
-    put:
+    patch:
       operationId: setDriftDetection
       summary: Set Drift Detection Environment Scheduling
       requestBody:
