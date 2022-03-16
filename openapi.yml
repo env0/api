@@ -1341,6 +1341,7 @@ components:
         - ABORTING
         - ABORTED
         - NEVER_DEPLOYED
+        - DRIFTED
         - CREATED
         - INACTIVE
         - ACTIVE
@@ -1354,6 +1355,7 @@ components:
         - ABORTING
         - ABORTED
         - NEVER_DEPLOYED
+        - DRIFTED
     DashboardApi.Query.EnvironmentStatus.Request.QueryStringParameters:
       type: object
       additionalProperties: false
@@ -1924,6 +1926,8 @@ components:
           type: string
         triggerName:
           $ref: '#/components/schemas/TriggerName'
+        driftDetected:
+          type: boolean
       required:
         - type
         - startedBy
