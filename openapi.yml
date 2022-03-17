@@ -87,8 +87,10 @@ components:
       enum:
         - terraform
         - terragrunt
+        - pulumi
         - terraform
         - terragrunt
+        - pulumi
     BlueprintApi.CreateBlueprint.Request.Body:
       type: object
       additionalProperties: false
@@ -1928,6 +1930,8 @@ components:
           $ref: '#/components/schemas/TriggerName'
         driftDetected:
           type: boolean
+        plan:
+          $ref: '#/components/schemas/DeploymentApi.Plan.ParsedPlan'
       required:
         - type
         - startedBy
@@ -2055,6 +2059,77 @@ components:
         - provider
         - type
         - name
+      additionalProperties: false
+    DeploymentApi.Plan.ParsedPlan:
+      type: object
+      properties:
+        resourceChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeploymentApi.Plan.PlanResourceChange'
+        summary:
+          $ref: '#/components/schemas/DeploymentApi.Plan.PlanSummary'
+      required:
+        - resourceChanges
+        - summary
+      additionalProperties: false
+    DeploymentApi.Plan.PlanResourceChange:
+      type: object
+      properties:
+        name:
+          type: string
+        providerName:
+          type: string
+        type:
+          type: string
+        path:
+          type: string
+        action:
+          $ref: '#/components/schemas/DeploymentApi.Plan.ResourceChangeAction'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeploymentApi.Plan.AttributeChange'
+      required:
+        - name
+        - providerName
+        - type
+        - path
+        - action
+        - attributes
+      additionalProperties: false
+    DeploymentApi.Plan.ResourceChangeAction:
+      type: string
+      enum:
+        - create
+        - update
+        - delete
+        - recreate
+    DeploymentApi.Plan.AttributeChange:
+      type: object
+      properties:
+        name:
+          type: string
+        before:
+          type: string
+        after:
+          type: string
+      required:
+        - name
+      additionalProperties: false
+    DeploymentApi.Plan.PlanSummary:
+      type: object
+      properties:
+        added:
+          type: number
+        changed:
+          type: number
+        destroyed:
+          type: number
+      required:
+        - added
+        - changed
+        - destroyed
       additionalProperties: false
     AutoDestroyStatus:
       type: number
