@@ -1651,6 +1651,8 @@ components:
           $ref: '#/components/schemas/EnvironmentApi.TTLRequest'
         configurationChanges:
           $ref: '#/components/schemas/EnvironmentApi.ConfigurationChanges'
+        vcsCommandsAlias:
+          type: string
         deployRequest:
           $ref: '#/components/schemas/DeployRequest'
         continuousDeployment:
@@ -1821,6 +1823,8 @@ components:
           type: boolean
         nextScheduledDates:
           $ref: '#/components/schemas/EnvironmentApi.EnvironmentNextScheduledDates'
+        vcsCommandsAlias:
+          type: string
         continuousDeployment:
           type: boolean
         pullRequestPlanDeployments:
@@ -2160,6 +2164,8 @@ components:
           type: boolean
         continuousDeployment:
           type: boolean
+        vcsCommandsAlias:
+          type: string
         pullRequestPlanDeployments:
           type: boolean
         autoDeployOnPathChangesOnly:
