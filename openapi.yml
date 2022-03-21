@@ -77,8 +77,6 @@ components:
       anyOf:
         - $ref: '#/components/schemas/BlueprintApi.ModuleType'
         - $ref: '#/components/schemas/BlueprintApi.TemplateType'
-        - $ref: '#/components/schemas/BlueprintApi.ModuleType'
-        - $ref: '#/components/schemas/BlueprintApi.TemplateType'
     BlueprintApi.ModuleType:
       type: string
       const: module
@@ -1905,7 +1903,7 @@ components:
         blueprintPath:
           type: string
         blueprintType:
-          $ref: '#/components/schemas/BlueprintApi.BlueprintType'
+          $ref: '#/components/schemas/BlueprintApi.TemplateType'
         environmentId:
           type: string
         resourceCount:
@@ -2471,6 +2469,10 @@ components:
           type:
             - string
             - 'null'
+        doNotReportSkippedStatusChecks:
+          type: boolean
+        doNotConsiderMergeCommitsForPrPlans:
+          type: boolean
         description:
           type: string
         photoUrl:
@@ -2534,6 +2536,10 @@ components:
           type:
             - string
             - 'null'
+        doNotReportSkippedStatusChecks:
+          type: boolean
+        doNotConsiderMergeCommitsForPrPlans:
+          type: boolean
       required:
         - maxTtl
         - defaultTtl
