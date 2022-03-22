@@ -5153,7 +5153,14 @@ paths:
     get:
       operationId: findByOrganizationId
       summary: List Projects
-      parameters: []
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
       responses:
         '200':
           description: ''
