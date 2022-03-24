@@ -1779,6 +1779,7 @@ components:
         - ttl
         - scheduled
         - workflow
+        - comment
     EnvironmentApi.Create.Request.Body:
       $ref: '#/components/schemas/EnvironmentApi.CreateEnvironmentRequest'
     EnvironmentApi.Environment:
