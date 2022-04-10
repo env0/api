@@ -151,6 +151,8 @@ components:
           type: array
           items:
             type: string
+        isSingleUse:
+          type: boolean
       required:
         - name
         - organizationId
@@ -233,6 +235,8 @@ components:
           type: boolean
         type:
           $ref: '#/components/schemas/BlueprintApi.BlueprintType'
+        isSingleUse:
+          type: boolean
       required:
         - name
         - organizationId
@@ -319,6 +323,8 @@ components:
           type: array
           items:
             type: string
+        isSingleUse:
+          type: boolean
         gitlabProjectId:
           type:
             - number
@@ -389,6 +395,8 @@ components:
           type: array
           items:
             type: string
+        isSingleUse:
+          type: boolean
         id:
           type: string
         author:
