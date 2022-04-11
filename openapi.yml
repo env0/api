@@ -2534,7 +2534,7 @@ components:
       additionalProperties: false
     OrganizationApi.UpdateOrganization.Response:
       $ref: '#/components/schemas/OrganizationApi.Organization'
-    OrganizationApi.UpdatePolicy.Request.Body:
+    OrganizationApi.OrganizationPolicy:
       type: object
       properties:
         maxTtl:
@@ -2553,6 +2553,8 @@ components:
         - maxTtl
         - defaultTtl
       additionalProperties: false
+    OrganizationApi.UpdatePolicy.Request.Body:
+      $ref: '#/components/schemas/OrganizationApi.OrganizationPolicy'
     OrganizationApi.UpdatePolicy.Response:
       $ref: '#/components/schemas/OrganizationApi.Organization'
     OrganizationUser:
