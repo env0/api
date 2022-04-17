@@ -1277,8 +1277,8 @@ components:
         $ref: '#/components/schemas/CredentialsApi.ApiKey'
     DashboardApi.Query.MaxActiveEnvironmentsPerDay.Response:
       $ref: >-
-        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7476-7507-api.d.ts-7461-7508-api.d.ts-7431-7509-api.d.ts-7274-7515-api.d.ts-7224-7515-api.d.ts-231-9860-api.d.ts-206-9860-api.d.ts-204-9862-api.d.ts-121-9862-api.d.ts-0-9863%3E
-    DashboardApi.Query.Base.Response<structure-api.d.ts-7476-7507-api.d.ts-7461-7508-api.d.ts-7431-7509-api.d.ts-7274-7515-api.d.ts-7224-7515-api.d.ts-231-9860-api.d.ts-206-9860-api.d.ts-204-9862-api.d.ts-121-9862-api.d.ts-0-9863>:
+        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7476-7507-api.d.ts-7461-7508-api.d.ts-7431-7509-api.d.ts-7274-7515-api.d.ts-7224-7515-api.d.ts-231-9940-api.d.ts-206-9940-api.d.ts-204-9942-api.d.ts-121-9942-api.d.ts-0-9943%3E
+    DashboardApi.Query.Base.Response<structure-api.d.ts-7476-7507-api.d.ts-7461-7508-api.d.ts-7431-7509-api.d.ts-7274-7515-api.d.ts-7224-7515-api.d.ts-231-9940-api.d.ts-206-9940-api.d.ts-204-9942-api.d.ts-121-9942-api.d.ts-0-9943>:
       type: array
       items:
         type: object
@@ -1293,8 +1293,8 @@ components:
         additionalProperties: false
     DashboardApi.Query.ActiveEnvironmentsPerDay.Response:
       $ref: >-
-        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7761-8057-api.d.ts-7746-8058-api.d.ts-7716-8059-api.d.ts-7562-8065-api.d.ts-7515-8065-api.d.ts-231-9860-api.d.ts-206-9860-api.d.ts-204-9862-api.d.ts-121-9862-api.d.ts-0-9863%3E
-    DashboardApi.Query.Base.Response<structure-api.d.ts-7761-8057-api.d.ts-7746-8058-api.d.ts-7716-8059-api.d.ts-7562-8065-api.d.ts-7515-8065-api.d.ts-231-9860-api.d.ts-206-9860-api.d.ts-204-9862-api.d.ts-121-9862-api.d.ts-0-9863>:
+        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7761-8097-api.d.ts-7746-8098-api.d.ts-7716-8099-api.d.ts-7562-8105-api.d.ts-7515-8105-api.d.ts-231-9940-api.d.ts-206-9940-api.d.ts-204-9942-api.d.ts-121-9942-api.d.ts-0-9943%3E
+    DashboardApi.Query.Base.Response<structure-api.d.ts-7761-8097-api.d.ts-7746-8098-api.d.ts-7716-8099-api.d.ts-7562-8105-api.d.ts-7515-8105-api.d.ts-231-9940-api.d.ts-206-9940-api.d.ts-204-9942-api.d.ts-121-9942-api.d.ts-0-9943>:
       type: array
       items:
         type: object
@@ -1321,6 +1321,8 @@ components:
             type: string
           blueprintName:
             type: string
+          isSingleUseBlueprint:
+            type: boolean
         required:
           - name
           - id
@@ -1842,6 +1844,8 @@ components:
           type: string
         terragruntWorkingDirectory:
           type: string
+        isSingleUseBlueprint:
+          type: boolean
       required:
         - name
         - organizationId
