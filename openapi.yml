@@ -76,19 +76,31 @@ components:
     BlueprintApi.BlueprintType:
       anyOf:
         - $ref: '#/components/schemas/BlueprintApi.ModuleType'
-        - $ref: '#/components/schemas/BlueprintApi.TemplateType'
+        - $ref: '#/components/schemas/BlueprintApi.IacType'
+        - type: string
+          const: complex
     BlueprintApi.ModuleType:
       type: string
       const: module
-    BlueprintApi.TemplateType:
+    BlueprintApi.IacType:
+      anyOf:
+        - $ref: '#/components/schemas/BlueprintApi.TerraformTemplateType'
+        - type: string
+          const: pulumi
+        - type: string
+          const: k8s
+        - $ref: '#/components/schemas/BlueprintApi.TerraformTemplateType'
+        - type: string
+          const: pulumi
+        - type: string
+          const: k8s
+    BlueprintApi.TerraformTemplateType:
       type: string
       enum:
         - terraform
         - terragrunt
-        - pulumi
         - terraform
         - terragrunt
-        - pulumi
     BlueprintApi.CreateBlueprint.Request.Body:
       type: object
       additionalProperties: false
@@ -449,6 +461,8 @@ components:
           type: boolean
         isRequired:
           type: boolean
+        regex:
+          type: string
         scope:
           $ref: '#/components/schemas/ConfigurationScope'
         type:
@@ -772,6 +786,8 @@ components:
           type: boolean
         isRequired:
           type: boolean
+        regex:
+          type: string
         scopeId:
           type: string
         scope:
@@ -932,6 +948,8 @@ components:
                   type: boolean
                 isSensitive:
                   type: boolean
+                regex:
+                  type: string
               required:
                 - scope
               additionalProperties: false
@@ -953,6 +971,8 @@ components:
           type: boolean
         isRequired:
           type: boolean
+        regex:
+          type: string
         scopeId:
           type: string
         scope:
@@ -998,6 +1018,8 @@ components:
           type: boolean
         isRequired:
           type: boolean
+        regex:
+          type: string
         scopeId:
           type: string
         scope:
@@ -1348,6 +1370,7 @@ components:
         - DESTROY_IN_PROGRESS
         - PR_PLAN_IN_PROGRESS
         - DRIFT_DETECTION_IN_PROGRESS
+        - TASK_IN_PROGRESS
         - ABORTING
         - ABORTED
         - NEVER_DEPLOYED
@@ -1362,6 +1385,7 @@ components:
         - DESTROY_IN_PROGRESS
         - PR_PLAN_IN_PROGRESS
         - DRIFT_DETECTION_IN_PROGRESS
+        - TASK_IN_PROGRESS
         - ABORTING
         - ABORTED
         - NEVER_DEPLOYED
@@ -1716,6 +1740,8 @@ components:
           type: boolean
         isRequired:
           type: boolean
+        regex:
+          type: string
         type:
           $ref: '#/components/schemas/ConfigurationType'
           description: |-
@@ -1742,6 +1768,7 @@ components:
             - deploy
             - prPlan
             - driftDetection
+            - task
         blueprintId:
           type: string
         blueprintRevision:
@@ -1767,6 +1794,8 @@ components:
         triggerName:
           $ref: '#/components/schemas/TriggerName'
         upstreamEnvironmentId:
+          type: string
+        taskPayload:
           type: string
       additionalProperties: false
     GitUserData:
@@ -1846,6 +1875,8 @@ components:
           type: string
         isSingleUseBlueprint:
           type: boolean
+        complexEnvironmentId:
+          type: string
       required:
         - name
         - organizationId
@@ -1916,7 +1947,7 @@ components:
         blueprintPath:
           type: string
         blueprintType:
-          $ref: '#/components/schemas/BlueprintApi.TemplateType'
+          $ref: '#/components/schemas/BlueprintApi.IacType'
         environmentId:
           type: string
         resourceCount:
@@ -1947,6 +1978,12 @@ components:
           type: boolean
         plan:
           $ref: '#/components/schemas/DeploymentApi.Plan.ParsedPlan'
+        isSkippedApply:
+          type: boolean
+        complexTransactionId:
+          type: string
+        workflowFile:
+          $ref: '#/components/schemas/BlueprintApi.Workflows.WorkflowFile'
       required:
         - type
         - startedBy
@@ -1979,6 +2016,7 @@ components:
         - destroy
         - prPlan
         - driftDetection
+        - task
     Infracost.TotalOutput:
       type: object
       additionalProperties: false
@@ -2146,6 +2184,34 @@ components:
         - changed
         - destroyed
       additionalProperties: false
+    BlueprintApi.Workflows.WorkflowFile:
+      type: object
+      properties:
+        environments:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/BlueprintApi.Workflows.WorkflowSubEnvironment'
+      required:
+        - environments
+      additionalProperties: false
+    BlueprintApi.Workflows.WorkflowSubEnvironment:
+      type: object
+      properties:
+        name:
+          type: string
+        templateName:
+          type: string
+        templateId:
+          type: string
+        needs:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - templateName
+        - templateId
+      additionalProperties: false
     AutoDestroyStatus:
       type: number
       enum:
@@ -2252,6 +2318,8 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/EnvironmentApi.Environment'
+    EnvironmentApi.CountByProject.Response:
+      type: number
     EnvironmentApi.FindResources.Response:
       type: array
       items:
@@ -4394,6 +4462,20 @@ paths:
           allowEmptyValue: false
           schema:
             type: string
+        - name: limit
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
       responses:
         '200':
           description: ''
@@ -4686,6 +4768,34 @@ paths:
               schema:
                 $ref: >-
                   #/components/schemas/EnvironmentApi.FindDeploymentLogById.Response
+      tags:
+        - Environments
+  /environments/count:
+    get:
+      operationId: countByProject
+      summary: Count Environments
+      parameters:
+        - name: projectId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: isActive
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.CountByProject.Response'
       tags:
         - Environments
   /environments/deployments/{id}/resources:
