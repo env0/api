@@ -1,37 +1,400 @@
 openapi: 3.1.0
 components:
   schemas:
-    AgentSettingsApi.ListAgents.Response:
+    CredentialsApi.CreateApiKey.Request.Body:
+      type: object
+      properties:
+        name:
+          type: string
+        organizationId:
+          type: string
+      required:
+        - name
+        - organizationId
+      additionalProperties: false
+    CredentialsApi.ApiKey:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        apiKeyId:
+          type: string
+        lastUsedAt:
+          type: string
+        organizationId:
+          type: string
+        createdAt:
+          type: string
+        createdBy:
+          type: string
+        createdByUser:
+          $ref: '#/components/schemas/ApiKeyUser'
+        apiKeySecret:
+          type: string
+        organizationRole:
+          type: string
+          enum:
+            - Admin
+            - User
+      required:
+        - id
+        - name
+        - apiKeyId
+        - lastUsedAt
+        - organizationId
+        - createdAt
+        - createdBy
+        - organizationRole
+      additionalProperties: false
+    ApiKeyUser:
+      type: object
+      properties:
+        user_id:
+          type: string
+        username:
+          type: string
+        created_at:
+          type: string
+        app_metadata:
+          type: object
+        name:
+          type: string
+        last_login:
+          type: string
+      additionalProperties: false
+    CredentialsApi.CreateApiKey.Response:
+      $ref: '#/components/schemas/CredentialsApi.ApiKey'
+    CredentialsApi.FindAllApiKeys.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/CredentialsApi.ApiKey'
+    DashboardApi.Query.MaxActiveEnvironmentsPerDay.Response:
+      $ref: >-
+        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7522-7553-api.d.ts-7507-7554-api.d.ts-7477-7555-api.d.ts-7320-7561-api.d.ts-7270-7561-api.d.ts-231-9986-api.d.ts-206-9986-api.d.ts-204-9988-api.d.ts-121-9988-api.d.ts-0-9989%3E
+    DashboardApi.Query.Base.Response<structure-api.d.ts-7522-7553-api.d.ts-7507-7554-api.d.ts-7477-7555-api.d.ts-7320-7561-api.d.ts-7270-7561-api.d.ts-231-9986-api.d.ts-206-9986-api.d.ts-204-9988-api.d.ts-121-9988-api.d.ts-0-9989>:
       type: array
       items:
         type: object
         properties:
-          agentKey:
+          date:
             type: string
+          count:
+            type: number
         required:
-          - agentKey
+          - date
+          - count
         additionalProperties: false
-    AgentSettingsApi.GetAgentValues.Response:
+    DashboardApi.Query.ActiveEnvironmentsPerDay.Response:
+      $ref: >-
+        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7807-8143-api.d.ts-7792-8144-api.d.ts-7762-8145-api.d.ts-7608-8151-api.d.ts-7561-8151-api.d.ts-231-9986-api.d.ts-206-9986-api.d.ts-204-9988-api.d.ts-121-9988-api.d.ts-0-9989%3E
+    DashboardApi.Query.Base.Response<structure-api.d.ts-7807-8143-api.d.ts-7792-8144-api.d.ts-7762-8145-api.d.ts-7608-8151-api.d.ts-7561-8151-api.d.ts-231-9986-api.d.ts-206-9986-api.d.ts-204-9988-api.d.ts-121-9988-api.d.ts-0-9989>:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          id:
+            type: string
+          projectName:
+            type: string
+          projectId:
+            type: string
+          status:
+            $ref: '#/components/schemas/EnvironmentApi.EnvironmentStatus'
+          user:
+            $ref: '#/components/schemas/User'
+          lastDeploymentDate:
+            type: string
+            format: date-time
+          createdAt:
+            type: string
+            format: date-time
+          blueprintId:
+            type: string
+          blueprintName:
+            type: string
+          isSingleUseBlueprint:
+            type: boolean
+        required:
+          - name
+          - id
+          - projectName
+          - projectId
+          - status
+          - user
+          - lastDeploymentDate
+          - createdAt
+          - blueprintId
+          - blueprintName
+        additionalProperties: false
+    EnvironmentApi.EnvironmentStatus:
       type: string
-    AgentSettingsApi.ProjectIdToAgentKeyMap:
-      type: object
-      additionalProperties:
-        type: string
-    AgentSettingsApi.GetAgentAssignments.Response:
+      enum:
+        - CREATED
+        - INACTIVE
+        - ACTIVE
+        - FAILED
+        - TIMEOUT
+        - WAITING_FOR_USER
+        - DEPLOY_IN_PROGRESS
+        - DESTROY_IN_PROGRESS
+        - PR_PLAN_IN_PROGRESS
+        - DRIFT_DETECTION_IN_PROGRESS
+        - TASK_IN_PROGRESS
+        - ABORTING
+        - ABORTED
+        - NEVER_DEPLOYED
+        - DRIFTED
+        - CREATED
+        - INACTIVE
+        - ACTIVE
+        - FAILED
+        - TIMEOUT
+        - WAITING_FOR_USER
+        - DEPLOY_IN_PROGRESS
+        - DESTROY_IN_PROGRESS
+        - PR_PLAN_IN_PROGRESS
+        - DRIFT_DETECTION_IN_PROGRESS
+        - TASK_IN_PROGRESS
+        - ABORTING
+        - ABORTED
+        - NEVER_DEPLOYED
+        - DRIFTED
+    User:
       type: object
       properties:
-        defaultAgent:
+        email:
           type: string
-        projectsAgents:
-          $ref: '#/components/schemas/AgentSettingsApi.ProjectIdToAgentKeyMap'
-      required:
-        - defaultAgent
-        - projectsAgents
+        user_id:
+          type: string
+        created_at:
+          type: string
+        app_metadata:
+          type: object
+        picture:
+          type: string
+        name:
+          type: string
+        last_login:
+          type: string
+        given_name:
+          type: string
+        family_name:
+          type: string
       additionalProperties: false
-    AgentSettingsApi.AssignAgents.Request.Body:
-      $ref: '#/components/schemas/AgentSettingsApi.ProjectIdToAgentKeyMap'
-    AgentSettingsApi.AssignAgents.Response:
-      $ref: '#/components/schemas/AgentSettingsApi.GetAgentAssignments.Response'
+    DashboardApi.Query.EnvironmentStatus.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: environmentStatus
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.CountTeams.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: countTeams
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.CountUsers.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: countUsers
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.CountProjects.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: countProjects
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.CountTemplates.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: countTemplates
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.ActiveEnvironments.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        queryName:
+          type: string
+          const: activeEnvironments
+        organizationId:
+          type: string
+      required:
+        - organizationId
+        - queryName
+    DashboardApi.Query.CountDeploymentsPerDay.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        startTime:
+          type: string
+        endTime:
+          type: string
+        queryName:
+          type: string
+          const: countDeploymentsPerDay
+        organizationId:
+          type: string
+      required:
+        - endTime
+        - organizationId
+        - queryName
+        - startTime
+    DashboardApi.Query.CountDeploymentType.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        startTime:
+          type: string
+        endTime:
+          type: string
+        queryName:
+          type: string
+          const: countDeploymentType
+        organizationId:
+          type: string
+      required:
+        - endTime
+        - organizationId
+        - queryName
+        - startTime
+    DashboardApi.Query.CountDeployTypesByUserInTimeRange.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        startTime:
+          type: string
+        endTime:
+          type: string
+        queryName:
+          type: string
+          const: countDeployTypesByUserInTimeRange
+        organizationId:
+          type: string
+      required:
+        - endTime
+        - organizationId
+        - queryName
+        - startTime
+    DashboardApi.Query.Response:
+      anyOf:
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.MaxActiveEnvironmentsPerDay.Response
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.ActiveEnvironmentsPerDay.Response
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.EnvironmentStatus.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountTeams.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountUsers.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountProjects.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountTemplates.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.ActiveEnvironments.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountDeploymentsPerDay.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountDeploymentType.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountDeployTypesByUserInTimeRange.Request.QueryStringParameters
+    DashboardApi.Query.MaxActiveEnvironmentsPerDay.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        startTime:
+          type: string
+        endTime:
+          type: string
+        queryName:
+          type: string
+          const: maxActiveEnvironmentsPerDay
+        organizationId:
+          type: string
+      required:
+        - endTime
+        - organizationId
+        - queryName
+        - startTime
+    DashboardApi.Query.ActiveEnvironmentsPerDay.Request.QueryStringParameters:
+      type: object
+      additionalProperties: false
+      properties:
+        startTime:
+          type: string
+        endTime:
+          type: string
+        queryName:
+          type: string
+          const: activeEnvironmentsPerDay
+        organizationId:
+          type: string
+      required:
+        - endTime
+        - organizationId
+        - queryName
+        - startTime
+    DashboardApi.Query.Request.QueryParams:
+      anyOf:
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.MaxActiveEnvironmentsPerDay.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.ActiveEnvironmentsPerDay.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.EnvironmentStatus.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountTeams.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountUsers.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountProjects.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountTemplates.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.ActiveEnvironments.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountDeploymentsPerDay.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountDeploymentType.Request.QueryStringParameters
+        - $ref: >-
+            #/components/schemas/DashboardApi.Query.CountDeployTypesByUserInTimeRange.Request.QueryStringParameters
     BlueprintApi.TerraformVersion:
       anyOf:
         - type: string
@@ -255,28 +618,6 @@ components:
         - repository
         - type
       description: Required
-    User:
-      type: object
-      properties:
-        email:
-          type: string
-        user_id:
-          type: string
-        created_at:
-          type: string
-        app_metadata:
-          type: object
-        picture:
-          type: string
-        name:
-          type: string
-        last_login:
-          type: string
-        given_name:
-          type: string
-        family_name:
-          type: string
-      additionalProperties: false
     BlueprintApi.CreateBlueprint.Response:
       $ref: '#/components/schemas/BlueprintApi.BlueprintWithProjectIds'
     BlueprintApi.BlueprintUserFields:
@@ -351,6 +692,41 @@ components:
       $ref: '#/components/schemas/BlueprintApi.BlueprintWithProjectIds'
     BlueprintApi.GetBlueprintById.Response:
       $ref: '#/components/schemas/BlueprintApi.BlueprintWithProjectIds'
+    RevisionsNamesResponse:
+      type: object
+      properties:
+        heads:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+        - heads
+        - tags
+      additionalProperties: false
+    BlueprintApi.GetVcsRepositoryRevisions.Response:
+      $ref: '#/components/schemas/RevisionsNamesResponse'
+    BlueprintApi.VcsQueryParams:
+      type: object
+      properties:
+        repository:
+          type: string
+        tokenId:
+          type: string
+        githubInstallationId:
+          type: string
+        sshKeyIds:
+          type: string
+        bitbucketClientKey:
+          type: string
+      required:
+        - repository
+      additionalProperties: false
+    BlueprintApi.GetVcsRepositoryRevisions.Request.QueryParams:
+      $ref: '#/components/schemas/BlueprintApi.VcsQueryParams'
     BlueprintApi.Blueprint:
       type: object
       additionalProperties: false
@@ -530,6 +906,26 @@ components:
       items:
         $ref: >-
           #/components/schemas/BlueprintApi.GetVariablesFromRepository.RepositoryVariable
+    BlueprintApi.GetVariablesFromRepository.Request.QueryParams:
+      type: object
+      additionalProperties: false
+      properties:
+        revision:
+          type: string
+        path:
+          type: string
+        repository:
+          type: string
+        tokenId:
+          type: string
+        githubInstallationId:
+          type: string
+        sshKeyIds:
+          type: string
+        bitbucketClientKey:
+          type: string
+      required:
+        - repository
     BlueprintApi.ExistingModule:
       $ref: >-
         #/components/schemas/AugmentedRequired%3CBlueprintApi.Module%2C(%22id%22%7C%22organizationId%22%7C%22author%22)%3E
@@ -610,6 +1006,14 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/BlueprintApi.ExistingModule'
+    BlueprintApi.FindAllModules.Request.QueryParams:
+      type: object
+      properties:
+        organizationId:
+          type: string
+      required:
+        - organizationId
+      additionalProperties: false
     BlueprintApi.GetModuleVersions.ModuleVersionMetadata:
       type: object
       properties:
@@ -709,6 +1113,14 @@ components:
       $ref: '#/components/schemas/BlueprintApi.ExistingModule'
     BlueprintApi.GetModule.Response:
       $ref: '#/components/schemas/BlueprintApi.Module'
+    BlueprintApi.GetModule.Request.PathParams:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
     BlueprintApi.ModuleUserFields:
       type: object
       additionalProperties: false
@@ -766,864 +1178,33 @@ components:
       $ref: '#/components/schemas/BlueprintApi.ModuleUserFields'
     BlueprintApi.UpdateModule.Response:
       $ref: '#/components/schemas/BlueprintApi.ExistingModule'
-    ConfigurationPropertyResponse:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        name:
-          type: string
-        value:
-          type: string
-        id:
-          type: string
-        userId:
-          type: string
-        isSensitive:
-          type: boolean
-        isReadonly:
-          type: boolean
-        isRequired:
-          type: boolean
-        regex:
-          type: string
-        scopeId:
-          type: string
-        scope:
-          $ref: '#/components/schemas/ConfigurationScope'
-        type:
-          $ref: '#/components/schemas/ConfigurationType'
-          description: |-
-            Whether it is an Environment or Terraform variable
-            0 value maps to an Environment variable
-            1 value maps to an Terraform variable
-        organizationId:
-          type: string
-        schema:
-          $ref: '#/components/schemas/PartialJSONSchema7'
-        description:
-          type: string
-          maxLength: 255
-      additionalProperties: false
-    ConfigurationApi.FindVariableById.Response:
-      $ref: '#/components/schemas/ConfigurationPropertyResponse'
-    ConfigurationApi.SshKey:
+    BlueprintApi.UpdateModule.Request.PathParams:
       type: object
       properties:
         id:
           type: string
-        name:
-          type: string
-        organizationId:
-          type: string
-        value:
-          type: string
-        sensitiveValueSalt:
-          type: string
-        userId:
-          type: string
-        user:
-          $ref: '#/components/schemas/User'
       required:
         - id
-        - name
-        - organizationId
-        - userId
-        - value
       additionalProperties: false
-    ConfigurationApi.FindSshKeysByOrganization.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/ConfigurationApi.SshKey'
-    ConfigurationApi.CreateSshKey.Request.Body:
-      type: object
-      properties:
-        name:
-          type: string
-        organizationId:
-          type: string
-        value:
-          type: string
-      required:
-        - name
-        - organizationId
-        - value
-      additionalProperties: false
-    ConfigurationApi.AbstractSecretResponse<ConfigurationApi.SshKey>:
-      type: object
-      properties:
-        userId:
-          type: string
-        user:
-          $ref: '#/components/schemas/User'
-        id:
-          type: string
-        name:
-          type: string
-        organizationId:
-          type: string
-        value:
-          type: string
-      required:
-        - userId
-        - id
-        - name
-        - organizationId
-        - value
-      additionalProperties: false
-    ConfigurationApi.CreateSshKey.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.SshKey%3E
-    ConfigurationApi.AbstractSecretResponse<ConfigurationApi.PersistentToken>:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-        organizationId:
-          type: string
-        type:
-          $ref: '#/components/schemas/TokenTypes'
-        id:
-          type: string
-      required:
-        - name
-        - value
-        - organizationId
-        - type
-        - id
-      additionalProperties: false
-    TokenTypes:
-      type: string
-      enum:
-        - GIT
-        - GitLab
-    ConfigurationApi.FindTokenByType.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
-    ConfigurationApi.FindTokenById.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
-    ConfigurationApi.Token:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-        organizationId:
-          type: string
-        type:
-          $ref: '#/components/schemas/TokenTypes'
-      required:
-        - name
-        - value
-        - organizationId
-        - type
-      additionalProperties: false
-    ConfigurationApi.CreateToken.Request.Body:
-      $ref: '#/components/schemas/ConfigurationApi.Token'
-    ConfigurationApi.CreateToken.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
-    ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty:
-      type: object
-      additionalProperties: false
-      properties:
-        overwrites:
-          anyOf:
-            - type: object
-              properties:
-                scope:
-                  $ref: '#/components/schemas/ConfigurationScope'
-                value:
-                  type: string
-                schema:
-                  $ref: '#/components/schemas/PartialJSONSchema7'
-                isReadonly:
-                  type: boolean
-                isRequired:
-                  type: boolean
-                isSensitive:
-                  type: boolean
-                regex:
-                  type: string
-              required:
-                - scope
-              additionalProperties: false
-            - type: 'null'
-        createdAt:
-          type: string
-          format: date-time
-        name:
-          type: string
-        value:
-          type: string
-        id:
-          type: string
-        userId:
-          type: string
-        isSensitive:
-          type: boolean
-        isReadonly:
-          type: boolean
-        isRequired:
-          type: boolean
-        regex:
-          type: string
-        scopeId:
-          type: string
-        scope:
-          $ref: '#/components/schemas/ConfigurationScope'
-        type:
-          $ref: '#/components/schemas/ConfigurationType'
-          description: |-
-            Whether it is an Environment or Terraform variable
-            0 value maps to an Environment variable
-            1 value maps to an Terraform variable
-        toDelete:
-          type: boolean
-        organizationId:
-          type: string
-        schema:
-          $ref: '#/components/schemas/PartialJSONSchema7'
-        description:
-          type: string
-          maxLength: 255
-      required:
-        - name
-        - organizationId
-        - overwrites
-        - scope
-        - type
-    ConfigurationApi.FindVariablesByScope.Response:
-      type: array
-      items:
-        $ref: >-
-          #/components/schemas/ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty
-    ConfigurationPropertyRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-        id:
-          type: string
-        isSensitive:
-          type: boolean
-        isReadonly:
-          type: boolean
-        isRequired:
-          type: boolean
-        regex:
-          type: string
-        scopeId:
-          type: string
-        scope:
-          $ref: '#/components/schemas/ConfigurationScope'
-        type:
-          $ref: '#/components/schemas/ConfigurationType'
-          description: |-
-            Whether it is an Environment or Terraform variable
-            0 value maps to an Environment variable
-            1 value maps to an Terraform variable
-        toDelete:
-          type: boolean
-        organizationId:
-          type: string
-        schema:
-          $ref: '#/components/schemas/PartialJSONSchema7'
-        description:
-          type: string
-          maxLength: 255
-      required:
-        - name
-        - scope
-        - type
-        - organizationId
-      additionalProperties: false
-    ConfigurationApi.CreateOrUpdateVariable.Request.Body:
-      type: array
-      items:
-        $ref: '#/components/schemas/ConfigurationPropertyRequest'
-    ConfigurationApi.CreateOrUpdateVariable.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/ConfigurationPropertyResponse'
-    TransientCredential:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/CredentialType'
-        createdByUser:
-          $ref: '#/components/schemas/User'
-        value:
-          type: object
-          description: >-
-            A JSON string representation of the cloud provider credentials.
-
-            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types
-            use:
-
-            { roleArn: "your-role-arn", externalId: "your-external-id" }
-
-
-            - For GCP_CREDENTIALS type use:
-
-            { tableId: "your-table-id", secret: "your-secret" }
-
-
-            - For AZURE_CREDENTIALS type use:
-
-            { clientId: "your-clientId", clientSecret: "your-clientSecret",
-            tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
-        name:
-          type: string
-        organizationId:
-          type: string
-        sensitiveValueSalt:
-          type: string
-      required:
-        - type
-        - value
-        - name
-        - organizationId
-      additionalProperties: false
-    CredentialType:
-      type: string
-      enum:
-        - AWS_ASSUMED_ROLE
-        - AWS_ASSUMED_ROLE_FOR_DEPLOYMENT
-        - GCP_CREDENTIALS
-        - AZURE_CREDENTIALS
-        - AWS_ACCESS_KEYS_FOR_DEPLOYMENT
-        - GCP_SERVICE_ACCOUNT_FOR_DEPLOYMENT
-        - AZURE_SERVICE_PRINCIPAL_FOR_DEPLOYMENT
-        - AWS_ASSUMED_ROLE
-        - AWS_ASSUMED_ROLE_FOR_DEPLOYMENT
-        - GCP_CREDENTIALS
-        - AZURE_CREDENTIALS
-        - AWS_ACCESS_KEYS_FOR_DEPLOYMENT
-        - GCP_SERVICE_ACCOUNT_FOR_DEPLOYMENT
-        - AZURE_SERVICE_PRINCIPAL_FOR_DEPLOYMENT
-    ConfigurationApi.CreateCredential.Request.Body:
-      $ref: '#/components/schemas/TransientCredential'
-    CredentialWithoutValue:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        organizationId:
-          type: string
-        value:
-          type: 'null'
-        sensitiveValueSalt:
-          type: string
-        type:
-          $ref: '#/components/schemas/CredentialType'
-        createdByUser:
-          $ref: '#/components/schemas/User'
-      required:
-        - id
-        - name
-        - organizationId
-        - type
-        - value
-      additionalProperties: false
-    ConfigurationApi.CreateCredential.Response:
-      $ref: '#/components/schemas/CredentialWithoutValue'
-    ConfigurationApi.FindCredentials.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/CredentialWithoutValue'
-    ConfigurationApi.AddDeployCredsToProject.Request.Body:
+    BlueprintApi.ModuleRegistryDownloadSource.Response:
       type: 'null'
-    ConfigurationApi.DeploymentCredentialToProject:
+    BlueprintApi.ModuleRegistryDownloadSource.Request.PathParams:
       type: object
       properties:
-        id:
-          type: string
-        projectId:
-          type: string
-        credentialId:
-          type: string
-        createdByUserId:
-          type: string
-      required:
-        - projectId
-        - credentialId
-        - createdByUserId
-      additionalProperties: false
-    ConfigurationApi.AddDeployCredsToProject.Response:
-      $ref: '#/components/schemas/ConfigurationApi.DeploymentCredentialToProject'
-    ConfigurationApi.DeploymentCredentialsToProject:
-      type: object
-      properties:
-        credentialIds:
-          type: array
-          items:
-            type: string
-      required:
-        - credentialIds
-      additionalProperties: false
-    ConfigurationApi.GetDeployCredsForProject.Response:
-      $ref: '#/components/schemas/ConfigurationApi.DeploymentCredentialsToProject'
-    CostApi.AddProjectCostsCredentials.Request.Body:
-      type: object
-      properties:
-        credentialsId:
-          type: string
-          maxLength: 36
-          minLength: 1
-      required:
-        - credentialsId
-      additionalProperties: false
-    CostApi.ProjectCostsCredentials:
-      type: object
-      properties:
-        projectId:
-          type: string
-        credentialsId:
-          type: string
-        credentialsType:
-          $ref: '#/components/schemas/CredentialType'
-      required:
-        - projectId
-        - credentialsId
-      additionalProperties: false
-    CostApi.AddProjectCostsCredentials.Response:
-      $ref: '#/components/schemas/CostApi.ProjectCostsCredentials'
-    CostApi.GetProjectCostsCredentials.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/CostApi.ProjectCostsCredentials'
-    CostApi.IsCostEnabled.Response:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-      required:
-        - enabled
-      additionalProperties: false
-    CostApi.CostQueryResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          date:
-            type: string
-          total:
-            type: object
-            properties:
-              AWS:
-                type: number
-              GCP:
-                type: number
-              AZURE:
-                type: number
-            additionalProperties: false
-        required:
-          - total
-        additionalProperties: false
-    CostApi.GetEnvironmentCosts.Response:
-      $ref: '#/components/schemas/CostApi.CostQueryResponse'
-    CostApi.GetProjectCosts.Response:
-      $ref: '#/components/schemas/CostApi.CostQueryResponse'
-    CredentialsApi.CreateApiKey.Request.Body:
-      type: object
-      properties:
-        name:
-          type: string
         organizationId:
           type: string
-      required:
-        - name
-        - organizationId
-      additionalProperties: false
-    CredentialsApi.ApiKey:
-      type: object
-      properties:
-        id:
+        moduleName:
           type: string
-        name:
+        providerName:
           type: string
-        apiKeyId:
-          type: string
-        lastUsedAt:
-          type: string
-        organizationId:
-          type: string
-        createdAt:
-          type: string
-        createdBy:
-          type: string
-        createdByUser:
-          $ref: '#/components/schemas/ApiKeyUser'
-        apiKeySecret:
-          type: string
-      required:
-        - id
-        - name
-        - apiKeyId
-        - lastUsedAt
-        - organizationId
-        - createdAt
-        - createdBy
-      additionalProperties: false
-    ApiKeyUser:
-      type: object
-      properties:
-        user_id:
-          type: string
-        username:
-          type: string
-        created_at:
-          type: string
-        app_metadata:
-          type: object
-        name:
-          type: string
-        last_login:
-          type: string
-      additionalProperties: false
-    CredentialsApi.CreateApiKey.Response:
-      $ref: '#/components/schemas/CredentialsApi.ApiKey'
-    CredentialsApi.FindAllApiKeys.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/CredentialsApi.ApiKey'
-    DashboardApi.Query.MaxActiveEnvironmentsPerDay.Response:
-      $ref: >-
-        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7476-7507-api.d.ts-7461-7508-api.d.ts-7431-7509-api.d.ts-7274-7515-api.d.ts-7224-7515-api.d.ts-231-9940-api.d.ts-206-9940-api.d.ts-204-9942-api.d.ts-121-9942-api.d.ts-0-9943%3E
-    DashboardApi.Query.Base.Response<structure-api.d.ts-7476-7507-api.d.ts-7461-7508-api.d.ts-7431-7509-api.d.ts-7274-7515-api.d.ts-7224-7515-api.d.ts-231-9940-api.d.ts-206-9940-api.d.ts-204-9942-api.d.ts-121-9942-api.d.ts-0-9943>:
-      type: array
-      items:
-        type: object
-        properties:
-          date:
-            type: string
-          count:
-            type: number
-        required:
-          - date
-          - count
-        additionalProperties: false
-    DashboardApi.Query.ActiveEnvironmentsPerDay.Response:
-      $ref: >-
-        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7761-8097-api.d.ts-7746-8098-api.d.ts-7716-8099-api.d.ts-7562-8105-api.d.ts-7515-8105-api.d.ts-231-9940-api.d.ts-206-9940-api.d.ts-204-9942-api.d.ts-121-9942-api.d.ts-0-9943%3E
-    DashboardApi.Query.Base.Response<structure-api.d.ts-7761-8097-api.d.ts-7746-8098-api.d.ts-7716-8099-api.d.ts-7562-8105-api.d.ts-7515-8105-api.d.ts-231-9940-api.d.ts-206-9940-api.d.ts-204-9942-api.d.ts-121-9942-api.d.ts-0-9943>:
-      type: array
-      items:
-        type: object
-        properties:
-          name:
-            type: string
-          id:
-            type: string
-          projectName:
-            type: string
-          projectId:
-            type: string
-          status:
-            $ref: '#/components/schemas/EnvironmentApi.EnvironmentStatus'
-          user:
-            $ref: '#/components/schemas/User'
-          lastDeploymentDate:
-            type: string
-            format: date-time
-          createdAt:
-            type: string
-            format: date-time
-          blueprintId:
-            type: string
-          blueprintName:
-            type: string
-          isSingleUseBlueprint:
-            type: boolean
-        required:
-          - name
-          - id
-          - projectName
-          - projectId
-          - status
-          - user
-          - lastDeploymentDate
-          - createdAt
-          - blueprintId
-          - blueprintName
-        additionalProperties: false
-    EnvironmentApi.EnvironmentStatus:
-      type: string
-      enum:
-        - CREATED
-        - INACTIVE
-        - ACTIVE
-        - FAILED
-        - TIMEOUT
-        - WAITING_FOR_USER
-        - DEPLOY_IN_PROGRESS
-        - DESTROY_IN_PROGRESS
-        - PR_PLAN_IN_PROGRESS
-        - DRIFT_DETECTION_IN_PROGRESS
-        - TASK_IN_PROGRESS
-        - ABORTING
-        - ABORTED
-        - NEVER_DEPLOYED
-        - DRIFTED
-        - CREATED
-        - INACTIVE
-        - ACTIVE
-        - FAILED
-        - TIMEOUT
-        - WAITING_FOR_USER
-        - DEPLOY_IN_PROGRESS
-        - DESTROY_IN_PROGRESS
-        - PR_PLAN_IN_PROGRESS
-        - DRIFT_DETECTION_IN_PROGRESS
-        - TASK_IN_PROGRESS
-        - ABORTING
-        - ABORTED
-        - NEVER_DEPLOYED
-        - DRIFTED
-    DashboardApi.Query.EnvironmentStatus.Request.QueryStringParameters:
-      type: object
-      additionalProperties: false
-      properties:
-        queryName:
-          type: string
-          const: environmentStatus
-        organizationId:
+        version:
           type: string
       required:
         - organizationId
-        - queryName
-    DashboardApi.Query.CountTeams.Request.QueryStringParameters:
-      type: object
+        - moduleName
+        - providerName
+        - version
       additionalProperties: false
-      properties:
-        queryName:
-          type: string
-          const: countTeams
-        organizationId:
-          type: string
-      required:
-        - organizationId
-        - queryName
-    DashboardApi.Query.CountUsers.Request.QueryStringParameters:
-      type: object
-      additionalProperties: false
-      properties:
-        queryName:
-          type: string
-          const: countUsers
-        organizationId:
-          type: string
-      required:
-        - organizationId
-        - queryName
-    DashboardApi.Query.CountProjects.Request.QueryStringParameters:
-      type: object
-      additionalProperties: false
-      properties:
-        queryName:
-          type: string
-          const: countProjects
-        organizationId:
-          type: string
-      required:
-        - organizationId
-        - queryName
-    DashboardApi.Query.CountTemplates.Request.QueryStringParameters:
-      type: object
-      additionalProperties: false
-      properties:
-        queryName:
-          type: string
-          const: countTemplates
-        organizationId:
-          type: string
-      required:
-        - organizationId
-        - queryName
-    DashboardApi.Query.ActiveEnvironments.Request.QueryStringParameters:
-      type: object
-      additionalProperties: false
-      properties:
-        queryName:
-          type: string
-          const: activeEnvironments
-        organizationId:
-          type: string
-      required:
-        - organizationId
-        - queryName
-    DashboardApi.Query.CountDeploymentsPerDay.Request.QueryStringParameters:
-      type: object
-      additionalProperties: false
-      properties:
-        startTime:
-          type: string
-        endTime:
-          type: string
-        queryName:
-          type: string
-          const: countDeploymentsPerDay
-        organizationId:
-          type: string
-      required:
-        - endTime
-        - organizationId
-        - queryName
-        - startTime
-    DashboardApi.Query.CountDeploymentType.Request.QueryStringParameters:
-      type: object
-      additionalProperties: false
-      properties:
-        startTime:
-          type: string
-        endTime:
-          type: string
-        queryName:
-          type: string
-          const: countDeploymentType
-        organizationId:
-          type: string
-      required:
-        - endTime
-        - organizationId
-        - queryName
-        - startTime
-    DashboardApi.Query.CountDeployTypesByUserInTimeRange.Request.QueryStringParameters:
-      type: object
-      additionalProperties: false
-      properties:
-        startTime:
-          type: string
-        endTime:
-          type: string
-        queryName:
-          type: string
-          const: countDeployTypesByUserInTimeRange
-        organizationId:
-          type: string
-      required:
-        - endTime
-        - organizationId
-        - queryName
-        - startTime
-    DashboardApi.Query.Response:
-      anyOf:
-        - $ref: >-
-            #/components/schemas/DashboardApi.Query.MaxActiveEnvironmentsPerDay.Response
-        - $ref: >-
-            #/components/schemas/DashboardApi.Query.ActiveEnvironmentsPerDay.Response
-        - $ref: >-
-            #/components/schemas/DashboardApi.Query.EnvironmentStatus.Request.QueryStringParameters
-        - $ref: >-
-            #/components/schemas/DashboardApi.Query.CountTeams.Request.QueryStringParameters
-        - $ref: >-
-            #/components/schemas/DashboardApi.Query.CountUsers.Request.QueryStringParameters
-        - $ref: >-
-            #/components/schemas/DashboardApi.Query.CountProjects.Request.QueryStringParameters
-        - $ref: >-
-            #/components/schemas/DashboardApi.Query.CountTemplates.Request.QueryStringParameters
-        - $ref: >-
-            #/components/schemas/DashboardApi.Query.ActiveEnvironments.Request.QueryStringParameters
-        - $ref: >-
-            #/components/schemas/DashboardApi.Query.CountDeploymentsPerDay.Request.QueryStringParameters
-        - $ref: >-
-            #/components/schemas/DashboardApi.Query.CountDeploymentType.Request.QueryStringParameters
-        - $ref: >-
-            #/components/schemas/DashboardApi.Query.CountDeployTypesByUserInTimeRange.Request.QueryStringParameters
-    DeploymentStepApi.DeploymentStepStatus:
-      $ref: '#/components/schemas/CommonDeploymentStepApi.DeploymentStepStatus'
-    CommonDeploymentStepApi.DeploymentStepStatus:
-      type: string
-      enum:
-        - NOT_STARTED
-        - IN_PROGRESS
-        - WAITING_FOR_USER
-        - TIMEOUT
-        - FAIL
-        - SUCCESS
-        - CANCELLED
-        - SKIPPED
-    DeploymentStepApi.FindByDeploymentLogId.Response:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: string
-          deploymentLogId:
-            type: string
-          name:
-            type: string
-          order:
-            type: number
-          projectId:
-            type: string
-          organizationId:
-            type: string
-          status:
-            $ref: '#/components/schemas/DeploymentStepApi.DeploymentStepStatus'
-          startedAt:
-            type: string
-            format: date-time
-          completedAt:
-            type: string
-            format: date-time
-        required:
-          - deploymentLogId
-          - name
-          - order
-          - projectId
-          - organizationId
-          - status
-        additionalProperties: false
-    CommonDeploymentStepApi.FindStepLog.Response:
-      type: object
-      properties:
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonDeploymentStepApi.FindStepLog.LogEvent'
-        nextStartTime:
-          type:
-            - number
-            - string
-        hasMoreLogs:
-          type: boolean
-      required:
-        - events
-        - hasMoreLogs
-      additionalProperties: false
-    CommonDeploymentStepApi.FindStepLog.LogEvent:
-      type: object
-      properties:
-        eventId:
-          type: string
-        message:
-          type: string
-        level:
-          type: string
-        timestamp:
-          type:
-            - number
-            - string
-      required:
-        - eventId
-        - message
-        - level
-        - timestamp
-      additionalProperties: false
-    DeploymentStepApi.FindStepLog.Response:
-      $ref: '#/components/schemas/CommonDeploymentStepApi.FindStepLog.Response'
     EnvironmentApi.UpdateDownstreamEnvironments.Request.Body:
       type: object
       properties:
@@ -1664,6 +1245,14 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/EnvironmentApi.DownstreamEnvironment'
+    EnvironmentApi.UpdateDownstreamEnvironments.Request.PathParams:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
     EnvironmentApi.FindDownstreamEnvironments.Response:
       type: array
       items:
@@ -1691,6 +1280,8 @@ components:
           type: boolean
         pullRequestPlanDeployments:
           type: boolean
+        driftDetectionRequest:
+          $ref: '#/components/schemas/EnvironmentApi.DriftDetectionRequest'
         autoDeployOnPathChangesOnly:
           type: boolean
         autoDeployByCustomGlob:
@@ -1762,6 +1353,8 @@ components:
     DeployRequest:
       type: object
       properties:
+        transactionId:
+          type: string
         deploymentType:
           type: string
           enum:
@@ -1819,6 +1412,14 @@ components:
         - scheduled
         - workflow
         - comment
+    EnvironmentApi.DriftDetectionRequest:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        cron:
+          type: string
+      additionalProperties: false
     EnvironmentApi.Create.Request.Body:
       $ref: '#/components/schemas/EnvironmentApi.CreateEnvironmentRequest'
     EnvironmentApi.Environment:
@@ -1983,7 +1584,7 @@ components:
         complexTransactionId:
           type: string
         workflowFile:
-          $ref: '#/components/schemas/BlueprintApi.Workflows.WorkflowFile'
+          $ref: '#/components/schemas/EnvironmentApi.ComplexEnvironments.WorkflowFile'
       required:
         - type
         - startedBy
@@ -2184,19 +1785,23 @@ components:
         - changed
         - destroyed
       additionalProperties: false
-    BlueprintApi.Workflows.WorkflowFile:
+    EnvironmentApi.ComplexEnvironments.WorkflowFile:
       type: object
       properties:
         environments:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/BlueprintApi.Workflows.WorkflowSubEnvironment'
+            $ref: >-
+              #/components/schemas/EnvironmentApi.ComplexEnvironments.WorkflowSubEnvironment
       required:
         - environments
       additionalProperties: false
-    BlueprintApi.Workflows.WorkflowSubEnvironment:
+    EnvironmentApi.ComplexEnvironments.WorkflowSubEnvironment:
       type: object
+      additionalProperties: false
       properties:
+        environmentId:
+          type: string
         name:
           type: string
         templateName:
@@ -2209,9 +1814,8 @@ components:
             type: string
       required:
         - name
-        - templateName
         - templateId
-      additionalProperties: false
+        - templateName
     AutoDestroyStatus:
       type: number
       enum:
@@ -2287,6 +1891,8 @@ components:
       properties:
         triggerName:
           $ref: '#/components/schemas/TriggerName'
+        transactionId:
+          type: string
       additionalProperties: false
     EnvironmentApi.Destroy.Response:
       type: object
@@ -2295,6 +1901,25 @@ components:
           type: string
       required:
         - id
+      additionalProperties: false
+    EnvironmentApi.QueryBoolean:
+      type: string
+      enum:
+        - 'true'
+        - 'false'
+    EnvironmentApi.Revision:
+      type: string
+    EnvironmentApi.Destroy.Request.QueryParams:
+      type: object
+      properties:
+        checkoutUpdatedCode:
+          $ref: '#/components/schemas/EnvironmentApi.QueryBoolean'
+        isScheduledRun:
+          $ref: '#/components/schemas/EnvironmentApi.QueryBoolean'
+        skipStateRefresh:
+          $ref: '#/components/schemas/EnvironmentApi.QueryBoolean'
+        revision:
+          $ref: '#/components/schemas/EnvironmentApi.Revision'
       additionalProperties: false
     EnvironmentApi.Resume.Request.Body:
       type: 'null'
@@ -2312,14 +1937,61 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/EnvironmentApi.DeploymentLog'
+    EnvironmentApi.FindDeploymentLogsByEnvironmentId.Request.QueryParams:
+      type: object
+      additionalProperties: false
+      properties:
+        limit:
+          type: string
+        offset:
+          type: string
+    EnvironmentApi.FindTransactionSubDeploymentLog.Response:
+      $ref: '#/components/schemas/EnvironmentApi.DeploymentLog'
     EnvironmentApi.FindById.Response:
       $ref: '#/components/schemas/EnvironmentApi.Environment'
     EnvironmentApi.FindAll.Response:
       type: array
       items:
         $ref: '#/components/schemas/EnvironmentApi.Environment'
+    EnvironmentApi.FindAll.Request.QueryParams:
+      type: object
+      additionalProperties: false
+      properties:
+        limit:
+          type: string
+        offset:
+          type: string
+        onlyMy:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        isActive:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        name:
+          type: string
+        organizationId:
+          type: string
+        projectId:
+          type: string
     EnvironmentApi.CountByProject.Response:
       type: number
+    EnvironmentApi.CountByProject.Request.QueryParams:
+      type: object
+      properties:
+        isActive:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+        projectId:
+          type: string
+      required:
+        - projectId
+      additionalProperties: false
     EnvironmentApi.FindResources.Response:
       type: array
       items:
@@ -2409,10 +2081,44 @@ components:
       $ref: '#/components/schemas/EnvironmentApi.Policy'
     EnvironmentApi.GetPolicies.Response:
       $ref: '#/components/schemas/EnvironmentApi.Policy'
+    EnvironmentApi.GetPolicies.Request.QueryParams:
+      type: object
+      properties:
+        projectId:
+          type: string
+      required:
+        - projectId
+      additionalProperties: false
+    EnvironmentApi.CheckLimit.EnvironmentLimits:
+      type: object
+      properties:
+        total:
+          type: number
+        user:
+          type: number
+      additionalProperties: false
+    EnvironmentApi.CheckLimit.Response:
+      $ref: '#/components/schemas/EnvironmentApi.CheckLimit.EnvironmentLimits'
+    EnvironmentApi.CheckLimit.Request.QueryParams:
+      type: object
+      properties:
+        projectId:
+          type: string
+      required:
+        - projectId
+      additionalProperties: false
     EnvironmentApi.RerunDeployment.Request.Body:
       type: 'null'
     EnvironmentApi.RerunDeployment.Response:
       type: 'null'
+    EnvironmentApi.RerunDeployment.Request.PathParams:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
     NotificationsApi.NotificationEndpointModel:
       type: object
       properties:
@@ -2463,6 +2169,14 @@ components:
       additionalProperties: false
     NotificationsApi.CreateNotificationEndpoint.Response:
       $ref: '#/components/schemas/NotificationsApi.NotificationEndpoint'
+    NotificationsApi.DeleteNotificationEndpoint.Request.PathParams:
+      type: object
+      properties:
+        endpointId:
+          type: string
+      required:
+        - endpointId
+      additionalProperties: false
     NotificationsApi.UpdateNotificationEndpoint.Request.Body:
       type: object
       properties:
@@ -2479,6 +2193,14 @@ components:
       additionalProperties: false
     NotificationsApi.UpdateNotificationEndpoint.Response:
       $ref: '#/components/schemas/NotificationsApi.NotificationEndpoint'
+    NotificationsApi.UpdateNotificationEndpoint.Request.PathParams:
+      type: object
+      properties:
+        endpointId:
+          type: string
+      required:
+        - endpointId
+      additionalProperties: false
     EventNameType:
       type: string
       enum:
@@ -2527,14 +2249,155 @@ components:
       additionalProperties: false
     NotificationsApi.UpdateProjectNotificationSettings.Response:
       $ref: '#/components/schemas/NotificationsApi.ProjectNotificationSetting'
+    NotificationsApi.UpdateProjectNotificationSettings.Request.PathParams:
+      type: object
+      properties:
+        projectId:
+          type: string
+        endpointId:
+          type: string
+      required:
+        - projectId
+        - endpointId
+      additionalProperties: false
     NotificationsApi.FindNotificationEndpoints.Response:
       type: array
       items:
         $ref: '#/components/schemas/NotificationsApi.NotificationEndpoint'
+    NotificationsApi.FindNotificationEndpoints.Request.QueryParams:
+      type: object
+      properties:
+        organizationId:
+          type: string
+      required:
+        - organizationId
+      additionalProperties: false
     NotificationsApi.FindProjectNotificationSettings.Response:
       type: array
       items:
         $ref: '#/components/schemas/NotificationsApi.ProjectNotificationSetting'
+    NotificationsApi.FindProjectNotificationSettings.Request.PathParams:
+      type: object
+      properties:
+        projectId:
+          type: string
+      required:
+        - projectId
+      additionalProperties: false
+    AgentSettingsApi.ListAgents.Response:
+      type: array
+      items:
+        type: object
+        properties:
+          agentKey:
+            type: string
+        required:
+          - agentKey
+        additionalProperties: false
+    AgentSettingsApi.ListAgents.Request.QueryParams:
+      type: object
+      properties:
+        organizationId:
+          type: string
+      required:
+        - organizationId
+      additionalProperties: false
+    AgentSettingsApi.GetAgentValues.Response:
+      type: string
+    AgentSettingsApi.GetAgentValues.Request.PathParams:
+      type: object
+      properties:
+        agentKey:
+          type: string
+      required:
+        - agentKey
+      additionalProperties: false
+    AgentSettingsApi.ProjectIdToAgentKeyMap:
+      type: object
+      additionalProperties:
+        type: string
+    AgentSettingsApi.GetAgentAssignments.Response:
+      type: object
+      properties:
+        defaultAgent:
+          type: string
+        projectsAgents:
+          $ref: '#/components/schemas/AgentSettingsApi.ProjectIdToAgentKeyMap'
+      required:
+        - defaultAgent
+        - projectsAgents
+      additionalProperties: false
+    AgentSettingsApi.GetAgentAssignments.Request.QueryParams:
+      type: object
+      properties:
+        organizationId:
+          type: string
+      required:
+        - organizationId
+      additionalProperties: false
+    AgentSettingsApi.AssignAgents.Request.Body:
+      $ref: '#/components/schemas/AgentSettingsApi.ProjectIdToAgentKeyMap'
+    AgentSettingsApi.AssignAgents.Response:
+      $ref: '#/components/schemas/AgentSettingsApi.GetAgentAssignments.Response'
+    AgentSettingsApi.AssignAgents.Request.QueryParams:
+      type: object
+      properties:
+        organizationId:
+          type: string
+      required:
+        - organizationId
+      additionalProperties: false
+    OrganizationApi.CreateOrganization.Request.Body:
+      type: object
+      properties:
+        name:
+          type: string
+          pattern: ^(?!\s*$).+
+        description:
+          type: string
+        photoUrl:
+          type: string
+      required:
+        - name
+      additionalProperties: false
+    OrganizationApi.OrganizationModel:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        maxTtl:
+          type:
+            - string
+            - 'null'
+        defaultTtl:
+          type:
+            - string
+            - 'null'
+        doNotReportSkippedStatusChecks:
+          type: boolean
+        doNotConsiderMergeCommitsForPrPlans:
+          type: boolean
+        description:
+          type: string
+        photoUrl:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - createdBy
+      additionalProperties: false
+    OrganizationApi.CreateOrganization.Response:
+      $ref: '#/components/schemas/OrganizationApi.OrganizationModel'
     OrganizationApi.Organization:
       type: object
       properties:
@@ -2649,6 +2512,14 @@ components:
               type: string
             family_name:
               type: string
+            app_metadata:
+              type: object
+              properties:
+                isApiKey:
+                  type: boolean
+              required:
+                - isApiKey
+              additionalProperties: false
           additionalProperties: false
         role:
           $ref: '#/components/schemas/OrganizationRolesString'
@@ -2668,6 +2539,23 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/OrganizationUser'
+    OrganizationApi.GetUsers.Request.QueryParams:
+      type: object
+      properties:
+        includeApiKeys:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+      additionalProperties: false
+    OrganizationApi.GetUsers.Request.PathParams:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
     OrganizationApi.Permissions:
       type: object
       properties:
@@ -2706,10 +2594,6 @@ components:
         - Deployer
         - Planner
         - Viewer
-        - Admin
-        - Deployer
-        - Planner
-        - Viewer
     OrganizationApi.CreateInvite.Request.Body:
       type: object
       properties:
@@ -2735,6 +2619,111 @@ components:
       $ref: '#/components/schemas/OrganizationRolesString'
     OrganizationApi.UpdateRole.Response:
       type: 'null'
+    CostApi.AddProjectCostsCredentials.Request.Body:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+          maxLength: 36
+          minLength: 1
+      required:
+        - credentialsId
+      additionalProperties: false
+    CostApi.ProjectCostsCredentials:
+      type: object
+      properties:
+        projectId:
+          type: string
+        credentialsId:
+          type: string
+        credentialsType:
+          $ref: '#/components/schemas/CredentialType'
+      required:
+        - projectId
+        - credentialsId
+      additionalProperties: false
+    CredentialType:
+      type: string
+      enum:
+        - AWS_ASSUMED_ROLE
+        - AWS_ASSUMED_ROLE_FOR_DEPLOYMENT
+        - GCP_CREDENTIALS
+        - AZURE_CREDENTIALS
+        - AWS_ACCESS_KEYS_FOR_DEPLOYMENT
+        - GCP_SERVICE_ACCOUNT_FOR_DEPLOYMENT
+        - AZURE_SERVICE_PRINCIPAL_FOR_DEPLOYMENT
+        - AWS_ASSUMED_ROLE
+        - AWS_ASSUMED_ROLE_FOR_DEPLOYMENT
+        - GCP_CREDENTIALS
+        - AZURE_CREDENTIALS
+        - AWS_ACCESS_KEYS_FOR_DEPLOYMENT
+        - GCP_SERVICE_ACCOUNT_FOR_DEPLOYMENT
+        - AZURE_SERVICE_PRINCIPAL_FOR_DEPLOYMENT
+    CostApi.AddProjectCostsCredentials.Response:
+      $ref: '#/components/schemas/CostApi.ProjectCostsCredentials'
+    CostApi.GetProjectCostsCredentials.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/CostApi.ProjectCostsCredentials'
+    CostApi.GetCosts.Request.QueryParams:
+      type: object
+      properties:
+        timespan:
+          $ref: '#/components/schemas/CostApi.Timespan'
+        granularity:
+          $ref: '#/components/schemas/CostApi.Granularity'
+      additionalProperties: false
+    CostApi.Timespan:
+      type: string
+      enum:
+        - DAY
+        - WEEK
+        - MONTH
+        - QUARTER
+        - YEAR
+    CostApi.Granularity:
+      type: string
+      enum:
+        - DAILY
+        - HOURLY
+    CostApi.GetProjectCostsCredentials.Request.QueryParams:
+      $ref: '#/components/schemas/CostApi.GetCosts.Request.QueryParams'
+    CostApi.IsCostEnabled.Response:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+      required:
+        - enabled
+      additionalProperties: false
+    CostApi.CostQueryResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          date:
+            type: string
+          total:
+            type: object
+            properties:
+              AWS:
+                type: number
+              GCP:
+                type: number
+              AZURE:
+                type: number
+            additionalProperties: false
+        required:
+          - total
+        additionalProperties: false
+    CostApi.GetEnvironmentCosts.Response:
+      $ref: '#/components/schemas/CostApi.CostQueryResponse'
+    CostApi.GetEnvironmentCosts.Request.QueryParams:
+      $ref: '#/components/schemas/CostApi.GetCosts.Request.QueryParams'
+    CostApi.GetProjectCosts.Response:
+      $ref: '#/components/schemas/CostApi.CostQueryResponse'
+    CostApi.GetProjectCosts.Request.QueryParams:
+      $ref: '#/components/schemas/CostApi.GetCosts.Request.QueryParams'
     ProjectApi.UpdateProjectRequest:
       type: object
       properties:
@@ -2886,59 +2875,6 @@ components:
     SchedulingApi.SetDriftDetection.Response:
       $ref: >-
         #/components/schemas/SchedulingApi.GetDriftDetectionByEnvironmentId.Response
-    SharedApi.Authorization.Permission:
-      type: object
-      properties:
-        id:
-          type: string
-        organizationId:
-          type: string
-        projectId:
-          type: string
-        isProjectArchived:
-          type: boolean
-        userId:
-          type: string
-        user:
-          $ref: '#/components/schemas/User'
-        teamId:
-          type: string
-        role:
-          $ref: '#/components/schemas/ProjectRoles'
-      required:
-        - organizationId
-        - projectId
-        - isProjectArchived
-        - userId
-        - role
-      additionalProperties: false
-    SharedApi.Authorization.GetProjectPermissions.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/SharedApi.Authorization.Permission'
-    SharedApi.Authorization.AddProjectPermission.Request.Body:
-      type: object
-      properties:
-        userId:
-          type: string
-        role:
-          $ref: '#/components/schemas/ProjectRoles'
-      required:
-        - userId
-        - role
-      additionalProperties: false
-    SharedApi.Authorization.AddProjectPermission.Response:
-      $ref: '#/components/schemas/SharedApi.Authorization.Permission'
-    SharedApi.Authorization.UpdateProjectPermission.Request.Body:
-      type: object
-      properties:
-        role:
-          $ref: '#/components/schemas/ProjectRoles'
-      required:
-        - role
-      additionalProperties: false
-    SharedApi.Authorization.UpdateProjectPermission.Response:
-      $ref: '#/components/schemas/SharedApi.Authorization.Permission'
     TeamApi.CreateTeam.Request.Body:
       type: object
       properties:
@@ -3025,6 +2961,14 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/TeamApi.TeamProjectAssignment'
+    TeamApi.GetAssignments.Request.QueryParams:
+      type: object
+      properties:
+        projectId:
+          type: string
+      required:
+        - projectId
+      additionalProperties: false
     TeamApi.UpdateAssignments.TeamAssignment:
       type: object
       properties:
@@ -3073,6 +3017,512 @@ components:
       additionalProperties: false
     TeamApi.CreateOrUpdateSingleAssignment.Response:
       $ref: '#/components/schemas/TeamApi.TeamProjectAssignment'
+    ConfigurationPropertyResponse:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        name:
+          type: string
+        value:
+          type: string
+        id:
+          type: string
+        userId:
+          type: string
+        isSensitive:
+          type: boolean
+        isReadonly:
+          type: boolean
+        isRequired:
+          type: boolean
+        regex:
+          type: string
+        scopeId:
+          type: string
+        scope:
+          $ref: '#/components/schemas/ConfigurationScope'
+        type:
+          $ref: '#/components/schemas/ConfigurationType'
+          description: |-
+            Whether it is an Environment or Terraform variable
+            0 value maps to an Environment variable
+            1 value maps to an Terraform variable
+        organizationId:
+          type: string
+        schema:
+          $ref: '#/components/schemas/PartialJSONSchema7'
+        description:
+          type: string
+          maxLength: 255
+      additionalProperties: false
+    ConfigurationApi.FindVariableById.Response:
+      $ref: '#/components/schemas/ConfigurationPropertyResponse'
+    ConfigurationApi.FindVariableById.Request.PathParams:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
+    ConfigurationApi.SshKey:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+        value:
+          type: string
+        sensitiveValueSalt:
+          type: string
+        userId:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+        - id
+        - name
+        - organizationId
+        - userId
+        - value
+      additionalProperties: false
+    ConfigurationApi.FindSshKeysByOrganization.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConfigurationApi.SshKey'
+    ConfigurationApi.CreateSshKey.Request.Body:
+      type: object
+      properties:
+        name:
+          type: string
+        organizationId:
+          type: string
+        value:
+          type: string
+      required:
+        - name
+        - organizationId
+        - value
+      additionalProperties: false
+    ConfigurationApi.AbstractSecretResponse<ConfigurationApi.SshKey>:
+      type: object
+      properties:
+        userId:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+        value:
+          type: string
+      required:
+        - userId
+        - id
+        - name
+        - organizationId
+        - value
+      additionalProperties: false
+    ConfigurationApi.CreateSshKey.Response:
+      $ref: >-
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.SshKey%3E
+    ConfigurationApi.AbstractSecretResponse<ConfigurationApi.PersistentToken>:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        organizationId:
+          type: string
+        type:
+          $ref: '#/components/schemas/TokenTypes'
+        id:
+          type: string
+      required:
+        - name
+        - value
+        - organizationId
+        - type
+        - id
+      additionalProperties: false
+    TokenTypes:
+      type: string
+      enum:
+        - GIT
+        - GitLab
+    ConfigurationApi.FindTokenByType.Response:
+      $ref: >-
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
+    ConfigurationApi.FindTokenById.Response:
+      $ref: >-
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
+    ConfigurationApi.Token:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        organizationId:
+          type: string
+        type:
+          $ref: '#/components/schemas/TokenTypes'
+      required:
+        - name
+        - value
+        - organizationId
+        - type
+      additionalProperties: false
+    ConfigurationApi.CreateToken.Request.Body:
+      $ref: '#/components/schemas/ConfigurationApi.Token'
+    ConfigurationApi.CreateToken.Response:
+      $ref: >-
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
+    ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty:
+      type: object
+      additionalProperties: false
+      properties:
+        overwrites:
+          anyOf:
+            - type: object
+              properties:
+                scope:
+                  $ref: '#/components/schemas/ConfigurationScope'
+                value:
+                  type: string
+                schema:
+                  $ref: '#/components/schemas/PartialJSONSchema7'
+                isReadonly:
+                  type: boolean
+                isRequired:
+                  type: boolean
+                isSensitive:
+                  type: boolean
+                regex:
+                  type: string
+              required:
+                - scope
+              additionalProperties: false
+            - type: 'null'
+        createdAt:
+          type: string
+          format: date-time
+        name:
+          type: string
+        value:
+          type: string
+        id:
+          type: string
+        userId:
+          type: string
+        isSensitive:
+          type: boolean
+        isReadonly:
+          type: boolean
+        isRequired:
+          type: boolean
+        regex:
+          type: string
+        scopeId:
+          type: string
+        scope:
+          $ref: '#/components/schemas/ConfigurationScope'
+        type:
+          $ref: '#/components/schemas/ConfigurationType'
+          description: |-
+            Whether it is an Environment or Terraform variable
+            0 value maps to an Environment variable
+            1 value maps to an Terraform variable
+        toDelete:
+          type: boolean
+        organizationId:
+          type: string
+        schema:
+          $ref: '#/components/schemas/PartialJSONSchema7'
+        description:
+          type: string
+          maxLength: 255
+      required:
+        - name
+        - organizationId
+        - overwrites
+        - scope
+        - type
+    ConfigurationApi.FindVariablesByScope.Response:
+      type: array
+      items:
+        $ref: >-
+          #/components/schemas/ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty
+    ConfigurationApi.FindVariablesByScope.Request.QueryParams:
+      type: object
+      properties:
+        organizationId:
+          type: string
+        blueprintId:
+          type: string
+        projectId:
+          type: string
+        environmentId:
+          type: string
+        deploymentLogId:
+          type: string
+      required:
+        - organizationId
+      additionalProperties: false
+    ConfigurationPropertyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        id:
+          type: string
+        isSensitive:
+          type: boolean
+        isReadonly:
+          type: boolean
+        isRequired:
+          type: boolean
+        regex:
+          type: string
+        scopeId:
+          type: string
+        scope:
+          $ref: '#/components/schemas/ConfigurationScope'
+        type:
+          $ref: '#/components/schemas/ConfigurationType'
+          description: |-
+            Whether it is an Environment or Terraform variable
+            0 value maps to an Environment variable
+            1 value maps to an Terraform variable
+        toDelete:
+          type: boolean
+        organizationId:
+          type: string
+        schema:
+          $ref: '#/components/schemas/PartialJSONSchema7'
+        description:
+          type: string
+          maxLength: 255
+      required:
+        - name
+        - scope
+        - type
+        - organizationId
+      additionalProperties: false
+    ConfigurationApi.CreateOrUpdateVariable.Request.Body:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConfigurationPropertyRequest'
+    ConfigurationApi.CreateOrUpdateVariable.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConfigurationPropertyResponse'
+    TransientCredential:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/CredentialType'
+        createdByUser:
+          $ref: '#/components/schemas/User'
+        value:
+          type: object
+          description: >-
+            A JSON string representation of the cloud provider credentials.
+
+            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types
+            use:
+
+            { roleArn: "your-role-arn", externalId: "your-external-id" }
+
+
+            - For GCP_CREDENTIALS type use:
+
+            { tableId: "your-table-id", secret: "your-secret" }
+
+
+            - For AZURE_CREDENTIALS type use:
+
+            { clientId: "your-clientId", clientSecret: "your-clientSecret",
+            tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
+        name:
+          type: string
+        organizationId:
+          type: string
+        sensitiveValueSalt:
+          type: string
+      required:
+        - type
+        - value
+        - name
+        - organizationId
+      additionalProperties: false
+    ConfigurationApi.CreateCredential.Request.Body:
+      $ref: '#/components/schemas/TransientCredential'
+    CredentialWithoutValue:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+        value:
+          type: 'null'
+        sensitiveValueSalt:
+          type: string
+        type:
+          $ref: '#/components/schemas/CredentialType'
+        createdByUser:
+          $ref: '#/components/schemas/User'
+      required:
+        - id
+        - name
+        - organizationId
+        - type
+        - value
+      additionalProperties: false
+    ConfigurationApi.CreateCredential.Response:
+      $ref: '#/components/schemas/CredentialWithoutValue'
+    ConfigurationApi.FindCredentials.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/CredentialWithoutValue'
+    ConfigurationApi.AddDeployCredsToProject.Request.Body:
+      type: 'null'
+    ConfigurationApi.DeploymentCredentialToProject:
+      type: object
+      properties:
+        id:
+          type: string
+        projectId:
+          type: string
+        credentialId:
+          type: string
+        createdByUserId:
+          type: string
+      required:
+        - projectId
+        - credentialId
+        - createdByUserId
+      additionalProperties: false
+    ConfigurationApi.AddDeployCredsToProject.Response:
+      $ref: '#/components/schemas/ConfigurationApi.DeploymentCredentialToProject'
+    ConfigurationApi.DeploymentCredentialsToProject:
+      type: object
+      properties:
+        credentialIds:
+          type: array
+          items:
+            type: string
+      required:
+        - credentialIds
+      additionalProperties: false
+    ConfigurationApi.GetDeployCredsForProject.Response:
+      $ref: '#/components/schemas/ConfigurationApi.DeploymentCredentialsToProject'
+    ConfigurationApi.GetDeployCredsForProject.Request.PathParams:
+      type: object
+      properties:
+        projectId:
+          type: string
+      required:
+        - projectId
+      additionalProperties: false
+    DeploymentStepApi.DeploymentStepStatus:
+      $ref: '#/components/schemas/CommonDeploymentStepApi.DeploymentStepStatus'
+    CommonDeploymentStepApi.DeploymentStepStatus:
+      type: string
+      enum:
+        - NOT_STARTED
+        - IN_PROGRESS
+        - WAITING_FOR_USER
+        - TIMEOUT
+        - FAIL
+        - SUCCESS
+        - CANCELLED
+        - SKIPPED
+    DeploymentStepApi.FindByDeploymentLogId.Response:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          deploymentLogId:
+            type: string
+          name:
+            type: string
+          order:
+            type: number
+          projectId:
+            type: string
+          organizationId:
+            type: string
+          status:
+            $ref: '#/components/schemas/DeploymentStepApi.DeploymentStepStatus'
+          startedAt:
+            type: string
+            format: date-time
+          completedAt:
+            type: string
+            format: date-time
+        required:
+          - deploymentLogId
+          - name
+          - order
+          - projectId
+          - organizationId
+          - status
+        additionalProperties: false
+    CommonDeploymentStepApi.FindStepLog.Response:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonDeploymentStepApi.FindStepLog.LogEvent'
+        nextStartTime:
+          type:
+            - number
+            - string
+        hasMoreLogs:
+          type: boolean
+      required:
+        - events
+        - hasMoreLogs
+      additionalProperties: false
+    CommonDeploymentStepApi.FindStepLog.LogEvent:
+      type: object
+      properties:
+        eventId:
+          type: string
+        message:
+          type: string
+        level:
+          type: string
+        timestamp:
+          type:
+            - number
+            - string
+      required:
+        - eventId
+        - message
+        - level
+        - timestamp
+      additionalProperties: false
+    DeploymentStepApi.FindStepLog.Response:
+      $ref: '#/components/schemas/CommonDeploymentStepApi.FindStepLog.Response'
   securitySchemes:
     env0 API Key:
       type: http
@@ -3138,11 +3588,29 @@ info:
     url: https://github.com/env0/api/raw/gh-pages/env0-color.png
     altText: env0 logo
 paths:
-  /agents:
+  /api-keys:
+    post:
+      operationId: createApiKey
+      summary: Create API Key endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CredentialsApi.CreateApiKey.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsApi.CreateApiKey.Response'
+      tags:
+        - Credentials
     get:
-      operationId: listAgents
-      summary: List agents
-      description: Get a list of the organization agents
+      operationId: findAllApiKeys
+      summary: List Organization API Keys endpoint
       parameters:
         - name: organizationId
           in: query
@@ -3157,38 +3625,50 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AgentSettingsApi.ListAgents.Response'
+                $ref: '#/components/schemas/CredentialsApi.FindAllApiKeys.Response'
       tags:
-        - Agents Settings
-  /agents/{agentKey}/values:
-    get:
-      operationId: getAgentValues
-      summary: Get agent values file content
-      description: Save it to a yaml file for helm
+        - Credentials
+  /api-keys/{id}:
+    delete:
+      operationId: deleteApiKey
+      summary: Delete an API Key endpoint
       parameters:
-        - name: agentKey
+        - name: id
           in: path
           description: ''
           required: true
           schema:
             type: string
       responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AgentSettingsApi.GetAgentValues.Response'
+        '204':
+          description: Status 204 Response
+          content: {}
       tags:
-        - Agents Settings
-  /agents/projects-assignments:
+        - Credentials
+  /dashboards:
     get:
-      operationId: getAgentAssignments
-      summary: Get agent assignments of projects
-      description: >-
-        returns the current default agent key and a map of project ids to agent
-        key assignments
+      operationId: query
+      summary: Get query result
       parameters:
+        - name: queryName
+          in: query
+          description: the query to trigger
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+            enum:
+              - countTeams
+              - countUsers
+              - activeEnvironments
+              - environmentStatus
+              - maxActiveEnvironmentsPerDay
+              - activeEnvironmentsPerDay
+              - countProjects
+              - countTemplates
+              - countDeploymentType
+              - countDeploymentsPerDay
+              - countDeployTypesByUserInTimeRange
         - name: organizationId
           in: query
           description: ''
@@ -3202,37 +3682,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/AgentSettingsApi.GetAgentAssignments.Response
+                $ref: '#/components/schemas/DashboardApi.Query.Response'
       tags:
-        - Agents Settings
-    post:
-      operationId: assignAgents
-      summary: Assign agents to projects
-      description: gets a map of project ids to agent-key assignments
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AgentSettingsApi.AssignAgents.Request.Body'
-        description: ''
-      parameters:
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AgentSettingsApi.AssignAgents.Response'
-      tags:
-        - Agents Settings
+        - Dashboard
   /blueprints:
     post:
       operationId: createBlueprint
@@ -3344,6 +3796,56 @@ paths:
         '204':
           description: Status 204 Response
           content: {}
+      tags:
+        - Templates
+  /blueprints/vcs-revisions:
+    get:
+      operationId: getVcsRepositoryRevisions
+      summary: List git repository revisions
+      parameters:
+        - name: repository
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: tokenId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: sshKeyIds
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: githubInstallationId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: bitbucketClientKey
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/BlueprintApi.GetVcsRepositoryRevisions.Response
       tags:
         - Templates
   /blueprints/{id}/projects:
@@ -3615,365 +4117,30 @@ paths:
                 $ref: '#/components/schemas/BlueprintApi.UpdateModule.Response'
       tags:
         - Modules
-  /configuration/{id}:
+  /modules/v1/{organizationId}/{moduleName}/{providerName}/{version}/download:
     get:
-      operationId: findVariableById
-      summary: Query configuration variable by id
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.FindVariableById.Response
-      tags:
-        - Configuration
-    delete:
-      operationId: deleteVariable
-      summary: Delete a variable
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Configuration
-  /ssh-keys:
-    get:
-      operationId: findSshKeysByOrganization
-      summary: List all available SSH keys
+      operationId: moduleRegistryDownloadSource
+      summary: Download Terraform module
       parameters:
         - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.FindSshKeysByOrganization.Response
-      tags:
-        - Configuration
-    post:
-      operationId: createSshKey
-      summary: Create a new SSH key
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ConfigurationApi.CreateSshKey.Request.Body'
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConfigurationApi.CreateSshKey.Response'
-      tags:
-        - Configuration
-  /ssh-keys/{id}:
-    delete:
-      operationId: deleteSshKey
-      summary: Delete SSH key
-      parameters:
-        - name: id
           in: path
           description: ''
           required: true
           schema:
             type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Configuration
-  /tokens:
-    get:
-      operationId: findTokenByType
-      summary: List git tokens
-      parameters:
-        - name: type
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-            const: GIT
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConfigurationApi.FindTokenByType.Response'
-      tags:
-        - Configuration
-    post:
-      operationId: createToken
-      summary: Create a git token
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ConfigurationApi.CreateToken.Request.Body'
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConfigurationApi.CreateToken.Response'
-      tags:
-        - Configuration
-  /tokens/{id}:
-    get:
-      operationId: findTokenById
-      summary: Get git token by id
-      parameters:
-        - name: id
+        - name: moduleName
           in: path
           description: ''
           required: true
           schema:
             type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConfigurationApi.FindTokenById.Response'
-      tags:
-        - Configuration
-    delete:
-      operationId: deleteToken
-      summary: Delete a git token
-      parameters:
-        - name: id
+        - name: providerName
           in: path
           description: ''
           required: true
           schema:
             type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Configuration
-  /configuration:
-    get:
-      operationId: findVariablesByScope
-      summary: List Variables by Scope
-      description: >
-        Lists all variables for the provided scope(s).
-
-        If more than one scope is given - variables will be overridden by lower
-        level scopes - just like env0 does.
-
-        For example - Provided both organizationId and projectId,
-
-        if a variable exists on both scopes, a single instance of it will be
-        returned, with its Project scope value
-      parameters:
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-        - name: projectId
-          in: query
-          description: ''
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-        - name: blueprintId
-          in: query
-          description: ''
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-        - name: environmentId
-          in: query
-          description: ''
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-        - name: deploymentLogId
-          in: query
-          description: ''
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.FindVariablesByScope.Response
-      tags:
-        - Configuration
-    post:
-      operationId: createOrUpdateVariable
-      summary: Create or update variable
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Request.Body
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Response
-      tags:
-        - Configuration
-  /credentials:
-    post:
-      operationId: createCredential
-      summary: Create Cloud Provider / Cost Credentials
-      description: >-
-        Create a set of new cloud provider credentials or cost credentials for
-        an Organization which may then be associated with a Project
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/ConfigurationApi.CreateCredential.Request.Body
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.CreateCredential.Response
-      tags:
-        - Configuration
-    get:
-      operationId: findCredentials
-      summary: List Organization credentials
-      parameters:
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConfigurationApi.FindCredentials.Response'
-      tags:
-        - Configuration
-  /credentials/{id}:
-    delete:
-      operationId: deleteCredential
-      summary: Delete Credentials
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Configuration
-  /credentials/deployment/{credentialId}/project/{projectId}:
-    delete:
-      operationId: removeDeployCredsFromProject
-      summary: Dissociate credentials with project
-      description: Dissociate cloud provider deployment credentials with Project
-      parameters:
-        - name: credentialId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Configuration
-    put:
-      operationId: addDeployCredsToProject
-      summary: Associate credentials with project
-      description: Associate cloud provider deployment credentials to Project
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/ConfigurationApi.AddDeployCredsToProject.Request.Body
-        description: ''
-      parameters:
-        - name: credentialId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: projectId
+        - name: version
           in: path
           description: ''
           required: true
@@ -3986,360 +4153,9 @@ paths:
             application/json:
               schema:
                 $ref: >-
-                  #/components/schemas/ConfigurationApi.AddDeployCredsToProject.Response
+                  #/components/schemas/BlueprintApi.ModuleRegistryDownloadSource.Response
       tags:
-        - Configuration
-  /credentials/deployment/project/{projectId}:
-    get:
-      operationId: getDeployCredsForProject
-      summary: List deployment a Project's deployment credentials
-      description: List deployment credentials associated with Project
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.GetDeployCredsForProject.Response
-      tags:
-        - Configuration
-  /costs/project/{projectId}/credentials:
-    put:
-      operationId: addProjectCostsCredentials
-      summary: Associate Cost Credentials with Project
-      description: >-
-        Associate Cloud provider Cost Credentials to a Project. This will enable
-        cost tagging in deployments in the project.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/CostApi.AddProjectCostsCredentials.Request.Body
-        description: ''
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/CostApi.AddProjectCostsCredentials.Response
-      tags:
-        - Cost
-    get:
-      operationId: getProjectCostsCredentials
-      summary: List Cost Credentials associated to Project
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/CostApi.GetProjectCostsCredentials.Response
-      tags:
-        - Cost
-  /costs/project/{projectId}/enabled:
-    get:
-      operationId: isCostEnabled
-      summary: Return wether or not cost is enabled for a project
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CostApi.IsCostEnabled.Response'
-      tags:
-        - Cost
-  /costs/project/{projectId}/credentials/{credentialsId}:
-    delete:
-      operationId: removeProjectCostsCredentials
-      summary: Dissociate Cost Credentials from Project
-      description: >-
-        Dissociate Cloud provider Cost Credentials to a Project. This will
-        disable cost tagging in deployments in the project.
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: credentialsId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Cost
-  /costs/environments/{environmentId}:
-    get:
-      operationId: getEnvironmentCosts
-      summary: Get costs for an Environment
-      parameters:
-        - name: environmentId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: timespan
-          in: query
-          description: A timespan to query cost for
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-            enum:
-              - DAY
-              - WEEK
-              - MONTH
-              - QUARTER
-              - YEAR
-        - name: granularity
-          in: query
-          description: Granularity of each cost record
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-            enum:
-              - DAILY
-              - HOURLY
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CostApi.GetEnvironmentCosts.Response'
-      tags:
-        - Cost
-  /costs/projects/{projectId}:
-    get:
-      operationId: getProjectCosts
-      summary: Get costs for an Project
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: timespan
-          in: query
-          description: A timespan to query cost for
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-            enum:
-              - DAY
-              - WEEK
-              - MONTH
-              - QUARTER
-              - YEAR
-        - name: granularity
-          in: query
-          description: Granularity of each cost record
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-            enum:
-              - DAILY
-              - HOURLY
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CostApi.GetProjectCosts.Response'
-      tags:
-        - Cost
-  /api-keys:
-    post:
-      operationId: createApiKey
-      summary: Create API Key endpoint
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CredentialsApi.CreateApiKey.Request.Body'
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CredentialsApi.CreateApiKey.Response'
-      tags:
-        - Credentials
-    get:
-      operationId: findAllApiKeys
-      summary: List Organization API Keys endpoint
-      parameters:
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CredentialsApi.FindAllApiKeys.Response'
-      tags:
-        - Credentials
-  /api-keys/{id}:
-    delete:
-      operationId: deleteApiKey
-      summary: Delete an API Key endpoint
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Credentials
-  /dashboards:
-    get:
-      operationId: query
-      summary: Get query result
-      parameters:
-        - name: queryName
-          in: query
-          description: the query to trigger
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-            enum:
-              - countTeams
-              - countUsers
-              - activeEnvironments
-              - environmentStatus
-              - maxActiveEnvironmentsPerDay
-              - activeEnvironmentsPerDay
-              - countProjects
-              - countTemplates
-              - countDeploymentType
-              - countDeploymentsPerDay
-              - countDeployTypesByUserInTimeRange
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DashboardApi.Query.Response'
-      tags:
-        - Dashboard
-  /deployments/{deploymentLogId}/steps:
-    get:
-      operationId: findByDeploymentLogId
-      summary: Find all steps by Deployment Id
-      parameters:
-        - name: deploymentLogId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/DeploymentStepApi.FindByDeploymentLogId.Response
-      tags:
-        - Deployment Logs
-  /deployments/{deploymentLogId}/steps/{name}/log:
-    get:
-      operationId: findStepLog
-      summary: Get logs for specific step
-      parameters:
-        - name: name
-          in: path
-          description: >-
-            In order to fetch the available step names first use
-            deployments/{deploymentLogId}/steps end point
-          required: true
-          schema:
-            type: string
-        - name: deploymentLogId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeploymentStepApi.FindStepLog.Response'
-      tags:
-        - Deployment Logs
+        - Templates
   /environments/{id}/downstream:
     put:
       operationId: updateDownstreamEnvironments
@@ -4770,6 +4586,35 @@ paths:
                   #/components/schemas/EnvironmentApi.FindDeploymentLogById.Response
       tags:
         - Environments
+  /transactions/{transactionId}/environments/{environmentId}:
+    get:
+      operationId: findTransactionSubDeploymentLog
+      summary: >-
+        Get Sub Deployment Log In A Transaction By Transaction Id And
+        Environment Id
+      parameters:
+        - name: transactionId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: environmentId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/EnvironmentApi.FindTransactionSubDeploymentLog.Response
+      tags:
+        - Environments
   /environments/count:
     get:
       operationId: countByProject
@@ -4858,6 +4703,27 @@ paths:
                 $ref: '#/components/schemas/EnvironmentApi.GetPolicies.Response'
       tags:
         - Projects
+  /policies/limits/check:
+    get:
+      operationId: checkLimit
+      summary: Check Environment meets Project limits
+      parameters:
+        - name: projectId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.CheckLimit.Response'
+      tags:
+        - Environments
   /environments/deployments/{id}/rerun:
     post:
       operationId: rerunDeployment
@@ -5026,6 +4892,137 @@ paths:
                   #/components/schemas/NotificationsApi.FindProjectNotificationSettings.Response
       tags:
         - Notifications
+  /agents:
+    get:
+      operationId: listAgents
+      summary: List agents
+      description: Get a list of the organization agents
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentSettingsApi.ListAgents.Response'
+      tags:
+        - Agents Settings
+  /agents/{agentKey}/values:
+    get:
+      operationId: getAgentValues
+      summary: Get agent values file content
+      description: Save it to a yaml file for helm
+      parameters:
+        - name: agentKey
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentSettingsApi.GetAgentValues.Response'
+      tags:
+        - Agents Settings
+  /agents/projects-assignments:
+    get:
+      operationId: getAgentAssignments
+      summary: Get agent assignments of projects
+      description: >-
+        returns the current default agent key and a map of project ids to agent
+        key assignments
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/AgentSettingsApi.GetAgentAssignments.Response
+      tags:
+        - Agents Settings
+    post:
+      operationId: assignAgents
+      summary: Assign agents to projects
+      description: gets a map of project ids to agent-key assignments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentSettingsApi.AssignAgents.Request.Body'
+        description: ''
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentSettingsApi.AssignAgents.Response'
+      tags:
+        - Agents Settings
+  /organizations:
+    post:
+      operationId: createOrganization
+      summary: Create a new Organization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/OrganizationApi.CreateOrganization.Request.Body
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/OrganizationApi.CreateOrganization.Response
+      tags:
+        - Organization
+    get:
+      operationId: findOrganizations
+      summary: List Organizations
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/OrganizationApi.FindOrganizations.Response
+      tags:
+        - Organization
   /organizations/{id}:
     get:
       operationId: findOrganizationById
@@ -5074,21 +5071,6 @@ paths:
                   #/components/schemas/OrganizationApi.UpdateOrganization.Response
       tags:
         - Organization
-  /organizations:
-    get:
-      operationId: findOrganizations
-      summary: List Organizations
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/OrganizationApi.FindOrganizations.Response
-      tags:
-        - Organization
   /organizations/{id}/policies:
     post:
       operationId: updatePolicy
@@ -5124,6 +5106,13 @@ paths:
           in: path
           description: ''
           required: true
+          schema:
+            type: string
+        - name: includeApiKeys
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
           schema:
             type: string
       responses:
@@ -5210,6 +5199,189 @@ paths:
                 $ref: '#/components/schemas/OrganizationApi.UpdateRole.Response'
       tags:
         - Organization
+  /costs/project/{projectId}/credentials:
+    put:
+      operationId: addProjectCostsCredentials
+      summary: Associate Cost Credentials with Project
+      description: >-
+        Associate Cloud provider Cost Credentials to a Project. This will enable
+        cost tagging in deployments in the project.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/CostApi.AddProjectCostsCredentials.Request.Body
+        description: ''
+      parameters:
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/CostApi.AddProjectCostsCredentials.Response
+      tags:
+        - Cost
+    get:
+      operationId: getProjectCostsCredentials
+      summary: List Cost Credentials associated to Project
+      parameters:
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/CostApi.GetProjectCostsCredentials.Response
+      tags:
+        - Cost
+  /costs/project/{projectId}/enabled:
+    get:
+      operationId: isCostEnabled
+      summary: Return wether or not cost is enabled for a project
+      parameters:
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostApi.IsCostEnabled.Response'
+      tags:
+        - Cost
+  /costs/project/{projectId}/credentials/{credentialsId}:
+    delete:
+      operationId: removeProjectCostsCredentials
+      summary: Dissociate Cost Credentials from Project
+      description: >-
+        Dissociate Cloud provider Cost Credentials to a Project. This will
+        disable cost tagging in deployments in the project.
+      parameters:
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: credentialsId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Cost
+  /costs/environments/{environmentId}:
+    get:
+      operationId: getEnvironmentCosts
+      summary: Get costs for an Environment
+      parameters:
+        - name: environmentId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: timespan
+          in: query
+          description: A timespan to query cost for
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+            enum:
+              - DAY
+              - WEEK
+              - MONTH
+              - QUARTER
+              - YEAR
+        - name: granularity
+          in: query
+          description: Granularity of each cost record
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+            enum:
+              - DAILY
+              - HOURLY
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostApi.GetEnvironmentCosts.Response'
+      tags:
+        - Cost
+  /costs/projects/{projectId}:
+    get:
+      operationId: getProjectCosts
+      summary: Get costs for an Project
+      parameters:
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: timespan
+          in: query
+          description: A timespan to query cost for
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+            enum:
+              - DAY
+              - WEEK
+              - MONTH
+              - QUARTER
+              - YEAR
+        - name: granularity
+          in: query
+          description: Granularity of each cost record
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+            enum:
+              - DAILY
+              - HOURLY
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostApi.GetProjectCosts.Response'
+      tags:
+        - Cost
   /projects/{id}:
     delete:
       operationId: archive
@@ -5430,110 +5602,6 @@ paths:
                 $ref: '#/components/schemas/SchedulingApi.SetDriftDetection.Response'
       tags:
         - Scheduling
-  /permissions/projects/{projectId}:
-    get:
-      operationId: getProjectPermissions
-      summary: Get the users' permissions for the project
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/SharedApi.Authorization.GetProjectPermissions.Response
-      tags:
-        - Role Based Access
-    post:
-      operationId: addProjectPermission
-      summary: Alter all users' permissions for a project
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/SharedApi.Authorization.AddProjectPermission.Request.Body
-        description: ''
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/SharedApi.Authorization.AddProjectPermission.Response
-      tags:
-        - Role Based Access
-  /permissions/projects/{projectId}/users/{userId}:
-    put:
-      operationId: updateProjectPermission
-      summary: Alter a user's permissions for a project
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/SharedApi.Authorization.UpdateProjectPermission.Request.Body
-        description: ''
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: userId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/SharedApi.Authorization.UpdateProjectPermission.Response
-      tags:
-        - Role Based Access
-    delete:
-      operationId: removeProjectPermission
-      summary: Remove a user from a project
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: userId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Role Based Access
   /teams:
     post:
       operationId: createTeam
@@ -5713,31 +5781,452 @@ paths:
           content: {}
       tags:
         - Teams
+  /configuration/{id}:
+    get:
+      operationId: findVariableById
+      summary: Query configuration variable by id
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.FindVariableById.Response
+      tags:
+        - Configuration
+    delete:
+      operationId: deleteVariable
+      summary: Delete a variable
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Configuration
+  /ssh-keys:
+    get:
+      operationId: findSshKeysByOrganization
+      summary: List all available SSH keys
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.FindSshKeysByOrganization.Response
+      tags:
+        - Configuration
+    post:
+      operationId: createSshKey
+      summary: Create a new SSH key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigurationApi.CreateSshKey.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationApi.CreateSshKey.Response'
+      tags:
+        - Configuration
+  /ssh-keys/{id}:
+    delete:
+      operationId: deleteSshKey
+      summary: Delete SSH key
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Configuration
+  /tokens:
+    get:
+      operationId: findTokenByType
+      summary: List git tokens
+      parameters:
+        - name: type
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+            const: GIT
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationApi.FindTokenByType.Response'
+      tags:
+        - Configuration
+    post:
+      operationId: createToken
+      summary: Create a git token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigurationApi.CreateToken.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationApi.CreateToken.Response'
+      tags:
+        - Configuration
+  /tokens/{id}:
+    get:
+      operationId: findTokenById
+      summary: Get git token by id
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationApi.FindTokenById.Response'
+      tags:
+        - Configuration
+    delete:
+      operationId: deleteToken
+      summary: Delete a git token
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Configuration
+  /configuration:
+    get:
+      operationId: findVariablesByScope
+      summary: List Variables by Scope
+      description: >
+        Lists all variables for the provided scope(s).
+
+        If more than one scope is given - variables will be overridden by lower
+        level scopes - just like env0 does.
+
+        For example - Provided both organizationId and projectId,
+
+        if a variable exists on both scopes, a single instance of it will be
+        returned, with its Project scope value
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: projectId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: blueprintId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: environmentId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: deploymentLogId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.FindVariablesByScope.Response
+      tags:
+        - Configuration
+    post:
+      operationId: createOrUpdateVariable
+      summary: Create or update variable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Request.Body
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Response
+      tags:
+        - Configuration
+  /credentials:
+    post:
+      operationId: createCredential
+      summary: Create Cloud Provider / Cost Credentials
+      description: >-
+        Create a set of new cloud provider credentials or cost credentials for
+        an Organization which may then be associated with a Project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/ConfigurationApi.CreateCredential.Request.Body
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.CreateCredential.Response
+      tags:
+        - Configuration
+    get:
+      operationId: findCredentials
+      summary: List Organization credentials
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationApi.FindCredentials.Response'
+      tags:
+        - Configuration
+  /credentials/{id}:
+    delete:
+      operationId: deleteCredential
+      summary: Delete Credentials
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Configuration
+  /credentials/deployment/{credentialId}/project/{projectId}:
+    delete:
+      operationId: removeDeployCredsFromProject
+      summary: Dissociate credentials with project
+      description: Dissociate cloud provider deployment credentials with Project
+      parameters:
+        - name: credentialId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Configuration
+    put:
+      operationId: addDeployCredsToProject
+      summary: Associate credentials with project
+      description: Associate cloud provider deployment credentials to Project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/ConfigurationApi.AddDeployCredsToProject.Request.Body
+        description: ''
+      parameters:
+        - name: credentialId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.AddDeployCredsToProject.Response
+      tags:
+        - Configuration
+  /credentials/deployment/project/{projectId}:
+    get:
+      operationId: getDeployCredsForProject
+      summary: List deployment a Project's deployment credentials
+      description: List deployment credentials associated with Project
+      parameters:
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.GetDeployCredsForProject.Response
+      tags:
+        - Configuration
+  /deployments/{deploymentLogId}/steps:
+    get:
+      operationId: findByDeploymentLogId
+      summary: Find all steps by Deployment Id
+      parameters:
+        - name: deploymentLogId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/DeploymentStepApi.FindByDeploymentLogId.Response
+      tags:
+        - Deployment Logs
+  /deployments/{deploymentLogId}/steps/{name}/log:
+    get:
+      operationId: findStepLog
+      summary: Get logs for specific step
+      parameters:
+        - name: name
+          in: path
+          description: >-
+            In order to fetch the available step names first use
+            deployments/{deploymentLogId}/steps end point
+          required: true
+          schema:
+            type: string
+        - name: deploymentLogId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentStepApi.FindStepLog.Response'
+      tags:
+        - Deployment Logs
 tags:
-  - name: Agents Settings
-    description: ''
-  - name: Templates
-    description: >
-      A template in env0 defines a type of environment that can be deployed.
-
-      Click Run Now on a template to create a new environment.
-
-      A template consists of a name, a description, a valid set of configuration
-      files describing the deployment, and a set of Variables and Secrets.
-
-      More on https://docs.env0.com/docs/templates
-  - name: Modules
-    description: Module Registry endpoints
-  - name: Configuration
-    description: >
-      This API covers all deployment Configuration including: Variables, Tokens,
-      SSH Keys and Deployment Credentials
-  - name: Cost
-    description: >
-      With cost monitoring enabled in env0, you will be able to see how much
-      each Environment you are running costs.
-
-      More on https://docs.env0.com/docs/cost-monitoring
   - name: Credentials
     description: >
       Authentication against the env0 API is done via API Keys.
@@ -5751,12 +6240,18 @@ tags:
   - name: Dashboard
     description: |
       This API covers all dashboard queries
-  - name: Deployment Logs
-    description: |
-      env0 deployment consists of steps such as Init Variables
-      using this API you can reterive information about those steps
-  - name: Deployment Logs
-    description: The Deployment Logs Endpoint by steps
+  - name: Templates
+    description: >
+      A template in env0 defines a type of environment that can be deployed.
+
+      Click Run Now on a template to create a new environment.
+
+      A template consists of a name, a description, a valid set of configuration
+      files describing the deployment, and a set of Variables and Secrets.
+
+      More on https://docs.env0.com/docs/templates
+  - name: Modules
+    description: Module Registry endpoints
   - name: Environments
     description: |
       An environment is an entity representing a deployment managed by env0.
@@ -5777,6 +6272,8 @@ tags:
       projects, controlling which events go to which channel.
 
       More on https://docs.env0.com/docs/notifications
+  - name: Agents Settings
+    description: ''
   - name: Organization
     description: >
       An Organization is the highest level logical entity in env0.
@@ -5787,6 +6284,12 @@ tags:
       each other, and do not share any entities.
 
       More on https://docs.env0.com/docs/organizations
+  - name: Cost
+    description: >
+      With cost monitoring enabled in env0, you will be able to see how much
+      each Environment you are running costs.
+
+      More on https://docs.env0.com/docs/cost-monitoring
   - name: Projects
     description: >
       Projects are used in env0 to provide granular access control to
@@ -5812,16 +6315,6 @@ tags:
 
 
       More on https://docs.env0.com/docs/scheduling
-  - name: Role Based Access
-    description: >
-      In order to have access to a project, users need to be associated with it.
-
-      Each user associated with a project has a specific project Role assigned
-      to them.
-
-
-      More on
-      https://docs.env0.com/docs/user-management#manage-users-of-a-project
   - name: Teams
     description: >
       Teams allow you to more easily manage your project level permissions in
@@ -5831,6 +6324,16 @@ tags:
       Settings level, and are not shared between multiple organizations
 
       More on https://docs.env0.com/docs/teams
+  - name: Configuration
+    description: >
+      This API covers all deployment Configuration including: Variables, Tokens,
+      SSH Keys and Deployment Credentials
+  - name: Deployment Logs
+    description: |
+      env0 deployment consists of steps such as Init Variables
+      using this API you can reterive information about those steps
+  - name: Deployment Logs
+    description: The Deployment Logs Endpoint by steps
 servers:
   - url: https://api.env0.com
 security:
