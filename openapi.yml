@@ -1721,10 +1721,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeploymentApi.Plan.PlanResourceChange'
+        outputChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeploymentApi.Plan.PlanOutputChange'
         summary:
           $ref: '#/components/schemas/DeploymentApi.Plan.PlanSummary'
       required:
         - resourceChanges
+        - outputChanges
         - summary
       additionalProperties: false
     DeploymentApi.Plan.PlanResourceChange:
@@ -1739,7 +1744,7 @@ components:
         path:
           type: string
         action:
-          $ref: '#/components/schemas/DeploymentApi.Plan.ResourceChangeAction'
+          $ref: '#/components/schemas/DeploymentApi.Plan.ChangeAction'
         attributes:
           type: array
           items:
@@ -1752,7 +1757,7 @@ components:
         - action
         - attributes
       additionalProperties: false
-    DeploymentApi.Plan.ResourceChangeAction:
+    DeploymentApi.Plan.ChangeAction:
       type: string
       enum:
         - create
@@ -1770,6 +1775,22 @@ components:
           type: string
       required:
         - name
+      additionalProperties: false
+    DeploymentApi.Plan.PlanOutputChange:
+      type: object
+      properties:
+        name:
+          type: string
+        action:
+          $ref: '#/components/schemas/DeploymentApi.Plan.ChangeAction'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeploymentApi.Plan.AttributeChange'
+      required:
+        - name
+        - action
+        - attributes
       additionalProperties: false
     DeploymentApi.Plan.PlanSummary:
       type: object
