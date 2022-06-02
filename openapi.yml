@@ -1,10 +1,96 @@
 openapi: 3.1.0
 components:
   schemas:
-    CredentialsApi.CreateApiKey.Request.Body:
+    ProjectApi.UpdateProjectRequest:
       type: object
       properties:
         name:
+          type: string
+          $comment: '{ "schema": { "type": "string" , "minLength": 1} }'
+        description:
+          type: string
+      required:
+        - name
+      additionalProperties: false
+    ProjectApi.Update.Request.Body:
+      $ref: '#/components/schemas/ProjectApi.UpdateProjectRequest'
+    ProjectApi.Project:
+      type: object
+      properties:
+        name:
+          type: string
+          $comment: '{ "schema": { "type": "string" , "minLength": 1} }'
+        description:
+          type: string
+        organizationId:
+          type: string
+        id:
+          type: string
+        createdBy:
+          type: string
+        createdByUser:
+          $ref: '#/components/schemas/User'
+        role:
+          $ref: '#/components/schemas/ProjectRoles'
+        isArchived:
+          type: boolean
+      required:
+        - createdBy
+        - name
+        - organizationId
+      additionalProperties: false
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+        user_id:
+          type: string
+        created_at:
+          type: string
+        app_metadata:
+          type: object
+        picture:
+          type: string
+        name:
+          type: string
+        last_login:
+          type: string
+        given_name:
+          type: string
+        family_name:
+          type: string
+      additionalProperties: false
+    ProjectRoles:
+      type: string
+      enum:
+        - Admin
+        - Deployer
+        - Planner
+        - Viewer
+        - Admin
+        - Deployer
+        - Planner
+        - Viewer
+        - Admin
+        - Deployer
+        - Planner
+        - Viewer
+    ProjectApi.Update.Response:
+      $ref: '#/components/schemas/ProjectApi.Project'
+    ProjectApi.FindById.Response:
+      $ref: '#/components/schemas/ProjectApi.Project'
+    ProjectApi.FindByOrganizationId.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProjectApi.Project'
+    ProjectApi.CreateProjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          $comment: '{ "schema": { "type": "string" , "minLength": 1} }'
+        description:
           type: string
         organizationId:
           type: string
@@ -12,64 +98,658 @@ components:
         - name
         - organizationId
       additionalProperties: false
-    CredentialsApi.ApiKey:
+    ProjectApi.CreateProject.Request.Body:
+      $ref: '#/components/schemas/ProjectApi.CreateProjectRequest'
+    ProjectApi.CreateProject.Response:
+      $ref: '#/components/schemas/ProjectApi.Project'
+    NotificationsApi.NotificationEndpointModel:
+      type: object
+      properties:
+        id:
+          type: string
+        createdBy:
+          type: string
+        createdByUser:
+          $ref: '#/components/schemas/User'
+        organizationId:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/NotificationEndpointType'
+        value:
+          type: string
+      required:
+        - organizationId
+        - name
+        - type
+        - value
+      additionalProperties: false
+    NotificationEndpointType:
+      type: string
+      enum:
+        - Slack
+        - Teams
+    NotificationsApi.CreateNotificationEndpoint.Request.Body:
+      $ref: '#/components/schemas/NotificationsApi.NotificationEndpointModel'
+    NotificationsApi.NotificationEndpoint:
+      type: object
+      properties:
+        id:
+          type: string
+        createdBy:
+          type: string
+        createdByUser:
+          $ref: '#/components/schemas/User'
+        organizationId:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/NotificationEndpointType'
+        value:
+          type: string
+      additionalProperties: false
+    NotificationsApi.CreateNotificationEndpoint.Response:
+      $ref: '#/components/schemas/NotificationsApi.NotificationEndpoint'
+    NotificationsApi.DeleteNotificationEndpoint.Request.PathParams:
+      type: object
+      properties:
+        endpointId:
+          type: string
+      required:
+        - endpointId
+      additionalProperties: false
+    NotificationsApi.UpdateNotificationEndpoint.Request.Body:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        type:
+          $ref: '#/components/schemas/NotificationEndpointType'
+      required:
+        - name
+        - value
+        - type
+      additionalProperties: false
+    NotificationsApi.UpdateNotificationEndpoint.Response:
+      $ref: '#/components/schemas/NotificationsApi.NotificationEndpoint'
+    NotificationsApi.UpdateNotificationEndpoint.Request.PathParams:
+      type: object
+      properties:
+        endpointId:
+          type: string
+      required:
+        - endpointId
+      additionalProperties: false
+    EventNameType:
+      type: string
+      enum:
+        - environmentDeployStarted
+        - environmentDestroyStarted
+        - deploySucceeded
+        - destroySucceeded
+        - deployFailed
+        - destroyFailed
+        - deploymentWaitingForUser
+        - deploymentCancelled
+        - environmentDeployResumed
+        - environmentDestroyResumed
+        - environmentMarkedForAutoDestroy
+        - driftDetected
+        - driftUndetected
+        - driftFailed
+    NotificationsApi.UpdateProjectNotificationSettings.Request.Body:
+      type: object
+      properties:
+        eventNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventNameType'
+      required:
+        - eventNames
+      additionalProperties: false
+    NotificationsApi.ProjectNotificationSetting:
+      type: object
+      properties:
+        id:
+          type: string
+        notificationEndpointId:
+          type: string
+        eventNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventNameType'
+        createdBy:
+          type: string
+        createdByUser:
+          $ref: '#/components/schemas/User'
+      required:
+        - notificationEndpointId
+        - eventNames
+      additionalProperties: false
+    NotificationsApi.UpdateProjectNotificationSettings.Response:
+      $ref: '#/components/schemas/NotificationsApi.ProjectNotificationSetting'
+    NotificationsApi.UpdateProjectNotificationSettings.Request.PathParams:
+      type: object
+      properties:
+        projectId:
+          type: string
+        endpointId:
+          type: string
+      required:
+        - projectId
+        - endpointId
+      additionalProperties: false
+    NotificationsApi.FindNotificationEndpoints.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/NotificationsApi.NotificationEndpoint'
+    NotificationsApi.FindNotificationEndpoints.Request.QueryParams:
+      type: object
+      properties:
+        organizationId:
+          type: string
+      required:
+        - organizationId
+      additionalProperties: false
+    NotificationsApi.FindProjectNotificationSettings.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/NotificationsApi.ProjectNotificationSetting'
+    NotificationsApi.FindProjectNotificationSettings.Request.PathParams:
+      type: object
+      properties:
+        projectId:
+          type: string
+      required:
+        - projectId
+      additionalProperties: false
+    DeploymentStepApi.DeploymentStepStatus:
+      $ref: '#/components/schemas/CommonDeploymentStepApi.DeploymentStepStatus'
+    CommonDeploymentStepApi.DeploymentStepStatus:
+      type: string
+      enum:
+        - NOT_STARTED
+        - IN_PROGRESS
+        - WAITING_FOR_USER
+        - TIMEOUT
+        - FAIL
+        - SUCCESS
+        - CANCELLED
+        - SKIPPED
+    DeploymentStepApi.FindByDeploymentLogId.Response:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          deploymentLogId:
+            type: string
+          name:
+            type: string
+          order:
+            type: number
+          projectId:
+            type: string
+          organizationId:
+            type: string
+          status:
+            $ref: '#/components/schemas/DeploymentStepApi.DeploymentStepStatus'
+          startedAt:
+            type: string
+            format: date-time
+          completedAt:
+            type: string
+            format: date-time
+        required:
+          - deploymentLogId
+          - name
+          - order
+          - projectId
+          - organizationId
+          - status
+        additionalProperties: false
+    CommonDeploymentStepApi.FindStepLog.Response:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonDeploymentStepApi.FindStepLog.LogEvent'
+        nextStartTime:
+          type:
+            - number
+            - string
+        hasMoreLogs:
+          type: boolean
+      required:
+        - events
+        - hasMoreLogs
+      additionalProperties: false
+    CommonDeploymentStepApi.FindStepLog.LogEvent:
+      type: object
+      properties:
+        eventId:
+          type: string
+        message:
+          type: string
+        level:
+          type: string
+        timestamp:
+          type:
+            - number
+            - string
+      required:
+        - eventId
+        - message
+        - level
+        - timestamp
+      additionalProperties: false
+    DeploymentStepApi.FindStepLog.Response:
+      $ref: '#/components/schemas/CommonDeploymentStepApi.FindStepLog.Response'
+    OrganizationApi.CreateOrganization.Request.Body:
+      type: object
+      properties:
+        name:
+          type: string
+          pattern: ^(?!\s*$).+
+        description:
+          type: string
+        photoUrl:
+          type: string
+      required:
+        - name
+      additionalProperties: false
+    OrganizationApi.OrganizationModel:
       type: object
       properties:
         id:
           type: string
         name:
           type: string
-        apiKeyId:
+        maxTtl:
+          type:
+            - string
+            - 'null'
+        defaultTtl:
+          type:
+            - string
+            - 'null'
+        doNotReportSkippedStatusChecks:
+          type: boolean
+        doNotConsiderMergeCommitsForPrPlans:
+          type: boolean
+        description:
           type: string
-        lastUsedAt:
-          type: string
-        organizationId:
-          type: string
-        createdAt:
+        photoUrl:
           type: string
         createdBy:
           type: string
-        createdByUser:
-          $ref: '#/components/schemas/ApiKeyUser'
-        apiKeySecret:
+        createdAt:
           type: string
-        organizationRole:
+          format: date-time
+        updatedAt:
           type: string
-          enum:
-            - Admin
-            - User
+          format: date-time
       required:
         - id
         - name
-        - apiKeyId
-        - lastUsedAt
-        - organizationId
-        - createdAt
         - createdBy
-        - organizationRole
       additionalProperties: false
-    ApiKeyUser:
+    OrganizationApi.CreateOrganization.Response:
+      $ref: '#/components/schemas/OrganizationApi.OrganizationModel'
+    OrganizationApi.Organization:
       type: object
       properties:
-        user_id:
+        id:
           type: string
-        username:
-          type: string
-        created_at:
-          type: string
-        app_metadata:
-          type: object
         name:
           type: string
-        last_login:
+        maxTtl:
+          type:
+            - string
+            - 'null'
+        defaultTtl:
+          type:
+            - string
+            - 'null'
+        doNotReportSkippedStatusChecks:
+          type: boolean
+        doNotConsiderMergeCommitsForPrPlans:
+          type: boolean
+        description:
           type: string
+        photoUrl:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        role:
+          $ref: '#/components/schemas/OrganizationApi.OrganizationRolesString'
+        isSelfHosted:
+          type: boolean
+        isSelfHostedK8s:
+          type: boolean
+      required:
+        - createdBy
+        - id
+        - name
+        - role
       additionalProperties: false
-    CredentialsApi.CreateApiKey.Response:
-      $ref: '#/components/schemas/CredentialsApi.ApiKey'
-    CredentialsApi.FindAllApiKeys.Response:
+    OrganizationApi.OrganizationRolesString:
+      $ref: '#/components/schemas/OrganizationRolesString'
+    OrganizationRolesString:
+      type: string
+      enum:
+        - ModuleReader
+        - User
+        - Admin
+    OrganizationApi.FindOrganizationById.Response:
+      $ref: '#/components/schemas/OrganizationApi.Organization'
+    OrganizationApi.FindOrganizations.Response:
       type: array
       items:
-        $ref: '#/components/schemas/CredentialsApi.ApiKey'
+        $ref: '#/components/schemas/OrganizationApi.Organization'
+    OrganizationApi.UpdateOrganization.Request.Body:
+      type: object
+      properties:
+        name:
+          type: string
+        photoUrl:
+          type: string
+        description:
+          type: string
+      required:
+        - name
+      additionalProperties: false
+    OrganizationApi.UpdateOrganization.Response:
+      $ref: '#/components/schemas/OrganizationApi.Organization'
+    OrganizationApi.OrganizationPolicy:
+      type: object
+      properties:
+        maxTtl:
+          type:
+            - string
+            - 'null'
+        defaultTtl:
+          type:
+            - string
+            - 'null'
+        doNotReportSkippedStatusChecks:
+          type: boolean
+        doNotConsiderMergeCommitsForPrPlans:
+          type: boolean
+      required:
+        - maxTtl
+        - defaultTtl
+      additionalProperties: false
+    OrganizationApi.UpdatePolicy.Request.Body:
+      $ref: '#/components/schemas/OrganizationApi.OrganizationPolicy'
+    OrganizationApi.UpdatePolicy.Response:
+      $ref: '#/components/schemas/OrganizationApi.Organization'
+    OrganizationUser:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            user_id:
+              type: string
+            email:
+              type: string
+            name:
+              type: string
+            last_login:
+              type: string
+            picture:
+              type: string
+            given_name:
+              type: string
+            family_name:
+              type: string
+            app_metadata:
+              type: object
+              properties:
+                isApiKey:
+                  type: boolean
+              required:
+                - isApiKey
+              additionalProperties: false
+          additionalProperties: false
+        role:
+          $ref: '#/components/schemas/OrganizationRolesString'
+        status:
+          $ref: '#/components/schemas/OrganizationUserStatus'
+      required:
+        - user
+        - role
+        - status
+      additionalProperties: false
+    OrganizationUserStatus:
+      type: string
+      enum:
+        - Active
+        - Invited
+    OrganizationApi.GetUsers.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrganizationUser'
+    OrganizationApi.GetUsers.Request.QueryParams:
+      type: object
+      properties:
+        includeApiKeys:
+          type: string
+          enum:
+            - 'true'
+            - 'false'
+      additionalProperties: false
+    OrganizationApi.GetUsers.Request.PathParams:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
+    OrganizationApi.Permissions:
+      type: object
+      properties:
+        organizationRole:
+          $ref: '#/components/schemas/OrganizationApi.OrganizationRolesString'
+        projectsPermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationApi.ProjectPermission'
+      required:
+        - organizationRole
+      additionalProperties: false
+    OrganizationApi.ProjectPermission:
+      type: object
+      properties:
+        projectId:
+          type: string
+        projectRole:
+          $ref: '#/components/schemas/ProjectRoles'
+      required:
+        - projectId
+        - projectRole
+      additionalProperties: false
+    OrganizationApi.CreateInvite.Request.Body:
+      type: object
+      properties:
+        email:
+          type: string
+        organizationId:
+          type: string
+        permissions:
+          $ref: '#/components/schemas/OrganizationApi.Permissions'
+      required:
+        - email
+        - organizationId
+      additionalProperties: false
+    OrganizationApi.CreateInvite.Response:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
+    OrganizationApi.UpdateRole.Request.Body:
+      $ref: '#/components/schemas/OrganizationRolesString'
+    OrganizationApi.UpdateRole.Response:
+      type: 'null'
+    TeamApi.CreateTeam.Request.Body:
+      type: object
+      properties:
+        organizationId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        isDefaultTeam:
+          type: boolean
+      required:
+        - organizationId
+        - name
+      additionalProperties: false
+    TeamApi.Team:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        createdByUser:
+          $ref: '#/components/schemas/User'
+        isDefaultTeam:
+          type: boolean
+      required:
+        - id
+        - organizationId
+        - name
+      additionalProperties: false
+    TeamApi.CreateTeam.Response:
+      $ref: '#/components/schemas/TeamApi.Team'
+    TeamApi.GetTeams.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/TeamApi.Team'
+    TeamApi.GetTeam.Response:
+      $ref: '#/components/schemas/TeamApi.Team'
+    TeamApi.UpdateTeam.Request.Body:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        userIds:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    TeamApi.UpdateTeam.Response:
+      $ref: '#/components/schemas/TeamApi.Team'
+    TeamApi.TeamProjectAssignment:
+      type: object
+      properties:
+        id:
+          type: string
+        teamId:
+          type: string
+          maxLength: 36
+          minLength: 1
+        projectId:
+          type: string
+          maxLength: 36
+          minLength: 1
+        projectRole:
+          $ref: '#/components/schemas/ProjectRoles'
+      required:
+        - id
+        - teamId
+        - projectId
+        - projectRole
+      additionalProperties: false
+    TeamApi.GetAssignments.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/TeamApi.TeamProjectAssignment'
+    TeamApi.GetAssignments.Request.QueryParams:
+      type: object
+      properties:
+        projectId:
+          type: string
+      required:
+        - projectId
+      additionalProperties: false
+    TeamApi.UpdateAssignments.TeamAssignment:
+      type: object
+      properties:
+        teamId:
+          type: string
+        projectRole:
+          $ref: '#/components/schemas/ProjectRoles'
+      required:
+        - teamId
+        - projectRole
+      additionalProperties: false
+    TeamApi.UpdateAssignments.Request.Body:
+      type: object
+      properties:
+        projectId:
+          type: string
+        assignments:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamApi.UpdateAssignments.TeamAssignment'
+      required:
+        - projectId
+        - assignments
+      additionalProperties: false
+    TeamApi.UpdateAssignments.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/TeamApi.TeamProjectAssignment'
+    TeamApi.CreateOrUpdateSingleAssignment.Request.Body:
+      type: object
+      properties:
+        teamId:
+          type: string
+          maxLength: 36
+          minLength: 1
+        projectId:
+          type: string
+          maxLength: 36
+          minLength: 1
+        projectRole:
+          $ref: '#/components/schemas/ProjectRoles'
+      required:
+        - teamId
+        - projectId
+        - projectRole
+      additionalProperties: false
+    TeamApi.CreateOrUpdateSingleAssignment.Response:
+      $ref: '#/components/schemas/TeamApi.TeamProjectAssignment'
     DashboardApi.Query.MaxActiveEnvironmentsPerDay.Response:
       $ref: >-
         #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7522-7553-api.d.ts-7507-7554-api.d.ts-7477-7555-api.d.ts-7320-7561-api.d.ts-7270-7561-api.d.ts-231-9986-api.d.ts-206-9986-api.d.ts-204-9988-api.d.ts-121-9988-api.d.ts-0-9989%3E
@@ -163,28 +843,6 @@ components:
         - ABORTED
         - NEVER_DEPLOYED
         - DRIFTED
-    User:
-      type: object
-      properties:
-        email:
-          type: string
-        user_id:
-          type: string
-        created_at:
-          type: string
-        app_metadata:
-          type: object
-        picture:
-          type: string
-        name:
-          type: string
-        last_login:
-          type: string
-        given_name:
-          type: string
-        family_name:
-          type: string
-      additionalProperties: false
     DashboardApi.Query.EnvironmentStatus.Request.QueryStringParameters:
       type: object
       additionalProperties: false
@@ -395,6 +1053,162 @@ components:
             #/components/schemas/DashboardApi.Query.CountDeploymentType.Request.QueryStringParameters
         - $ref: >-
             #/components/schemas/DashboardApi.Query.CountDeployTypesByUserInTimeRange.Request.QueryStringParameters
+    CredentialsApi.CreateApiKey.Request.Body:
+      type: object
+      properties:
+        name:
+          type: string
+        organizationId:
+          type: string
+      required:
+        - name
+        - organizationId
+      additionalProperties: false
+    CredentialsApi.ApiKey:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        apiKeyId:
+          type: string
+        lastUsedAt:
+          type: string
+        organizationId:
+          type: string
+        createdAt:
+          type: string
+        createdBy:
+          type: string
+        createdByUser:
+          $ref: '#/components/schemas/ApiKeyUser'
+        apiKeySecret:
+          type: string
+        organizationRole:
+          type: string
+          enum:
+            - Admin
+            - User
+      required:
+        - id
+        - name
+        - apiKeyId
+        - lastUsedAt
+        - organizationId
+        - createdAt
+        - createdBy
+        - organizationRole
+      additionalProperties: false
+    ApiKeyUser:
+      type: object
+      properties:
+        user_id:
+          type: string
+        username:
+          type: string
+        created_at:
+          type: string
+        app_metadata:
+          type: object
+        name:
+          type: string
+        last_login:
+          type: string
+      additionalProperties: false
+    CredentialsApi.CreateApiKey.Response:
+      $ref: '#/components/schemas/CredentialsApi.ApiKey'
+    CredentialsApi.FindAllApiKeys.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/CredentialsApi.ApiKey'
+    SchedulingApi.ScheduledAction:
+      type: object
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        environmentId:
+          type: string
+        projectId:
+          type: string
+        organizationId:
+          type: string
+        cron:
+          type: string
+        nextSchedule:
+          type: string
+          format: date-time
+        enabled:
+          type: boolean
+      required:
+        - environmentId
+        - projectId
+        - organizationId
+        - cron
+        - enabled
+      additionalProperties: false
+    SchedulingApi.GetScheduleByEnvironmentId.Response:
+      type: object
+      properties:
+        deploy:
+          $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
+        destroy:
+          $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
+      additionalProperties: false
+    SchedulingApi.GetScheduleByProjectId.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/SchedulingApi.GetScheduleByEnvironmentId.Response'
+    SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction:
+      type: object
+      properties:
+        cron:
+          type: string
+        enabled:
+          type: boolean
+      required:
+        - cron
+      additionalProperties: false
+    SchedulingApi.SetEnvironmentSchedule.Request.Body:
+      type: object
+      properties:
+        deploy:
+          $ref: >-
+            #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction
+        destroy:
+          $ref: >-
+            #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction
+      additionalProperties: false
+    SchedulingApi.SetEnvironmentSchedule.Response:
+      $ref: '#/components/schemas/SchedulingApi.GetScheduleByEnvironmentId.Response'
+    SchedulingApi.DriftDetection:
+      $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
+    SchedulingApi.GetDriftDetectionByEnvironmentId.Response:
+      $ref: '#/components/schemas/SchedulingApi.DriftDetection'
+    SchedulingApi.SetDriftDetection.Request.ScheduledAction:
+      type: object
+      properties:
+        cron:
+          type: string
+        enabled:
+          type: boolean
+      required:
+        - enabled
+      additionalProperties: false
+    SchedulingApi.SetDriftDetection.Request.Body:
+      $ref: >-
+        #/components/schemas/SchedulingApi.SetDriftDetection.Request.ScheduledAction
+    SchedulingApi.SetDriftDetection.Response:
+      $ref: >-
+        #/components/schemas/SchedulingApi.GetDriftDetectionByEnvironmentId.Response
     BlueprintApi.TerraformVersion:
       anyOf:
         - type: string
@@ -1204,6 +2018,445 @@ components:
         - moduleName
         - providerName
         - version
+      additionalProperties: false
+    ConfigurationPropertyResponse:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        name:
+          type: string
+        value:
+          type: string
+        id:
+          type: string
+        userId:
+          type: string
+        isSensitive:
+          type: boolean
+        isReadonly:
+          type: boolean
+        isRequired:
+          type: boolean
+        regex:
+          type: string
+        scopeId:
+          type: string
+        scope:
+          $ref: '#/components/schemas/ConfigurationScope'
+        type:
+          $ref: '#/components/schemas/ConfigurationType'
+          description: |-
+            Whether it is an Environment or Terraform variable
+            0 value maps to an Environment variable
+            1 value maps to an Terraform variable
+        organizationId:
+          type: string
+        schema:
+          $ref: '#/components/schemas/PartialJSONSchema7'
+        description:
+          type: string
+          maxLength: 255
+      additionalProperties: false
+    ConfigurationApi.FindVariableById.Response:
+      $ref: '#/components/schemas/ConfigurationPropertyResponse'
+    ConfigurationApi.FindVariableById.Request.PathParams:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
+    ConfigurationApi.SshKey:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+        value:
+          type: string
+        sensitiveValueSalt:
+          type: string
+        userId:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+        - id
+        - name
+        - organizationId
+        - userId
+        - value
+      additionalProperties: false
+    ConfigurationApi.FindSshKeysByOrganization.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConfigurationApi.SshKey'
+    ConfigurationApi.CreateSshKey.Request.Body:
+      type: object
+      properties:
+        name:
+          type: string
+        organizationId:
+          type: string
+        value:
+          type: string
+      required:
+        - name
+        - organizationId
+        - value
+      additionalProperties: false
+    ConfigurationApi.AbstractSecretResponse<ConfigurationApi.SshKey>:
+      type: object
+      properties:
+        userId:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+        value:
+          type: string
+      required:
+        - userId
+        - id
+        - name
+        - organizationId
+        - value
+      additionalProperties: false
+    ConfigurationApi.CreateSshKey.Response:
+      $ref: >-
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.SshKey%3E
+    ConfigurationApi.AbstractSecretResponse<ConfigurationApi.PersistentToken>:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        organizationId:
+          type: string
+        type:
+          $ref: '#/components/schemas/TokenTypes'
+        id:
+          type: string
+      required:
+        - name
+        - value
+        - organizationId
+        - type
+        - id
+      additionalProperties: false
+    TokenTypes:
+      type: string
+      enum:
+        - GIT
+        - GitLab
+    ConfigurationApi.FindTokenByType.Response:
+      $ref: >-
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
+    ConfigurationApi.FindTokenById.Response:
+      $ref: >-
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
+    ConfigurationApi.Token:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        organizationId:
+          type: string
+        type:
+          $ref: '#/components/schemas/TokenTypes'
+      required:
+        - name
+        - value
+        - organizationId
+        - type
+      additionalProperties: false
+    ConfigurationApi.CreateToken.Request.Body:
+      $ref: '#/components/schemas/ConfigurationApi.Token'
+    ConfigurationApi.CreateToken.Response:
+      $ref: >-
+        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
+    ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty:
+      type: object
+      additionalProperties: false
+      properties:
+        overwrites:
+          anyOf:
+            - type: object
+              properties:
+                scope:
+                  $ref: '#/components/schemas/ConfigurationScope'
+                value:
+                  type: string
+                schema:
+                  $ref: '#/components/schemas/PartialJSONSchema7'
+                isReadonly:
+                  type: boolean
+                isRequired:
+                  type: boolean
+                isSensitive:
+                  type: boolean
+                regex:
+                  type: string
+              required:
+                - scope
+              additionalProperties: false
+            - type: 'null'
+        createdAt:
+          type: string
+          format: date-time
+        name:
+          type: string
+        value:
+          type: string
+        id:
+          type: string
+        userId:
+          type: string
+        isSensitive:
+          type: boolean
+        isReadonly:
+          type: boolean
+        isRequired:
+          type: boolean
+        regex:
+          type: string
+        scopeId:
+          type: string
+        scope:
+          $ref: '#/components/schemas/ConfigurationScope'
+        type:
+          $ref: '#/components/schemas/ConfigurationType'
+          description: |-
+            Whether it is an Environment or Terraform variable
+            0 value maps to an Environment variable
+            1 value maps to an Terraform variable
+        toDelete:
+          type: boolean
+        organizationId:
+          type: string
+        schema:
+          $ref: '#/components/schemas/PartialJSONSchema7'
+        description:
+          type: string
+          maxLength: 255
+      required:
+        - name
+        - organizationId
+        - overwrites
+        - scope
+        - type
+    ConfigurationApi.FindVariablesByScope.Response:
+      type: array
+      items:
+        $ref: >-
+          #/components/schemas/ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty
+    ConfigurationApi.FindVariablesByScope.Request.QueryParams:
+      type: object
+      properties:
+        organizationId:
+          type: string
+        blueprintId:
+          type: string
+        projectId:
+          type: string
+        environmentId:
+          type: string
+        deploymentLogId:
+          type: string
+      required:
+        - organizationId
+      additionalProperties: false
+    ConfigurationPropertyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        id:
+          type: string
+        isSensitive:
+          type: boolean
+        isReadonly:
+          type: boolean
+        isRequired:
+          type: boolean
+        regex:
+          type: string
+        scopeId:
+          type: string
+        scope:
+          $ref: '#/components/schemas/ConfigurationScope'
+        type:
+          $ref: '#/components/schemas/ConfigurationType'
+          description: |-
+            Whether it is an Environment or Terraform variable
+            0 value maps to an Environment variable
+            1 value maps to an Terraform variable
+        toDelete:
+          type: boolean
+        organizationId:
+          type: string
+        schema:
+          $ref: '#/components/schemas/PartialJSONSchema7'
+        description:
+          type: string
+          maxLength: 255
+      required:
+        - name
+        - scope
+        - type
+        - organizationId
+      additionalProperties: false
+    ConfigurationApi.CreateOrUpdateVariable.Request.Body:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConfigurationPropertyRequest'
+    ConfigurationApi.CreateOrUpdateVariable.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConfigurationPropertyResponse'
+    TransientCredential:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/CredentialType'
+        createdByUser:
+          $ref: '#/components/schemas/User'
+        value:
+          type: object
+          description: >-
+            A JSON string representation of the cloud provider credentials.
+
+            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types
+            use:
+
+            { roleArn: "your-role-arn", externalId: "your-external-id" }
+
+
+            - For GCP_CREDENTIALS type use:
+
+            { tableId: "your-table-id", secret: "your-secret" }
+
+
+            - For AZURE_CREDENTIALS type use:
+
+            { clientId: "your-clientId", clientSecret: "your-clientSecret",
+            tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
+        name:
+          type: string
+        organizationId:
+          type: string
+        sensitiveValueSalt:
+          type: string
+      required:
+        - type
+        - value
+        - name
+        - organizationId
+      additionalProperties: false
+    CredentialType:
+      type: string
+      enum:
+        - AWS_ASSUMED_ROLE
+        - AWS_ASSUMED_ROLE_FOR_DEPLOYMENT
+        - AWS_ACCESS_KEYS_FOR_DEPLOYMENT
+        - GCP_CREDENTIALS
+        - GCP_SERVICE_ACCOUNT_FOR_DEPLOYMENT
+        - AZURE_CREDENTIALS
+        - AZURE_SERVICE_PRINCIPAL_FOR_DEPLOYMENT
+        - AWS_ASSUMED_ROLE
+        - AWS_ASSUMED_ROLE_FOR_DEPLOYMENT
+        - AWS_ACCESS_KEYS_FOR_DEPLOYMENT
+        - GCP_CREDENTIALS
+        - GCP_SERVICE_ACCOUNT_FOR_DEPLOYMENT
+        - AZURE_CREDENTIALS
+        - AZURE_SERVICE_PRINCIPAL_FOR_DEPLOYMENT
+    ConfigurationApi.CreateCredential.Request.Body:
+      $ref: '#/components/schemas/TransientCredential'
+    CredentialWithoutValue:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+        value:
+          type: 'null'
+        sensitiveValueSalt:
+          type: string
+        type:
+          $ref: '#/components/schemas/CredentialType'
+        createdByUser:
+          $ref: '#/components/schemas/User'
+      required:
+        - id
+        - name
+        - organizationId
+        - type
+        - value
+      additionalProperties: false
+    ConfigurationApi.CreateCredential.Response:
+      $ref: '#/components/schemas/CredentialWithoutValue'
+    ConfigurationApi.FindCredentials.Response:
+      type: array
+      items:
+        $ref: '#/components/schemas/CredentialWithoutValue'
+    ConfigurationApi.AddDeployCredsToProject.Request.Body:
+      type: 'null'
+    ConfigurationApi.DeploymentCredentialToProject:
+      type: object
+      properties:
+        id:
+          type: string
+        projectId:
+          type: string
+        credentialId:
+          type: string
+        createdByUserId:
+          type: string
+      required:
+        - projectId
+        - credentialId
+        - createdByUserId
+      additionalProperties: false
+    ConfigurationApi.AddDeployCredsToProject.Response:
+      $ref: '#/components/schemas/ConfigurationApi.DeploymentCredentialToProject'
+    ConfigurationApi.DeploymentCredentialsToProject:
+      type: object
+      properties:
+        credentialIds:
+          type: array
+          items:
+            type: string
+      required:
+        - credentialIds
+      additionalProperties: false
+    ConfigurationApi.GetDeployCredsForProject.Response:
+      $ref: '#/components/schemas/ConfigurationApi.DeploymentCredentialsToProject'
+    ConfigurationApi.GetDeployCredsForProject.Request.PathParams:
+      type: object
+      properties:
+        projectId:
+          type: string
+      required:
+        - projectId
       additionalProperties: false
     EnvironmentApi.UpdateDownstreamEnvironments.Request.Body:
       type: object
@@ -2110,16 +3363,28 @@ components:
       required:
         - projectId
       additionalProperties: false
-    EnvironmentApi.CheckLimit.EnvironmentLimits:
+    EnvironmentApi.CheckLimit.EnvironmentLimitsWarnings:
       type: object
       properties:
+        total:
+          type: boolean
+        user:
+          type: boolean
+      required:
+        - total
+        - user
+      additionalProperties: false
+    EnvironmentApi.CheckLimit.Response:
+      type: object
+      additionalProperties: false
+      properties:
+        warnings:
+          $ref: >-
+            #/components/schemas/EnvironmentApi.CheckLimit.EnvironmentLimitsWarnings
         total:
           type: number
         user:
           type: number
-      additionalProperties: false
-    EnvironmentApi.CheckLimit.Response:
-      $ref: '#/components/schemas/EnvironmentApi.CheckLimit.EnvironmentLimits'
     EnvironmentApi.CheckLimit.Request.QueryParams:
       type: object
       properties:
@@ -2139,171 +3404,6 @@ components:
           type: string
       required:
         - id
-      additionalProperties: false
-    NotificationsApi.NotificationEndpointModel:
-      type: object
-      properties:
-        id:
-          type: string
-        createdBy:
-          type: string
-        createdByUser:
-          $ref: '#/components/schemas/User'
-        organizationId:
-          type: string
-        name:
-          type: string
-        type:
-          $ref: '#/components/schemas/NotificationEndpointType'
-        value:
-          type: string
-      required:
-        - organizationId
-        - name
-        - type
-        - value
-      additionalProperties: false
-    NotificationEndpointType:
-      type: string
-      enum:
-        - Slack
-        - Teams
-    NotificationsApi.CreateNotificationEndpoint.Request.Body:
-      $ref: '#/components/schemas/NotificationsApi.NotificationEndpointModel'
-    NotificationsApi.NotificationEndpoint:
-      type: object
-      properties:
-        id:
-          type: string
-        createdBy:
-          type: string
-        createdByUser:
-          $ref: '#/components/schemas/User'
-        organizationId:
-          type: string
-        name:
-          type: string
-        type:
-          $ref: '#/components/schemas/NotificationEndpointType'
-        value:
-          type: string
-      additionalProperties: false
-    NotificationsApi.CreateNotificationEndpoint.Response:
-      $ref: '#/components/schemas/NotificationsApi.NotificationEndpoint'
-    NotificationsApi.DeleteNotificationEndpoint.Request.PathParams:
-      type: object
-      properties:
-        endpointId:
-          type: string
-      required:
-        - endpointId
-      additionalProperties: false
-    NotificationsApi.UpdateNotificationEndpoint.Request.Body:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-        type:
-          $ref: '#/components/schemas/NotificationEndpointType'
-      required:
-        - name
-        - value
-        - type
-      additionalProperties: false
-    NotificationsApi.UpdateNotificationEndpoint.Response:
-      $ref: '#/components/schemas/NotificationsApi.NotificationEndpoint'
-    NotificationsApi.UpdateNotificationEndpoint.Request.PathParams:
-      type: object
-      properties:
-        endpointId:
-          type: string
-      required:
-        - endpointId
-      additionalProperties: false
-    EventNameType:
-      type: string
-      enum:
-        - environmentDeployStarted
-        - environmentDestroyStarted
-        - deploySucceeded
-        - destroySucceeded
-        - deployFailed
-        - destroyFailed
-        - deploymentWaitingForUser
-        - deploymentCancelled
-        - environmentDeployResumed
-        - environmentDestroyResumed
-        - environmentMarkedForAutoDestroy
-        - driftDetected
-        - driftUndetected
-        - driftFailed
-    NotificationsApi.UpdateProjectNotificationSettings.Request.Body:
-      type: object
-      properties:
-        eventNames:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventNameType'
-      required:
-        - eventNames
-      additionalProperties: false
-    NotificationsApi.ProjectNotificationSetting:
-      type: object
-      properties:
-        id:
-          type: string
-        notificationEndpointId:
-          type: string
-        eventNames:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventNameType'
-        createdBy:
-          type: string
-        createdByUser:
-          $ref: '#/components/schemas/User'
-      required:
-        - notificationEndpointId
-        - eventNames
-      additionalProperties: false
-    NotificationsApi.UpdateProjectNotificationSettings.Response:
-      $ref: '#/components/schemas/NotificationsApi.ProjectNotificationSetting'
-    NotificationsApi.UpdateProjectNotificationSettings.Request.PathParams:
-      type: object
-      properties:
-        projectId:
-          type: string
-        endpointId:
-          type: string
-      required:
-        - projectId
-        - endpointId
-      additionalProperties: false
-    NotificationsApi.FindNotificationEndpoints.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/NotificationsApi.NotificationEndpoint'
-    NotificationsApi.FindNotificationEndpoints.Request.QueryParams:
-      type: object
-      properties:
-        organizationId:
-          type: string
-      required:
-        - organizationId
-      additionalProperties: false
-    NotificationsApi.FindProjectNotificationSettings.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/NotificationsApi.ProjectNotificationSetting'
-    NotificationsApi.FindProjectNotificationSettings.Request.PathParams:
-      type: object
-      properties:
-        projectId:
-          type: string
-      required:
-        - projectId
       additionalProperties: false
     AgentSettingsApi.ListAgents.Response:
       type: array
@@ -2368,278 +3468,6 @@ components:
       required:
         - organizationId
       additionalProperties: false
-    OrganizationApi.CreateOrganization.Request.Body:
-      type: object
-      properties:
-        name:
-          type: string
-          pattern: ^(?!\s*$).+
-        description:
-          type: string
-        photoUrl:
-          type: string
-      required:
-        - name
-      additionalProperties: false
-    OrganizationApi.OrganizationModel:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        maxTtl:
-          type:
-            - string
-            - 'null'
-        defaultTtl:
-          type:
-            - string
-            - 'null'
-        doNotReportSkippedStatusChecks:
-          type: boolean
-        doNotConsiderMergeCommitsForPrPlans:
-          type: boolean
-        description:
-          type: string
-        photoUrl:
-          type: string
-        createdBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-      required:
-        - id
-        - name
-        - createdBy
-      additionalProperties: false
-    OrganizationApi.CreateOrganization.Response:
-      $ref: '#/components/schemas/OrganizationApi.OrganizationModel'
-    OrganizationApi.Organization:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        maxTtl:
-          type:
-            - string
-            - 'null'
-        defaultTtl:
-          type:
-            - string
-            - 'null'
-        doNotReportSkippedStatusChecks:
-          type: boolean
-        doNotConsiderMergeCommitsForPrPlans:
-          type: boolean
-        description:
-          type: string
-        photoUrl:
-          type: string
-        createdBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        role:
-          $ref: '#/components/schemas/OrganizationApi.OrganizationRolesString'
-        isSelfHosted:
-          type: boolean
-        isSelfHostedK8s:
-          type: boolean
-      required:
-        - createdBy
-        - id
-        - name
-        - role
-      additionalProperties: false
-    OrganizationApi.OrganizationRolesString:
-      $ref: '#/components/schemas/OrganizationRolesString'
-    OrganizationRolesString:
-      type: string
-      enum:
-        - ModuleReader
-        - User
-        - Admin
-    OrganizationApi.FindOrganizationById.Response:
-      $ref: '#/components/schemas/OrganizationApi.Organization'
-    OrganizationApi.FindOrganizations.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/OrganizationApi.Organization'
-    OrganizationApi.UpdateOrganization.Request.Body:
-      type: object
-      properties:
-        name:
-          type: string
-        photoUrl:
-          type: string
-        description:
-          type: string
-      required:
-        - name
-      additionalProperties: false
-    OrganizationApi.UpdateOrganization.Response:
-      $ref: '#/components/schemas/OrganizationApi.Organization'
-    OrganizationApi.OrganizationPolicy:
-      type: object
-      properties:
-        maxTtl:
-          type:
-            - string
-            - 'null'
-        defaultTtl:
-          type:
-            - string
-            - 'null'
-        doNotReportSkippedStatusChecks:
-          type: boolean
-        doNotConsiderMergeCommitsForPrPlans:
-          type: boolean
-      required:
-        - maxTtl
-        - defaultTtl
-      additionalProperties: false
-    OrganizationApi.UpdatePolicy.Request.Body:
-      $ref: '#/components/schemas/OrganizationApi.OrganizationPolicy'
-    OrganizationApi.UpdatePolicy.Response:
-      $ref: '#/components/schemas/OrganizationApi.Organization'
-    OrganizationUser:
-      type: object
-      properties:
-        user:
-          type: object
-          properties:
-            user_id:
-              type: string
-            email:
-              type: string
-            name:
-              type: string
-            last_login:
-              type: string
-            picture:
-              type: string
-            given_name:
-              type: string
-            family_name:
-              type: string
-            app_metadata:
-              type: object
-              properties:
-                isApiKey:
-                  type: boolean
-              required:
-                - isApiKey
-              additionalProperties: false
-          additionalProperties: false
-        role:
-          $ref: '#/components/schemas/OrganizationRolesString'
-        status:
-          $ref: '#/components/schemas/OrganizationUserStatus'
-      required:
-        - user
-        - role
-        - status
-      additionalProperties: false
-    OrganizationUserStatus:
-      type: string
-      enum:
-        - Active
-        - Invited
-    OrganizationApi.GetUsers.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/OrganizationUser'
-    OrganizationApi.GetUsers.Request.QueryParams:
-      type: object
-      properties:
-        includeApiKeys:
-          type: string
-          enum:
-            - 'true'
-            - 'false'
-      additionalProperties: false
-    OrganizationApi.GetUsers.Request.PathParams:
-      type: object
-      properties:
-        id:
-          type: string
-      required:
-        - id
-      additionalProperties: false
-    OrganizationApi.Permissions:
-      type: object
-      properties:
-        organizationRole:
-          $ref: '#/components/schemas/OrganizationApi.OrganizationRolesString'
-        projectsPermissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrganizationApi.ProjectPermission'
-      required:
-        - organizationRole
-      additionalProperties: false
-    OrganizationApi.ProjectPermission:
-      type: object
-      properties:
-        projectId:
-          type: string
-        projectRole:
-          $ref: '#/components/schemas/ProjectRoles'
-      required:
-        - projectId
-        - projectRole
-      additionalProperties: false
-    ProjectRoles:
-      type: string
-      enum:
-        - Admin
-        - Deployer
-        - Planner
-        - Viewer
-        - Admin
-        - Deployer
-        - Planner
-        - Viewer
-        - Admin
-        - Deployer
-        - Planner
-        - Viewer
-    OrganizationApi.CreateInvite.Request.Body:
-      type: object
-      properties:
-        email:
-          type: string
-        organizationId:
-          type: string
-        permissions:
-          $ref: '#/components/schemas/OrganizationApi.Permissions'
-      required:
-        - email
-        - organizationId
-      additionalProperties: false
-    OrganizationApi.CreateInvite.Response:
-      type: object
-      properties:
-        id:
-          type: string
-      required:
-        - id
-      additionalProperties: false
-    OrganizationApi.UpdateRole.Request.Body:
-      $ref: '#/components/schemas/OrganizationRolesString'
-    OrganizationApi.UpdateRole.Response:
-      type: 'null'
     CostApi.AddProjectCostsCredentials.Request.Body:
       type: object
       properties:
@@ -2663,23 +3491,6 @@ components:
         - projectId
         - credentialsId
       additionalProperties: false
-    CredentialType:
-      type: string
-      enum:
-        - AWS_ASSUMED_ROLE
-        - AWS_ASSUMED_ROLE_FOR_DEPLOYMENT
-        - AWS_ACCESS_KEYS_FOR_DEPLOYMENT
-        - GCP_CREDENTIALS
-        - GCP_SERVICE_ACCOUNT_FOR_DEPLOYMENT
-        - AZURE_CREDENTIALS
-        - AZURE_SERVICE_PRINCIPAL_FOR_DEPLOYMENT
-        - AWS_ASSUMED_ROLE
-        - AWS_ASSUMED_ROLE_FOR_DEPLOYMENT
-        - AWS_ACCESS_KEYS_FOR_DEPLOYMENT
-        - GCP_CREDENTIALS
-        - GCP_SERVICE_ACCOUNT_FOR_DEPLOYMENT
-        - AZURE_CREDENTIALS
-        - AZURE_SERVICE_PRINCIPAL_FOR_DEPLOYMENT
     CostApi.AddProjectCostsCredentials.Response:
       $ref: '#/components/schemas/CostApi.ProjectCostsCredentials'
     CostApi.GetProjectCostsCredentials.Response:
@@ -2745,805 +3556,6 @@ components:
       $ref: '#/components/schemas/CostApi.CostQueryResponse'
     CostApi.GetProjectCosts.Request.QueryParams:
       $ref: '#/components/schemas/CostApi.GetCosts.Request.QueryParams'
-    ProjectApi.UpdateProjectRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          $comment: '{ "schema": { "type": "string" , "minLength": 1} }'
-        description:
-          type: string
-      required:
-        - name
-      additionalProperties: false
-    ProjectApi.Update.Request.Body:
-      $ref: '#/components/schemas/ProjectApi.UpdateProjectRequest'
-    ProjectApi.Project:
-      type: object
-      properties:
-        name:
-          type: string
-          $comment: '{ "schema": { "type": "string" , "minLength": 1} }'
-        description:
-          type: string
-        organizationId:
-          type: string
-        id:
-          type: string
-        createdBy:
-          type: string
-        createdByUser:
-          $ref: '#/components/schemas/User'
-        role:
-          $ref: '#/components/schemas/ProjectRoles'
-        isArchived:
-          type: boolean
-      required:
-        - createdBy
-        - name
-        - organizationId
-      additionalProperties: false
-    ProjectApi.Update.Response:
-      $ref: '#/components/schemas/ProjectApi.Project'
-    ProjectApi.FindById.Response:
-      $ref: '#/components/schemas/ProjectApi.Project'
-    ProjectApi.FindByOrganizationId.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/ProjectApi.Project'
-    ProjectApi.CreateProjectRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          $comment: '{ "schema": { "type": "string" , "minLength": 1} }'
-        description:
-          type: string
-        organizationId:
-          type: string
-      required:
-        - name
-        - organizationId
-      additionalProperties: false
-    ProjectApi.CreateProject.Request.Body:
-      $ref: '#/components/schemas/ProjectApi.CreateProjectRequest'
-    ProjectApi.CreateProject.Response:
-      $ref: '#/components/schemas/ProjectApi.Project'
-    SchedulingApi.ScheduledAction:
-      type: object
-      properties:
-        id:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        environmentId:
-          type: string
-        projectId:
-          type: string
-        organizationId:
-          type: string
-        cron:
-          type: string
-        nextSchedule:
-          type: string
-          format: date-time
-        enabled:
-          type: boolean
-      required:
-        - environmentId
-        - projectId
-        - organizationId
-        - cron
-        - enabled
-      additionalProperties: false
-    SchedulingApi.GetScheduleByEnvironmentId.Response:
-      type: object
-      properties:
-        deploy:
-          $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
-        destroy:
-          $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
-      additionalProperties: false
-    SchedulingApi.GetScheduleByProjectId.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/SchedulingApi.GetScheduleByEnvironmentId.Response'
-    SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction:
-      type: object
-      properties:
-        cron:
-          type: string
-        enabled:
-          type: boolean
-      required:
-        - cron
-      additionalProperties: false
-    SchedulingApi.SetEnvironmentSchedule.Request.Body:
-      type: object
-      properties:
-        deploy:
-          $ref: >-
-            #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction
-        destroy:
-          $ref: >-
-            #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.ScheduledAction
-      additionalProperties: false
-    SchedulingApi.SetEnvironmentSchedule.Response:
-      $ref: '#/components/schemas/SchedulingApi.GetScheduleByEnvironmentId.Response'
-    SchedulingApi.DriftDetection:
-      $ref: '#/components/schemas/SchedulingApi.ScheduledAction'
-    SchedulingApi.GetDriftDetectionByEnvironmentId.Response:
-      $ref: '#/components/schemas/SchedulingApi.DriftDetection'
-    SchedulingApi.SetDriftDetection.Request.ScheduledAction:
-      type: object
-      properties:
-        cron:
-          type: string
-        enabled:
-          type: boolean
-      required:
-        - enabled
-      additionalProperties: false
-    SchedulingApi.SetDriftDetection.Request.Body:
-      $ref: >-
-        #/components/schemas/SchedulingApi.SetDriftDetection.Request.ScheduledAction
-    SchedulingApi.SetDriftDetection.Response:
-      $ref: >-
-        #/components/schemas/SchedulingApi.GetDriftDetectionByEnvironmentId.Response
-    TeamApi.CreateTeam.Request.Body:
-      type: object
-      properties:
-        organizationId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        isDefaultTeam:
-          type: boolean
-      required:
-        - organizationId
-        - name
-      additionalProperties: false
-    TeamApi.Team:
-      type: object
-      properties:
-        id:
-          type: string
-        organizationId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-        createdByUser:
-          $ref: '#/components/schemas/User'
-        isDefaultTeam:
-          type: boolean
-      required:
-        - id
-        - organizationId
-        - name
-      additionalProperties: false
-    TeamApi.CreateTeam.Response:
-      $ref: '#/components/schemas/TeamApi.Team'
-    TeamApi.GetTeams.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/TeamApi.Team'
-    TeamApi.GetTeam.Response:
-      $ref: '#/components/schemas/TeamApi.Team'
-    TeamApi.UpdateTeam.Request.Body:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        userIds:
-          type: array
-          items:
-            type: string
-      additionalProperties: false
-    TeamApi.UpdateTeam.Response:
-      $ref: '#/components/schemas/TeamApi.Team'
-    TeamApi.TeamProjectAssignment:
-      type: object
-      properties:
-        id:
-          type: string
-        teamId:
-          type: string
-          maxLength: 36
-          minLength: 1
-        projectId:
-          type: string
-          maxLength: 36
-          minLength: 1
-        projectRole:
-          $ref: '#/components/schemas/ProjectRoles'
-      required:
-        - id
-        - teamId
-        - projectId
-        - projectRole
-      additionalProperties: false
-    TeamApi.GetAssignments.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/TeamApi.TeamProjectAssignment'
-    TeamApi.GetAssignments.Request.QueryParams:
-      type: object
-      properties:
-        projectId:
-          type: string
-      required:
-        - projectId
-      additionalProperties: false
-    TeamApi.UpdateAssignments.TeamAssignment:
-      type: object
-      properties:
-        teamId:
-          type: string
-        projectRole:
-          $ref: '#/components/schemas/ProjectRoles'
-      required:
-        - teamId
-        - projectRole
-      additionalProperties: false
-    TeamApi.UpdateAssignments.Request.Body:
-      type: object
-      properties:
-        projectId:
-          type: string
-        assignments:
-          type: array
-          items:
-            $ref: '#/components/schemas/TeamApi.UpdateAssignments.TeamAssignment'
-      required:
-        - projectId
-        - assignments
-      additionalProperties: false
-    TeamApi.UpdateAssignments.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/TeamApi.TeamProjectAssignment'
-    TeamApi.CreateOrUpdateSingleAssignment.Request.Body:
-      type: object
-      properties:
-        teamId:
-          type: string
-          maxLength: 36
-          minLength: 1
-        projectId:
-          type: string
-          maxLength: 36
-          minLength: 1
-        projectRole:
-          $ref: '#/components/schemas/ProjectRoles'
-      required:
-        - teamId
-        - projectId
-        - projectRole
-      additionalProperties: false
-    TeamApi.CreateOrUpdateSingleAssignment.Response:
-      $ref: '#/components/schemas/TeamApi.TeamProjectAssignment'
-    ConfigurationPropertyResponse:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        name:
-          type: string
-        value:
-          type: string
-        id:
-          type: string
-        userId:
-          type: string
-        isSensitive:
-          type: boolean
-        isReadonly:
-          type: boolean
-        isRequired:
-          type: boolean
-        regex:
-          type: string
-        scopeId:
-          type: string
-        scope:
-          $ref: '#/components/schemas/ConfigurationScope'
-        type:
-          $ref: '#/components/schemas/ConfigurationType'
-          description: |-
-            Whether it is an Environment or Terraform variable
-            0 value maps to an Environment variable
-            1 value maps to an Terraform variable
-        organizationId:
-          type: string
-        schema:
-          $ref: '#/components/schemas/PartialJSONSchema7'
-        description:
-          type: string
-          maxLength: 255
-      additionalProperties: false
-    ConfigurationApi.FindVariableById.Response:
-      $ref: '#/components/schemas/ConfigurationPropertyResponse'
-    ConfigurationApi.FindVariableById.Request.PathParams:
-      type: object
-      properties:
-        id:
-          type: string
-      required:
-        - id
-      additionalProperties: false
-    ConfigurationApi.SshKey:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        organizationId:
-          type: string
-        value:
-          type: string
-        sensitiveValueSalt:
-          type: string
-        userId:
-          type: string
-        user:
-          $ref: '#/components/schemas/User'
-      required:
-        - id
-        - name
-        - organizationId
-        - userId
-        - value
-      additionalProperties: false
-    ConfigurationApi.FindSshKeysByOrganization.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/ConfigurationApi.SshKey'
-    ConfigurationApi.CreateSshKey.Request.Body:
-      type: object
-      properties:
-        name:
-          type: string
-        organizationId:
-          type: string
-        value:
-          type: string
-      required:
-        - name
-        - organizationId
-        - value
-      additionalProperties: false
-    ConfigurationApi.AbstractSecretResponse<ConfigurationApi.SshKey>:
-      type: object
-      properties:
-        userId:
-          type: string
-        user:
-          $ref: '#/components/schemas/User'
-        id:
-          type: string
-        name:
-          type: string
-        organizationId:
-          type: string
-        value:
-          type: string
-      required:
-        - userId
-        - id
-        - name
-        - organizationId
-        - value
-      additionalProperties: false
-    ConfigurationApi.CreateSshKey.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.SshKey%3E
-    ConfigurationApi.AbstractSecretResponse<ConfigurationApi.PersistentToken>:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-        organizationId:
-          type: string
-        type:
-          $ref: '#/components/schemas/TokenTypes'
-        id:
-          type: string
-      required:
-        - name
-        - value
-        - organizationId
-        - type
-        - id
-      additionalProperties: false
-    TokenTypes:
-      type: string
-      enum:
-        - GIT
-        - GitLab
-    ConfigurationApi.FindTokenByType.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
-    ConfigurationApi.FindTokenById.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
-    ConfigurationApi.Token:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-        organizationId:
-          type: string
-        type:
-          $ref: '#/components/schemas/TokenTypes'
-      required:
-        - name
-        - value
-        - organizationId
-        - type
-      additionalProperties: false
-    ConfigurationApi.CreateToken.Request.Body:
-      $ref: '#/components/schemas/ConfigurationApi.Token'
-    ConfigurationApi.CreateToken.Response:
-      $ref: >-
-        #/components/schemas/ConfigurationApi.AbstractSecretResponse%3CConfigurationApi.PersistentToken%3E
-    ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty:
-      type: object
-      additionalProperties: false
-      properties:
-        overwrites:
-          anyOf:
-            - type: object
-              properties:
-                scope:
-                  $ref: '#/components/schemas/ConfigurationScope'
-                value:
-                  type: string
-                schema:
-                  $ref: '#/components/schemas/PartialJSONSchema7'
-                isReadonly:
-                  type: boolean
-                isRequired:
-                  type: boolean
-                isSensitive:
-                  type: boolean
-                regex:
-                  type: string
-              required:
-                - scope
-              additionalProperties: false
-            - type: 'null'
-        createdAt:
-          type: string
-          format: date-time
-        name:
-          type: string
-        value:
-          type: string
-        id:
-          type: string
-        userId:
-          type: string
-        isSensitive:
-          type: boolean
-        isReadonly:
-          type: boolean
-        isRequired:
-          type: boolean
-        regex:
-          type: string
-        scopeId:
-          type: string
-        scope:
-          $ref: '#/components/schemas/ConfigurationScope'
-        type:
-          $ref: '#/components/schemas/ConfigurationType'
-          description: |-
-            Whether it is an Environment or Terraform variable
-            0 value maps to an Environment variable
-            1 value maps to an Terraform variable
-        toDelete:
-          type: boolean
-        organizationId:
-          type: string
-        schema:
-          $ref: '#/components/schemas/PartialJSONSchema7'
-        description:
-          type: string
-          maxLength: 255
-      required:
-        - name
-        - organizationId
-        - overwrites
-        - scope
-        - type
-    ConfigurationApi.FindVariablesByScope.Response:
-      type: array
-      items:
-        $ref: >-
-          #/components/schemas/ConfigurationApi.FindVariablesByScope.OverridingConfigurationProperty
-    ConfigurationApi.FindVariablesByScope.Request.QueryParams:
-      type: object
-      properties:
-        organizationId:
-          type: string
-        blueprintId:
-          type: string
-        projectId:
-          type: string
-        environmentId:
-          type: string
-        deploymentLogId:
-          type: string
-      required:
-        - organizationId
-      additionalProperties: false
-    ConfigurationPropertyRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-        id:
-          type: string
-        isSensitive:
-          type: boolean
-        isReadonly:
-          type: boolean
-        isRequired:
-          type: boolean
-        regex:
-          type: string
-        scopeId:
-          type: string
-        scope:
-          $ref: '#/components/schemas/ConfigurationScope'
-        type:
-          $ref: '#/components/schemas/ConfigurationType'
-          description: |-
-            Whether it is an Environment or Terraform variable
-            0 value maps to an Environment variable
-            1 value maps to an Terraform variable
-        toDelete:
-          type: boolean
-        organizationId:
-          type: string
-        schema:
-          $ref: '#/components/schemas/PartialJSONSchema7'
-        description:
-          type: string
-          maxLength: 255
-      required:
-        - name
-        - scope
-        - type
-        - organizationId
-      additionalProperties: false
-    ConfigurationApi.CreateOrUpdateVariable.Request.Body:
-      type: array
-      items:
-        $ref: '#/components/schemas/ConfigurationPropertyRequest'
-    ConfigurationApi.CreateOrUpdateVariable.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/ConfigurationPropertyResponse'
-    TransientCredential:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/CredentialType'
-        createdByUser:
-          $ref: '#/components/schemas/User'
-        value:
-          type: object
-          description: >-
-            A JSON string representation of the cloud provider credentials.
-
-            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types
-            use:
-
-            { roleArn: "your-role-arn", externalId: "your-external-id" }
-
-
-            - For GCP_CREDENTIALS type use:
-
-            { tableId: "your-table-id", secret: "your-secret" }
-
-
-            - For AZURE_CREDENTIALS type use:
-
-            { clientId: "your-clientId", clientSecret: "your-clientSecret",
-            tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
-        name:
-          type: string
-        organizationId:
-          type: string
-        sensitiveValueSalt:
-          type: string
-      required:
-        - type
-        - value
-        - name
-        - organizationId
-      additionalProperties: false
-    ConfigurationApi.CreateCredential.Request.Body:
-      $ref: '#/components/schemas/TransientCredential'
-    CredentialWithoutValue:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        organizationId:
-          type: string
-        value:
-          type: 'null'
-        sensitiveValueSalt:
-          type: string
-        type:
-          $ref: '#/components/schemas/CredentialType'
-        createdByUser:
-          $ref: '#/components/schemas/User'
-      required:
-        - id
-        - name
-        - organizationId
-        - type
-        - value
-      additionalProperties: false
-    ConfigurationApi.CreateCredential.Response:
-      $ref: '#/components/schemas/CredentialWithoutValue'
-    ConfigurationApi.FindCredentials.Response:
-      type: array
-      items:
-        $ref: '#/components/schemas/CredentialWithoutValue'
-    ConfigurationApi.AddDeployCredsToProject.Request.Body:
-      type: 'null'
-    ConfigurationApi.DeploymentCredentialToProject:
-      type: object
-      properties:
-        id:
-          type: string
-        projectId:
-          type: string
-        credentialId:
-          type: string
-        createdByUserId:
-          type: string
-      required:
-        - projectId
-        - credentialId
-        - createdByUserId
-      additionalProperties: false
-    ConfigurationApi.AddDeployCredsToProject.Response:
-      $ref: '#/components/schemas/ConfigurationApi.DeploymentCredentialToProject'
-    ConfigurationApi.DeploymentCredentialsToProject:
-      type: object
-      properties:
-        credentialIds:
-          type: array
-          items:
-            type: string
-      required:
-        - credentialIds
-      additionalProperties: false
-    ConfigurationApi.GetDeployCredsForProject.Response:
-      $ref: '#/components/schemas/ConfigurationApi.DeploymentCredentialsToProject'
-    ConfigurationApi.GetDeployCredsForProject.Request.PathParams:
-      type: object
-      properties:
-        projectId:
-          type: string
-      required:
-        - projectId
-      additionalProperties: false
-    DeploymentStepApi.DeploymentStepStatus:
-      $ref: '#/components/schemas/CommonDeploymentStepApi.DeploymentStepStatus'
-    CommonDeploymentStepApi.DeploymentStepStatus:
-      type: string
-      enum:
-        - NOT_STARTED
-        - IN_PROGRESS
-        - WAITING_FOR_USER
-        - TIMEOUT
-        - FAIL
-        - SUCCESS
-        - CANCELLED
-        - SKIPPED
-    DeploymentStepApi.FindByDeploymentLogId.Response:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: string
-          deploymentLogId:
-            type: string
-          name:
-            type: string
-          order:
-            type: number
-          projectId:
-            type: string
-          organizationId:
-            type: string
-          status:
-            $ref: '#/components/schemas/DeploymentStepApi.DeploymentStepStatus'
-          startedAt:
-            type: string
-            format: date-time
-          completedAt:
-            type: string
-            format: date-time
-        required:
-          - deploymentLogId
-          - name
-          - order
-          - projectId
-          - organizationId
-          - status
-        additionalProperties: false
-    CommonDeploymentStepApi.FindStepLog.Response:
-      type: object
-      properties:
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonDeploymentStepApi.FindStepLog.LogEvent'
-        nextStartTime:
-          type:
-            - number
-            - string
-        hasMoreLogs:
-          type: boolean
-      required:
-        - events
-        - hasMoreLogs
-      additionalProperties: false
-    CommonDeploymentStepApi.FindStepLog.LogEvent:
-      type: object
-      properties:
-        eventId:
-          type: string
-        message:
-          type: string
-        level:
-          type: string
-        timestamp:
-          type:
-            - number
-            - string
-      required:
-        - eventId
-        - message
-        - level
-        - timestamp
-      additionalProperties: false
-    DeploymentStepApi.FindStepLog.Response:
-      $ref: '#/components/schemas/CommonDeploymentStepApi.FindStepLog.Response'
   securitySchemes:
     env0 API Key:
       type: http
@@ -3609,6 +3621,732 @@ info:
     url: https://github.com/env0/api/raw/gh-pages/env0-color.png
     altText: env0 logo
 paths:
+  /projects/{id}:
+    delete:
+      operationId: archive
+      summary: Archive a Project
+      description: >-
+        This can not be undone. Running Environments will NOT be destroyed and
+        continuous and scheduled Deployments will continue to occur.
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Projects
+    put:
+      operationId: update
+      summary: Update a Project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectApi.Update.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectApi.Update.Response'
+      tags:
+        - Projects
+    get:
+      operationId: findById
+      summary: Get a Project By ID
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectApi.FindById.Response'
+      tags:
+        - Projects
+  /projects:
+    get:
+      operationId: findByOrganizationId
+      summary: List Projects
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectApi.FindByOrganizationId.Response'
+      tags:
+        - Projects
+    post:
+      operationId: createProject
+      summary: Create a new Project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectApi.CreateProject.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectApi.CreateProject.Response'
+      tags:
+        - Projects
+  /notifications/endpoints:
+    post:
+      operationId: createNotificationEndpoint
+      summary: Create Notification Endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/NotificationsApi.CreateNotificationEndpoint.Request.Body
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/NotificationsApi.CreateNotificationEndpoint.Response
+      tags:
+        - Notifications
+    get:
+      operationId: findNotificationEndpoints
+      summary: List Notification Endpoints
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/NotificationsApi.FindNotificationEndpoints.Response
+      tags:
+        - Notifications
+  /notifications/endpoints/{endpointId}:
+    delete:
+      operationId: deleteNotificationEndpoint
+      summary: Delete Notification Endpoint
+      parameters:
+        - name: endpointId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Notifications
+    patch:
+      operationId: updateNotificationEndpoint
+      summary: Update Notification Endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/NotificationsApi.UpdateNotificationEndpoint.Request.Body
+        description: ''
+      parameters:
+        - name: endpointId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/NotificationsApi.UpdateNotificationEndpoint.Response
+      tags:
+        - Notifications
+  /notifications/projects/{projectId}/endpoints/{endpointId}:
+    put:
+      operationId: updateProjectNotificationSettings
+      summary: Update Notification Settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/NotificationsApi.UpdateProjectNotificationSettings.Request.Body
+        description: ''
+      parameters:
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: endpointId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/NotificationsApi.UpdateProjectNotificationSettings.Response
+      tags:
+        - Notifications
+  /notifications/projects/{projectId}:
+    get:
+      operationId: findProjectNotificationSettings
+      summary: Get Notification Endpoint settings
+      parameters:
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/NotificationsApi.FindProjectNotificationSettings.Response
+      tags:
+        - Notifications
+  /deployments/{deploymentLogId}/steps:
+    get:
+      operationId: findByDeploymentLogId
+      summary: Find all steps by Deployment Id
+      parameters:
+        - name: deploymentLogId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/DeploymentStepApi.FindByDeploymentLogId.Response
+      tags:
+        - Deployment Logs
+  /deployments/{deploymentLogId}/steps/{name}/log:
+    get:
+      operationId: findStepLog
+      summary: Get logs for specific step
+      parameters:
+        - name: name
+          in: path
+          description: >-
+            In order to fetch the available step names first use
+            deployments/{deploymentLogId}/steps end point
+          required: true
+          schema:
+            type: string
+        - name: deploymentLogId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentStepApi.FindStepLog.Response'
+      tags:
+        - Deployment Logs
+  /organizations:
+    post:
+      operationId: createOrganization
+      summary: Create a new Organization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/OrganizationApi.CreateOrganization.Request.Body
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/OrganizationApi.CreateOrganization.Response
+      tags:
+        - Organization
+    get:
+      operationId: findOrganizations
+      summary: List Organizations
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/OrganizationApi.FindOrganizations.Response
+      tags:
+        - Organization
+  /organizations/{id}:
+    get:
+      operationId: findOrganizationById
+      summary: Get Organization
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/OrganizationApi.FindOrganizationById.Response
+      tags:
+        - Organization
+    put:
+      operationId: updateOrganization
+      summary: Update Organization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/OrganizationApi.UpdateOrganization.Request.Body
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/OrganizationApi.UpdateOrganization.Response
+      tags:
+        - Organization
+  /organizations/{id}/policies:
+    post:
+      operationId: updatePolicy
+      summary: Update Policy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationApi.UpdatePolicy.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationApi.UpdatePolicy.Response'
+      tags:
+        - Organization
+  /organizations/{id}/users:
+    get:
+      operationId: getUsers
+      summary: List Users
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: includeApiKeys
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationApi.GetUsers.Response'
+      tags:
+        - Organization
+  /organizations/{id}/users/{userId}:
+    delete:
+      operationId: removeUserFromOrganization
+      summary: Remove User
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Organization
+  /invites:
+    post:
+      operationId: createInvite
+      summary: Invite User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationApi.CreateInvite.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationApi.CreateInvite.Response'
+      tags:
+        - Organization
+  /organizations/{id}/users/{userId}/role:
+    put:
+      operationId: updateRole
+      summary: Update Role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationApi.UpdateRole.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationApi.UpdateRole.Response'
+      tags:
+        - Organization
+  /teams:
+    post:
+      operationId: createTeam
+      summary: Create Team
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamApi.CreateTeam.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamApi.CreateTeam.Response'
+      tags:
+        - Teams
+  /teams/organizations/{organizationId}:
+    get:
+      operationId: getTeams
+      summary: List Teams
+      parameters:
+        - name: organizationId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamApi.GetTeams.Response'
+      tags:
+        - Teams
+  /teams/{teamId}:
+    get:
+      operationId: getTeam
+      summary: Get Team
+      parameters:
+        - name: teamId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamApi.GetTeam.Response'
+      tags:
+        - Teams
+    put:
+      operationId: updateTeam
+      summary: Update Team
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamApi.UpdateTeam.Request.Body'
+        description: ''
+      parameters:
+        - name: teamId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamApi.UpdateTeam.Response'
+      tags:
+        - Teams
+    delete:
+      operationId: deleteTeam
+      summary: Delete Team
+      parameters:
+        - name: teamId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Teams
+  /teams/assignments:
+    get:
+      operationId: getAssignments
+      summary: List Project Teams Permissions
+      parameters:
+        - name: projectId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamApi.GetAssignments.Response'
+      tags:
+        - Teams
+    put:
+      operationId: updateAssignments
+      summary: Update Teams Assignments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamApi.UpdateAssignments.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamApi.UpdateAssignments.Response'
+      tags:
+        - Teams
+    post:
+      operationId: createOrUpdateSingleAssignment
+      summary: Create or Update a single Team to Project Assignment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/TeamApi.CreateOrUpdateSingleAssignment.Request.Body
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/TeamApi.CreateOrUpdateSingleAssignment.Response
+      tags:
+        - Teams
+  /teams/assignments/{assignmentId}:
+    delete:
+      operationId: deleteSingleAssignment
+      summary: Delete a single Team to Project Assignment
+      parameters:
+        - name: assignmentId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Teams
+  /dashboards:
+    get:
+      operationId: query
+      summary: Get query result
+      parameters:
+        - name: queryName
+          in: query
+          description: the query to trigger
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+            enum:
+              - countTeams
+              - countUsers
+              - activeEnvironments
+              - environmentStatus
+              - maxActiveEnvironmentsPerDay
+              - activeEnvironmentsPerDay
+              - countProjects
+              - countTemplates
+              - countDeploymentType
+              - countDeploymentsPerDay
+              - countDeployTypesByUserInTimeRange
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardApi.Query.Response'
+      tags:
+        - Dashboard
   /api-keys:
     post:
       operationId: createApiKey
@@ -3666,35 +4404,15 @@ paths:
           content: {}
       tags:
         - Credentials
-  /dashboards:
+  /scheduling/environments/{id}:
     get:
-      operationId: query
-      summary: Get query result
+      operationId: getScheduleByEnvironmentId
+      summary: Get Environment Scheduling
       parameters:
-        - name: queryName
-          in: query
-          description: the query to trigger
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-            enum:
-              - countTeams
-              - countUsers
-              - activeEnvironments
-              - environmentStatus
-              - maxActiveEnvironmentsPerDay
-              - activeEnvironmentsPerDay
-              - countProjects
-              - countTemplates
-              - countDeploymentType
-              - countDeploymentsPerDay
-              - countDeployTypesByUserInTimeRange
-        - name: organizationId
-          in: query
+        - name: id
+          in: path
           description: ''
           required: true
-          allowEmptyValue: false
           schema:
             type: string
       responses:
@@ -3703,9 +4421,105 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DashboardApi.Query.Response'
+                $ref: >-
+                  #/components/schemas/SchedulingApi.GetScheduleByEnvironmentId.Response
       tags:
-        - Dashboard
+        - Scheduling
+    put:
+      operationId: setEnvironmentSchedule
+      summary: Set Environment Scheduling
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.Body
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Response
+      tags:
+        - Scheduling
+  /scheduling/projects/{id}:
+    get:
+      operationId: getScheduleByProjectId
+      summary: Get Project Scheduling
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/SchedulingApi.GetScheduleByProjectId.Response
+      tags:
+        - Scheduling
+  /scheduling/drift-detection/environments/{id}:
+    get:
+      operationId: getDriftDetectionByEnvironmentId
+      summary: Get Drift Detection Environment Scheduling
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/SchedulingApi.GetDriftDetectionByEnvironmentId.Response
+      tags:
+        - Scheduling
+    patch:
+      operationId: setDriftDetection
+      summary: Set Drift Detection Environment Scheduling
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/SchedulingApi.SetDriftDetection.Request.Body
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchedulingApi.SetDriftDetection.Response'
+      tags:
+        - Scheduling
   /blueprints:
     post:
       operationId: createBlueprint
@@ -4177,6 +4991,402 @@ paths:
                   #/components/schemas/BlueprintApi.ModuleRegistryDownloadSource.Response
       tags:
         - Templates
+  /configuration/{id}:
+    get:
+      operationId: findVariableById
+      summary: Query configuration variable by id
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.FindVariableById.Response
+      tags:
+        - Configuration
+    delete:
+      operationId: deleteVariable
+      summary: Delete a variable
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Configuration
+  /ssh-keys:
+    get:
+      operationId: findSshKeysByOrganization
+      summary: List all available SSH keys
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.FindSshKeysByOrganization.Response
+      tags:
+        - Configuration
+    post:
+      operationId: createSshKey
+      summary: Create a new SSH key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigurationApi.CreateSshKey.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationApi.CreateSshKey.Response'
+      tags:
+        - Configuration
+  /ssh-keys/{id}:
+    delete:
+      operationId: deleteSshKey
+      summary: Delete SSH key
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Configuration
+  /tokens:
+    get:
+      operationId: findTokenByType
+      summary: List git tokens
+      parameters:
+        - name: type
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+            const: GIT
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationApi.FindTokenByType.Response'
+      tags:
+        - Configuration
+    post:
+      operationId: createToken
+      summary: Create a git token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigurationApi.CreateToken.Request.Body'
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationApi.CreateToken.Response'
+      tags:
+        - Configuration
+  /tokens/{id}:
+    get:
+      operationId: findTokenById
+      summary: Get git token by id
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationApi.FindTokenById.Response'
+      tags:
+        - Configuration
+    delete:
+      operationId: deleteToken
+      summary: Delete a git token
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Configuration
+  /configuration:
+    get:
+      operationId: findVariablesByScope
+      summary: List Variables by Scope
+      description: >
+        Lists all variables for the provided scope(s).
+
+        If more than one scope is given - variables will be overridden by lower
+        level scopes - just like env0 does.
+
+        For example - Provided both organizationId and projectId,
+
+        if a variable exists on both scopes, a single instance of it will be
+        returned, with its Project scope value
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: projectId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: blueprintId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: environmentId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: deploymentLogId
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.FindVariablesByScope.Response
+      tags:
+        - Configuration
+    post:
+      operationId: createOrUpdateVariable
+      summary: Create or update variable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Request.Body
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Response
+      tags:
+        - Configuration
+  /credentials:
+    post:
+      operationId: createCredential
+      summary: Create Cloud Provider / Cost Credentials
+      description: >-
+        Create a set of new cloud provider credentials or cost credentials for
+        an Organization which may then be associated with a Project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/ConfigurationApi.CreateCredential.Request.Body
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.CreateCredential.Response
+      tags:
+        - Configuration
+    get:
+      operationId: findCredentials
+      summary: List Organization credentials
+      parameters:
+        - name: organizationId
+          in: query
+          description: ''
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigurationApi.FindCredentials.Response'
+      tags:
+        - Configuration
+  /credentials/{id}:
+    delete:
+      operationId: deleteCredential
+      summary: Delete Credentials
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Configuration
+  /credentials/deployment/{credentialId}/project/{projectId}:
+    delete:
+      operationId: removeDeployCredsFromProject
+      summary: Dissociate credentials with project
+      description: Dissociate cloud provider deployment credentials with Project
+      parameters:
+        - name: credentialId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Status 204 Response
+          content: {}
+      tags:
+        - Configuration
+    put:
+      operationId: addDeployCredsToProject
+      summary: Associate credentials with project
+      description: Associate cloud provider deployment credentials to Project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/ConfigurationApi.AddDeployCredsToProject.Request.Body
+        description: ''
+      parameters:
+        - name: credentialId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.AddDeployCredsToProject.Response
+      tags:
+        - Configuration
+  /credentials/deployment/project/{projectId}:
+    get:
+      operationId: getDeployCredsForProject
+      summary: List deployment a Project's deployment credentials
+      description: List deployment credentials associated with Project
+      parameters:
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.GetDeployCredsForProject.Response
+      tags:
+        - Configuration
   /environments/{id}/downstream:
     put:
       operationId: updateDownstreamEnvironments
@@ -4771,148 +5981,6 @@ paths:
                 $ref: '#/components/schemas/EnvironmentApi.RerunDeployment.Response'
       tags:
         - Environments
-  /notifications/endpoints:
-    post:
-      operationId: createNotificationEndpoint
-      summary: Create Notification Endpoint
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/NotificationsApi.CreateNotificationEndpoint.Request.Body
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/NotificationsApi.CreateNotificationEndpoint.Response
-      tags:
-        - Notifications
-    get:
-      operationId: findNotificationEndpoints
-      summary: List Notification Endpoints
-      parameters:
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/NotificationsApi.FindNotificationEndpoints.Response
-      tags:
-        - Notifications
-  /notifications/endpoints/{endpointId}:
-    delete:
-      operationId: deleteNotificationEndpoint
-      summary: Delete Notification Endpoint
-      parameters:
-        - name: endpointId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Notifications
-    patch:
-      operationId: updateNotificationEndpoint
-      summary: Update Notification Endpoint
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/NotificationsApi.UpdateNotificationEndpoint.Request.Body
-        description: ''
-      parameters:
-        - name: endpointId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/NotificationsApi.UpdateNotificationEndpoint.Response
-      tags:
-        - Notifications
-  /notifications/projects/{projectId}/endpoints/{endpointId}:
-    put:
-      operationId: updateProjectNotificationSettings
-      summary: Update Notification Settings
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/NotificationsApi.UpdateProjectNotificationSettings.Request.Body
-        description: ''
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: endpointId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/NotificationsApi.UpdateProjectNotificationSettings.Response
-      tags:
-        - Notifications
-  /notifications/projects/{projectId}:
-    get:
-      operationId: findProjectNotificationSettings
-      summary: Get Notification Endpoint settings
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/NotificationsApi.FindProjectNotificationSettings.Response
-      tags:
-        - Notifications
   /agents:
     get:
       operationId: listAgents
@@ -5008,218 +6076,6 @@ paths:
                 $ref: '#/components/schemas/AgentSettingsApi.AssignAgents.Response'
       tags:
         - Agents Settings
-  /organizations:
-    post:
-      operationId: createOrganization
-      summary: Create a new Organization
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/OrganizationApi.CreateOrganization.Request.Body
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/OrganizationApi.CreateOrganization.Response
-      tags:
-        - Organization
-    get:
-      operationId: findOrganizations
-      summary: List Organizations
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/OrganizationApi.FindOrganizations.Response
-      tags:
-        - Organization
-  /organizations/{id}:
-    get:
-      operationId: findOrganizationById
-      summary: Get Organization
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/OrganizationApi.FindOrganizationById.Response
-      tags:
-        - Organization
-    put:
-      operationId: updateOrganization
-      summary: Update Organization
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/OrganizationApi.UpdateOrganization.Request.Body
-        description: ''
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/OrganizationApi.UpdateOrganization.Response
-      tags:
-        - Organization
-  /organizations/{id}/policies:
-    post:
-      operationId: updatePolicy
-      summary: Update Policy
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OrganizationApi.UpdatePolicy.Request.Body'
-        description: ''
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrganizationApi.UpdatePolicy.Response'
-      tags:
-        - Organization
-  /organizations/{id}/users:
-    get:
-      operationId: getUsers
-      summary: List Users
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: includeApiKeys
-          in: query
-          description: ''
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrganizationApi.GetUsers.Response'
-      tags:
-        - Organization
-  /organizations/{id}/users/{userId}:
-    delete:
-      operationId: removeUserFromOrganization
-      summary: Remove User
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: userId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Organization
-  /invites:
-    post:
-      operationId: createInvite
-      summary: Invite User
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OrganizationApi.CreateInvite.Request.Body'
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrganizationApi.CreateInvite.Response'
-      tags:
-        - Organization
-  /organizations/{id}/users/{userId}/role:
-    put:
-      operationId: updateRole
-      summary: Update Role
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OrganizationApi.UpdateRole.Request.Body'
-        description: ''
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: userId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrganizationApi.UpdateRole.Response'
-      tags:
-        - Organization
   /costs/project/{projectId}/credentials:
     put:
       operationId: addProjectCostsCredentials
@@ -5403,914 +6259,7 @@ paths:
                 $ref: '#/components/schemas/CostApi.GetProjectCosts.Response'
       tags:
         - Cost
-  /projects/{id}:
-    delete:
-      operationId: archive
-      summary: Archive a Project
-      description: >-
-        This can not be undone. Running Environments will NOT be destroyed and
-        continuous and scheduled Deployments will continue to occur.
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Projects
-    put:
-      operationId: update
-      summary: Update a Project
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProjectApi.Update.Request.Body'
-        description: ''
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectApi.Update.Response'
-      tags:
-        - Projects
-    get:
-      operationId: findById
-      summary: Get a Project By ID
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectApi.FindById.Response'
-      tags:
-        - Projects
-  /projects:
-    get:
-      operationId: findByOrganizationId
-      summary: List Projects
-      parameters:
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectApi.FindByOrganizationId.Response'
-      tags:
-        - Projects
-    post:
-      operationId: createProject
-      summary: Create a new Project
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProjectApi.CreateProject.Request.Body'
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectApi.CreateProject.Response'
-      tags:
-        - Projects
-  /scheduling/environments/{id}:
-    get:
-      operationId: getScheduleByEnvironmentId
-      summary: Get Environment Scheduling
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/SchedulingApi.GetScheduleByEnvironmentId.Response
-      tags:
-        - Scheduling
-    put:
-      operationId: setEnvironmentSchedule
-      summary: Set Environment Scheduling
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Request.Body
-        description: ''
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/SchedulingApi.SetEnvironmentSchedule.Response
-      tags:
-        - Scheduling
-  /scheduling/projects/{id}:
-    get:
-      operationId: getScheduleByProjectId
-      summary: Get Project Scheduling
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/SchedulingApi.GetScheduleByProjectId.Response
-      tags:
-        - Scheduling
-  /scheduling/drift-detection/environments/{id}:
-    get:
-      operationId: getDriftDetectionByEnvironmentId
-      summary: Get Drift Detection Environment Scheduling
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/SchedulingApi.GetDriftDetectionByEnvironmentId.Response
-      tags:
-        - Scheduling
-    patch:
-      operationId: setDriftDetection
-      summary: Set Drift Detection Environment Scheduling
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/SchedulingApi.SetDriftDetection.Request.Body
-        description: ''
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SchedulingApi.SetDriftDetection.Response'
-      tags:
-        - Scheduling
-  /teams:
-    post:
-      operationId: createTeam
-      summary: Create Team
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TeamApi.CreateTeam.Request.Body'
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TeamApi.CreateTeam.Response'
-      tags:
-        - Teams
-  /teams/organizations/{organizationId}:
-    get:
-      operationId: getTeams
-      summary: List Teams
-      parameters:
-        - name: organizationId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TeamApi.GetTeams.Response'
-      tags:
-        - Teams
-  /teams/{teamId}:
-    get:
-      operationId: getTeam
-      summary: Get Team
-      parameters:
-        - name: teamId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TeamApi.GetTeam.Response'
-      tags:
-        - Teams
-    put:
-      operationId: updateTeam
-      summary: Update Team
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TeamApi.UpdateTeam.Request.Body'
-        description: ''
-      parameters:
-        - name: teamId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TeamApi.UpdateTeam.Response'
-      tags:
-        - Teams
-    delete:
-      operationId: deleteTeam
-      summary: Delete Team
-      parameters:
-        - name: teamId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Teams
-  /teams/assignments:
-    get:
-      operationId: getAssignments
-      summary: List Project Teams Permissions
-      parameters:
-        - name: projectId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TeamApi.GetAssignments.Response'
-      tags:
-        - Teams
-    put:
-      operationId: updateAssignments
-      summary: Update Teams Assignments
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TeamApi.UpdateAssignments.Request.Body'
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TeamApi.UpdateAssignments.Response'
-      tags:
-        - Teams
-    post:
-      operationId: createOrUpdateSingleAssignment
-      summary: Create or Update a single Team to Project Assignment
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/TeamApi.CreateOrUpdateSingleAssignment.Request.Body
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/TeamApi.CreateOrUpdateSingleAssignment.Response
-      tags:
-        - Teams
-  /teams/assignments/{assignmentId}:
-    delete:
-      operationId: deleteSingleAssignment
-      summary: Delete a single Team to Project Assignment
-      parameters:
-        - name: assignmentId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Teams
-  /configuration/{id}:
-    get:
-      operationId: findVariableById
-      summary: Query configuration variable by id
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.FindVariableById.Response
-      tags:
-        - Configuration
-    delete:
-      operationId: deleteVariable
-      summary: Delete a variable
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Configuration
-  /ssh-keys:
-    get:
-      operationId: findSshKeysByOrganization
-      summary: List all available SSH keys
-      parameters:
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.FindSshKeysByOrganization.Response
-      tags:
-        - Configuration
-    post:
-      operationId: createSshKey
-      summary: Create a new SSH key
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ConfigurationApi.CreateSshKey.Request.Body'
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConfigurationApi.CreateSshKey.Response'
-      tags:
-        - Configuration
-  /ssh-keys/{id}:
-    delete:
-      operationId: deleteSshKey
-      summary: Delete SSH key
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Configuration
-  /tokens:
-    get:
-      operationId: findTokenByType
-      summary: List git tokens
-      parameters:
-        - name: type
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-            const: GIT
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConfigurationApi.FindTokenByType.Response'
-      tags:
-        - Configuration
-    post:
-      operationId: createToken
-      summary: Create a git token
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ConfigurationApi.CreateToken.Request.Body'
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConfigurationApi.CreateToken.Response'
-      tags:
-        - Configuration
-  /tokens/{id}:
-    get:
-      operationId: findTokenById
-      summary: Get git token by id
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConfigurationApi.FindTokenById.Response'
-      tags:
-        - Configuration
-    delete:
-      operationId: deleteToken
-      summary: Delete a git token
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Configuration
-  /configuration:
-    get:
-      operationId: findVariablesByScope
-      summary: List Variables by Scope
-      description: >
-        Lists all variables for the provided scope(s).
-
-        If more than one scope is given - variables will be overridden by lower
-        level scopes - just like env0 does.
-
-        For example - Provided both organizationId and projectId,
-
-        if a variable exists on both scopes, a single instance of it will be
-        returned, with its Project scope value
-      parameters:
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-        - name: projectId
-          in: query
-          description: ''
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-        - name: blueprintId
-          in: query
-          description: ''
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-        - name: environmentId
-          in: query
-          description: ''
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-        - name: deploymentLogId
-          in: query
-          description: ''
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.FindVariablesByScope.Response
-      tags:
-        - Configuration
-    post:
-      operationId: createOrUpdateVariable
-      summary: Create or update variable
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Request.Body
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.CreateOrUpdateVariable.Response
-      tags:
-        - Configuration
-  /credentials:
-    post:
-      operationId: createCredential
-      summary: Create Cloud Provider / Cost Credentials
-      description: >-
-        Create a set of new cloud provider credentials or cost credentials for
-        an Organization which may then be associated with a Project
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/ConfigurationApi.CreateCredential.Request.Body
-        description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.CreateCredential.Response
-      tags:
-        - Configuration
-    get:
-      operationId: findCredentials
-      summary: List Organization credentials
-      parameters:
-        - name: organizationId
-          in: query
-          description: ''
-          required: true
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ConfigurationApi.FindCredentials.Response'
-      tags:
-        - Configuration
-  /credentials/{id}:
-    delete:
-      operationId: deleteCredential
-      summary: Delete Credentials
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Configuration
-  /credentials/deployment/{credentialId}/project/{projectId}:
-    delete:
-      operationId: removeDeployCredsFromProject
-      summary: Dissociate credentials with project
-      description: Dissociate cloud provider deployment credentials with Project
-      parameters:
-        - name: credentialId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Status 204 Response
-          content: {}
-      tags:
-        - Configuration
-    put:
-      operationId: addDeployCredsToProject
-      summary: Associate credentials with project
-      description: Associate cloud provider deployment credentials to Project
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: >-
-                #/components/schemas/ConfigurationApi.AddDeployCredsToProject.Request.Body
-        description: ''
-      parameters:
-        - name: credentialId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.AddDeployCredsToProject.Response
-      tags:
-        - Configuration
-  /credentials/deployment/project/{projectId}:
-    get:
-      operationId: getDeployCredsForProject
-      summary: List deployment a Project's deployment credentials
-      description: List deployment credentials associated with Project
-      parameters:
-        - name: projectId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/ConfigurationApi.GetDeployCredsForProject.Response
-      tags:
-        - Configuration
-  /deployments/{deploymentLogId}/steps:
-    get:
-      operationId: findByDeploymentLogId
-      summary: Find all steps by Deployment Id
-      parameters:
-        - name: deploymentLogId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/DeploymentStepApi.FindByDeploymentLogId.Response
-      tags:
-        - Deployment Logs
-  /deployments/{deploymentLogId}/steps/{name}/log:
-    get:
-      operationId: findStepLog
-      summary: Get logs for specific step
-      parameters:
-        - name: name
-          in: path
-          description: >-
-            In order to fetch the available step names first use
-            deployments/{deploymentLogId}/steps end point
-          required: true
-          schema:
-            type: string
-        - name: deploymentLogId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeploymentStepApi.FindStepLog.Response'
-      tags:
-        - Deployment Logs
 tags:
-  - name: Credentials
-    description: >
-      Authentication against the env0 API is done via API Keys.
-
-
-      An API Key is created by an organization administrator, but is not
-      connected to any specific user when it's being used. 
-
-
-      More on https://docs.env0.com/reference/authentication
-  - name: Dashboard
-    description: |
-      This API covers all dashboard queries
-  - name: Templates
-    description: >
-      A template in env0 defines a type of environment that can be deployed.
-
-      Click Run Now on a template to create a new environment.
-
-      A template consists of a name, a description, a valid set of configuration
-      files describing the deployment, and a set of Variables and Secrets.
-
-      More on https://docs.env0.com/docs/templates
-  - name: Modules
-    description: Module Registry endpoints
-  - name: Environments
-    description: |
-      An environment is an entity representing a deployment managed by env0.
-
-      Your users manage their environments in env0 in Projects.
-      They can create, destroy, and redeploy environments.
-
-      More on https://docs.env0.com/docs/environments
-  - name: Notifications
-    description: >
-      env0 can send notifications for deployment events to your Slack or
-      Microsoft Teams workspace.
-
-      You can define several Notification Targets, corresponding to different
-      channels.
-
-      You can also associate these Notification Targets to different env0
-      projects, controlling which events go to which channel.
-
-      More on https://docs.env0.com/docs/notifications
-  - name: Agents Settings
-    description: ''
-  - name: Organization
-    description: >
-      An Organization is the highest level logical entity in env0.
-
-
-      All Projects, Templates, Variable, Policies, and Environments, are defined
-      for a specific organization. Organizations are logically separate from
-      each other, and do not share any entities.
-
-      More on https://docs.env0.com/docs/organizations
-  - name: Cost
-    description: >
-      With cost monitoring enabled in env0, you will be able to see how much
-      each Environment you are running costs.
-
-      More on https://docs.env0.com/docs/cost-monitoring
   - name: Projects
     description: >
       Projects are used in env0 to provide granular access control to
@@ -6326,6 +6275,56 @@ tags:
       environments, each with its own access rights and policies.
 
       More on https://docs.env0.com/docs/projects
+  - name: Notifications
+    description: >
+      env0 can send notifications for deployment events to your Slack or
+      Microsoft Teams workspace.
+
+      You can define several Notification Targets, corresponding to different
+      channels.
+
+      You can also associate these Notification Targets to different env0
+      projects, controlling which events go to which channel.
+
+      More on https://docs.env0.com/docs/notifications
+  - name: Deployment Logs
+    description: |
+      env0 deployment consists of steps such as Init Variables
+      using this API you can reterive information about those steps
+  - name: Deployment Logs
+    description: The Deployment Logs Endpoint by steps
+  - name: Organization
+    description: >
+      An Organization is the highest level logical entity in env0.
+
+
+      All Projects, Templates, Variable, Policies, and Environments, are defined
+      for a specific organization. Organizations are logically separate from
+      each other, and do not share any entities.
+
+      More on https://docs.env0.com/docs/organizations
+  - name: Teams
+    description: >
+      Teams allow you to more easily manage your project level permissions in
+      env0 by setting the role for an entire group of users as a single entity.
+
+      A team belongs to a single Organization, are managed at the Organization
+      Settings level, and are not shared between multiple organizations
+
+      More on https://docs.env0.com/docs/teams
+  - name: Dashboard
+    description: |
+      This API covers all dashboard queries
+  - name: Credentials
+    description: >
+      Authentication against the env0 API is done via API Keys.
+
+
+      An API Key is created by an organization administrator, but is not
+      connected to any specific user when it's being used. 
+
+
+      More on https://docs.env0.com/reference/authentication
   - name: Scheduling
     description: >
       Scheduling allows you to automatically trigger destroys and deploys of
@@ -6336,25 +6335,38 @@ tags:
 
 
       More on https://docs.env0.com/docs/scheduling
-  - name: Teams
+  - name: Templates
     description: >
-      Teams allow you to more easily manage your project level permissions in
-      env0 by setting the role for an entire group of users as a single entity.
+      A template in env0 defines a type of environment that can be deployed.
 
-      A team belongs to a single Organization, are managed at the Organization
-      Settings level, and are not shared between multiple organizations
+      Click Run Now on a template to create a new environment.
 
-      More on https://docs.env0.com/docs/teams
+      A template consists of a name, a description, a valid set of configuration
+      files describing the deployment, and a set of Variables and Secrets.
+
+      More on https://docs.env0.com/docs/templates
+  - name: Modules
+    description: Module Registry endpoints
   - name: Configuration
     description: >
       This API covers all deployment Configuration including: Variables, Tokens,
       SSH Keys and Deployment Credentials
-  - name: Deployment Logs
+  - name: Environments
     description: |
-      env0 deployment consists of steps such as Init Variables
-      using this API you can reterive information about those steps
-  - name: Deployment Logs
-    description: The Deployment Logs Endpoint by steps
+      An environment is an entity representing a deployment managed by env0.
+
+      Your users manage their environments in env0 in Projects.
+      They can create, destroy, and redeploy environments.
+
+      More on https://docs.env0.com/docs/environments
+  - name: Agents Settings
+    description: ''
+  - name: Cost
+    description: >
+      With cost monitoring enabled in env0, you will be able to see how much
+      each Environment you are running costs.
+
+      More on https://docs.env0.com/docs/cost-monitoring
 servers:
   - url: https://api.env0.com
 security:
