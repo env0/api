@@ -76,6 +76,10 @@ components:
         - Deployer
         - Planner
         - Viewer
+        - Admin
+        - Deployer
+        - Planner
+        - Viewer
     ProjectApi.Update.Response:
       $ref: '#/components/schemas/ProjectApi.Project'
     ProjectApi.FindById.Response:
@@ -453,6 +457,9 @@ components:
         - ModuleReader
         - User
         - Admin
+        - ModuleReader
+        - User
+        - Admin
     OrganizationApi.FindOrganizationById.Response:
       $ref: '#/components/schemas/OrganizationApi.Organization'
     OrganizationApi.FindOrganizations.Response:
@@ -571,6 +578,7 @@ components:
             $ref: '#/components/schemas/OrganizationApi.ProjectPermission'
       required:
         - organizationRole
+        - organizationRole
       additionalProperties: false
     OrganizationApi.ProjectPermission:
       type: object
@@ -580,6 +588,8 @@ components:
         projectRole:
           $ref: '#/components/schemas/ProjectRoles'
       required:
+        - projectId
+        - projectRole
         - projectId
         - projectRole
       additionalProperties: false
@@ -1060,6 +1070,8 @@ components:
           type: string
         organizationId:
           type: string
+        permissions:
+          $ref: '#/components/schemas/OrganizationApi.Permissions'
       required:
         - name
         - organizationId
@@ -1217,6 +1229,37 @@ components:
         - $ref: '#/components/schemas/BlueprintApi.BackwardCompatibleTFVersionType'
     BlueprintApi.BackwardCompatibleTFVersionType:
       type: 'null'
+    BlueprintApi.IacVersion:
+      type: object
+      properties:
+        pulumi:
+          anyOf:
+            - $ref: '#/components/schemas/BlueprintApi.TerragruntVersionType'
+            - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
+            - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
+        k8s:
+          anyOf:
+            - $ref: '#/components/schemas/BlueprintApi.TerragruntVersionType'
+            - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
+            - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
+      additionalProperties:
+        anyOf:
+          - $ref: '#/components/schemas/BlueprintApi.TerragruntVersionType'
+          - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
+          - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
+    BlueprintApi.TerragruntVersionType:
+      type: object
+      properties:
+        terraform:
+          $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
+        terragrunt:
+          $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
+      required:
+        - terraform
+        - terragrunt
+      additionalProperties: false
+    BlueprintApi.PulumiVersionType:
+      type: string
     BlueprintApi.SshKey:
       type: object
       properties:
@@ -1308,6 +1351,8 @@ components:
           type: string
         terragruntVersion:
           type: string
+        iacVersion:
+          $ref: '#/components/schemas/BlueprintApi.IacVersion'
         tokenId:
           type: string
         tokenName:
@@ -1396,6 +1441,8 @@ components:
             using tfenv's 'min-required'
         terragruntVersion:
           type: string
+        iacVersion:
+          $ref: '#/components/schemas/BlueprintApi.IacVersion'
         tokenId:
           type: string
         tokenName:
@@ -1458,6 +1505,8 @@ components:
             using tfenv's 'min-required'
         terragruntVersion:
           type: string
+        iacVersion:
+          $ref: '#/components/schemas/BlueprintApi.IacVersion'
         tokenId:
           type: string
         tokenName:
@@ -1565,6 +1614,8 @@ components:
             using tfenv's 'min-required'
         terragruntVersion:
           type: string
+        iacVersion:
+          $ref: '#/components/schemas/BlueprintApi.IacVersion'
         tokenId:
           type: string
         tokenName:
@@ -1667,7 +1718,6 @@ components:
           $ref: '#/components/schemas/PartialJSONSchema7'
         description:
           type: string
-          maxLength: 255
       required:
         - name
         - scope
@@ -2057,7 +2107,6 @@ components:
           $ref: '#/components/schemas/PartialJSONSchema7'
         description:
           type: string
-          maxLength: 255
       additionalProperties: false
     ConfigurationApi.FindVariableById.Response:
       $ref: '#/components/schemas/ConfigurationPropertyResponse'
@@ -2252,7 +2301,6 @@ components:
           $ref: '#/components/schemas/PartialJSONSchema7'
         description:
           type: string
-          maxLength: 255
       required:
         - name
         - organizationId
@@ -2315,7 +2363,6 @@ components:
           $ref: '#/components/schemas/PartialJSONSchema7'
         description:
           type: string
-          maxLength: 255
       required:
         - name
         - scope
@@ -2598,7 +2645,6 @@ components:
           $ref: '#/components/schemas/PartialJSONSchema7'
         description:
           type: string
-          maxLength: 255
       required:
         - name
         - type
@@ -3289,6 +3335,14 @@ components:
           $comment: >-
             { "schema": { "anyOf": [{ "type": "integer", "minimum": 1 }, {
             "type": "null" }] } }
+        maxTtl:
+          type:
+            - string
+            - 'null'
+        defaultTtl:
+          type:
+            - string
+            - 'null'
         requiresApprovalDefault:
           type: boolean
         includeCostEstimation:
@@ -3311,6 +3365,8 @@ components:
       properties:
         id:
           type: string
+        updatedBy:
+          type: string
         projectId:
           type: string
         numberOfEnvironments:
@@ -3320,6 +3376,14 @@ components:
         numberOfEnvironmentsTotal:
           type:
             - number
+            - 'null'
+        maxTtl:
+          type:
+            - string
+            - 'null'
+        defaultTtl:
+          type:
+            - string
             - 'null'
         requiresApprovalDefault:
           type: boolean
@@ -3331,23 +3395,23 @@ components:
           type: boolean
         skipRedundantDeployments:
           type: boolean
-        updatedBy:
-          type: string
         runPullRequestPlanDefault:
           type: boolean
         continuousDeploymentDefault:
           type: boolean
       required:
         - id
+        - updatedBy
         - projectId
         - numberOfEnvironments
         - numberOfEnvironmentsTotal
+        - maxTtl
+        - defaultTtl
         - requiresApprovalDefault
         - includeCostEstimation
         - skipApplyWhenPlanIsEmpty
         - disableDestroyEnvironments
         - skipRedundantDeployments
-        - updatedBy
         - runPullRequestPlanDefault
         - continuousDeploymentDefault
       additionalProperties: false
