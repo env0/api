@@ -3202,6 +3202,26 @@ components:
       required:
         - id
       additionalProperties: false
+    EnvironmentApi.BatchCancel.Request.Body:
+      type: 'null'
+    EnvironmentApi.BatchCancel.Response:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+      required:
+        - ids
+      additionalProperties: false
+    EnvironmentApi.BatchCancel.Request.QueryParams:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/EnvironmentApi.DeploymentLogStatus'
+      required:
+        - status
+      additionalProperties: false
     EnvironmentApi.Abort.Request.Body:
       type: 'null'
     EnvironmentApi.Abort.Response:
@@ -5744,6 +5764,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EnvironmentApi.Cancel.Response'
+      tags:
+        - Environments
+  /environments/{id}/deployments/cancel:
+    put:
+      operationId: batchCancel
+      summary: Batch Cancel Deployments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnvironmentApi.BatchCancel.Request.Body'
+        description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Cancel deployments with this status
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+            enum:
+              - IN_PROGRESS
+              - WAITING_FOR_USER
+              - TIMEOUT
+              - FAILURE
+              - SUCCESS
+              - CANCELLED
+              - INTERNAL_FAILURE
+              - ABORTING
+              - ABORTED
+              - QUEUED
+              - SKIPPED
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentApi.BatchCancel.Response'
       tags:
         - Environments
   /environments/deployments/{id}/abort:
