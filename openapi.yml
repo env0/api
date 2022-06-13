@@ -1230,36 +1230,36 @@ components:
     BlueprintApi.BackwardCompatibleTFVersionType:
       type: 'null'
     BlueprintApi.IacVersion:
-      type: object
-      properties:
-        pulumi:
-          anyOf:
-            - $ref: '#/components/schemas/BlueprintApi.TerragruntVersionType'
-            - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
-            - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
-        k8s:
-          anyOf:
-            - $ref: '#/components/schemas/BlueprintApi.TerragruntVersionType'
-            - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
-            - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
-      additionalProperties:
-        anyOf:
-          - $ref: '#/components/schemas/BlueprintApi.TerragruntVersionType'
-          - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
-          - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
+      anyOf:
+        - type: object
+          properties:
+            terraform:
+              anyOf:
+                - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
+                - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
+            pulumi:
+              anyOf:
+                - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
+                - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
+            k8s:
+              anyOf:
+                - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
+                - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
+          additionalProperties: false
+        - $ref: '#/components/schemas/BlueprintApi.TerragruntVersionType'
+    BlueprintApi.PulumiVersionType:
+      type: string
     BlueprintApi.TerragruntVersionType:
       type: object
       properties:
         terraform:
           $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
         terragrunt:
-          $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
+          type: string
       required:
         - terraform
         - terragrunt
       additionalProperties: false
-    BlueprintApi.PulumiVersionType:
-      type: string
     BlueprintApi.SshKey:
       type: object
       properties:
@@ -1304,23 +1304,21 @@ components:
       const: module
     BlueprintApi.IacType:
       anyOf:
-        - $ref: '#/components/schemas/BlueprintApi.TerraformTemplateType'
+        - $ref: '#/components/schemas/BlueprintApi.SingleVersionIacs'
         - type: string
-          const: pulumi
+          const: terragrunt
+        - $ref: '#/components/schemas/BlueprintApi.SingleVersionIacs'
         - type: string
-          const: k8s
-        - $ref: '#/components/schemas/BlueprintApi.TerraformTemplateType'
-        - type: string
-          const: pulumi
-        - type: string
-          const: k8s
-    BlueprintApi.TerraformTemplateType:
+          const: terragrunt
+    BlueprintApi.SingleVersionIacs:
       type: string
       enum:
         - terraform
-        - terragrunt
+        - pulumi
+        - k8s
         - terraform
-        - terragrunt
+        - pulumi
+        - k8s
     BlueprintApi.CreateBlueprint.Request.Body:
       type: object
       additionalProperties: false
