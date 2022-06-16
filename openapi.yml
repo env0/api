@@ -652,7 +652,7 @@ components:
         blueprintPath:
           type: string
         blueprintType:
-          $ref: '#/components/schemas/BlueprintApi.IacType'
+          $ref: '#/components/schemas/BlueprintApi.DeployableType'
         environmentId:
           type: string
         resourceCount:
@@ -802,6 +802,14 @@ components:
         - ABORTED
         - QUEUED
         - SKIPPED
+    BlueprintApi.DeployableType:
+      anyOf:
+        - $ref: '#/components/schemas/BlueprintApi.IacType'
+        - type: string
+          const: workflow
+        - $ref: '#/components/schemas/BlueprintApi.IacType'
+        - type: string
+          const: workflow
     BlueprintApi.IacType:
       anyOf:
         - $ref: '#/components/schemas/BlueprintApi.SingleVersionIacs'
@@ -2238,10 +2246,8 @@ components:
       additionalProperties: false
     BlueprintApi.BlueprintType:
       anyOf:
+        - $ref: '#/components/schemas/BlueprintApi.DeployableType'
         - $ref: '#/components/schemas/BlueprintApi.ModuleType'
-        - $ref: '#/components/schemas/BlueprintApi.IacType'
-        - type: string
-          const: complex
     BlueprintApi.ModuleType:
       type: string
       const: module
