@@ -3425,6 +3425,50 @@ components:
       additionalProperties: false
     ConfigurationApi.CreateCredential.Response:
       $ref: '#/components/schemas/CredentialWithoutValue'
+    ConfigurationApi.UpdateCredential.Request.Body:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/CredentialType'
+        createdByUser:
+          $ref: '#/components/schemas/User'
+        value:
+          type: object
+          description: >-
+            A JSON string representation of the cloud provider credentials.
+
+            - For AWS_ASSUMED_ROLE_FOR_DEPLOYMENT and AWS_ASSUMED_ROLE types
+            use:
+
+            { roleArn: "your-role-arn", externalId: "your-external-id" }
+
+
+            - For GCP_CREDENTIALS type use:
+
+            { tableId: "your-table-id", secret: "your-secret" }
+
+
+            - For AZURE_CREDENTIALS type use:
+
+            { clientId: "your-clientId", clientSecret: "your-clientSecret",
+            tenantId: "your-tenantId", subscriptionId: "your-subscriptionId" }
+        name:
+          type: string
+        organizationId:
+          type: string
+        sensitiveValueSalt:
+          type: string
+      additionalProperties: false
+    ConfigurationApi.UpdateCredential.Response:
+      $ref: '#/components/schemas/CredentialWithoutValue'
+    ConfigurationApi.UpdateCredential.Request.PathParams:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+      additionalProperties: false
     ConfigurationApi.FindCredentials.Response:
       type: array
       items:
@@ -5997,6 +6041,28 @@ paths:
       tags:
         - Configuration
   /credentials/{id}:
+    patch:
+      operationId: updateCredential
+      summary: Update Cloud Credentials
+      description: Update cloud credentials or cost credentials for an organization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/ConfigurationApi.UpdateCredential.Request.Body
+        description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ConfigurationApi.UpdateCredential.Response
+      tags:
+        - Configuration
     delete:
       operationId: deleteCredential
       summary: Delete Credentials
