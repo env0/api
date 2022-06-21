@@ -547,7 +547,7 @@ components:
           type: string
         isSingleUseBlueprint:
           type: boolean
-        complexEnvironmentId:
+        workflowEnvironmentId:
           type: string
       required:
         - name
