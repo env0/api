@@ -1021,7 +1021,8 @@ components:
         workflowDeploymentId:
           type: string
         workflowFile:
-          $ref: '#/components/schemas/EnvironmentApi.ComplexEnvironments.WorkflowFile'
+          $ref: >-
+            #/components/schemas/EnvironmentApi.WorkflowEnvironments.WorkflowFile
       required:
         - type
         - startedBy
@@ -1268,18 +1269,18 @@ components:
         - changed
         - destroyed
       additionalProperties: false
-    EnvironmentApi.ComplexEnvironments.WorkflowFile:
+    EnvironmentApi.WorkflowEnvironments.WorkflowFile:
       type: object
       properties:
         environments:
           type: object
           additionalProperties:
             $ref: >-
-              #/components/schemas/EnvironmentApi.ComplexEnvironments.WorkflowSubEnvironment
+              #/components/schemas/EnvironmentApi.WorkflowEnvironments.WorkflowSubEnvironment
       required:
         - environments
       additionalProperties: false
-    EnvironmentApi.ComplexEnvironments.WorkflowSubEnvironment:
+    EnvironmentApi.WorkflowEnvironments.WorkflowSubEnvironment:
       type: object
       additionalProperties: false
       properties:
@@ -2364,37 +2365,8 @@ components:
         - $ref: '#/components/schemas/BlueprintApi.BackwardCompatibleTFVersionType'
     BlueprintApi.BackwardCompatibleTFVersionType:
       type: 'null'
-    BlueprintApi.IacVersion:
-      anyOf:
-        - type: object
-          properties:
-            terraform:
-              anyOf:
-                - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
-                - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
-            pulumi:
-              anyOf:
-                - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
-                - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
-            k8s:
-              anyOf:
-                - $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
-                - $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
-          additionalProperties: false
-        - $ref: '#/components/schemas/BlueprintApi.TerragruntVersionType'
     BlueprintApi.PulumiVersionType:
       type: string
-    BlueprintApi.TerragruntVersionType:
-      type: object
-      properties:
-        terraform:
-          $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
-        terragrunt:
-          type: string
-      required:
-        - terraform
-        - terragrunt
-      additionalProperties: false
     BlueprintApi.SshKey:
       type: object
       properties:
@@ -2465,8 +2437,8 @@ components:
           type: string
         terragruntVersion:
           type: string
-        iacVersion:
-          $ref: '#/components/schemas/BlueprintApi.IacVersion'
+        pulumiVersion:
+          $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
         tokenId:
           type: string
         tokenName:
@@ -2555,8 +2527,8 @@ components:
             using tfenv's 'min-required'
         terragruntVersion:
           type: string
-        iacVersion:
-          $ref: '#/components/schemas/BlueprintApi.IacVersion'
+        pulumiVersion:
+          $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
         tokenId:
           type: string
         tokenName:
@@ -2619,8 +2591,8 @@ components:
             using tfenv's 'min-required'
         terragruntVersion:
           type: string
-        iacVersion:
-          $ref: '#/components/schemas/BlueprintApi.IacVersion'
+        pulumiVersion:
+          $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
         tokenId:
           type: string
         tokenName:
@@ -2728,8 +2700,8 @@ components:
             using tfenv's 'min-required'
         terragruntVersion:
           type: string
-        iacVersion:
-          $ref: '#/components/schemas/BlueprintApi.IacVersion'
+        pulumiVersion:
+          $ref: '#/components/schemas/BlueprintApi.PulumiVersionType'
         tokenId:
           type: string
         tokenName:
