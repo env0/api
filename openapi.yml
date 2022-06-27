@@ -2465,6 +2465,8 @@ components:
           type: boolean
         isGitLab:
           type: boolean
+        isTerragruntRunAll:
+          type: boolean
         type:
           $ref: '#/components/schemas/BlueprintApi.BlueprintType'
         projectIds:
@@ -2555,6 +2557,8 @@ components:
           type: boolean
         isGitLab:
           type: boolean
+        isTerragruntRunAll:
+          type: boolean
         type:
           $ref: '#/components/schemas/BlueprintApi.BlueprintType'
         isSingleUse:
@@ -2618,6 +2622,8 @@ components:
         isGitHubEnterprise:
           type: boolean
         isGitLab:
+          type: boolean
+        isTerragruntRunAll:
           type: boolean
         type:
           $ref: '#/components/schemas/BlueprintApi.BlueprintType'
@@ -2727,6 +2733,8 @@ components:
         isGitHubEnterprise:
           type: boolean
         isGitLab:
+          type: boolean
+        isTerragruntRunAll:
           type: boolean
         type:
           $ref: '#/components/schemas/BlueprintApi.BlueprintType'
