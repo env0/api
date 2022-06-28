@@ -961,8 +961,13 @@ components:
           type: string
           format: date-time
         output:
-          type: object
-          additionalProperties: {}
+          anyOf:
+            - type: object
+              additionalProperties: {}
+            - type: array
+              items:
+                type: object
+                additionalProperties: {}
         error:
           type: object
           additionalProperties: {}
