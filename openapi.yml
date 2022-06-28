@@ -1158,9 +1158,11 @@ components:
         - terraform
         - pulumi
         - k8s
+        - cloudformation
         - terraform
         - pulumi
         - k8s
+        - cloudformation
     EnvironmentApi.EnvironmentResource:
       type: object
       properties:
