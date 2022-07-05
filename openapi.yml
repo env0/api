@@ -735,8 +735,6 @@ components:
     DeployRequest:
       type: object
       properties:
-        transactionId:
-          type: string
         workflowDeploymentId:
           type: string
         deploymentType:
@@ -1420,8 +1418,6 @@ components:
       properties:
         triggerName:
           $ref: '#/components/schemas/TriggerName'
-        transactionId:
-          type: string
         workflowDeploymentId:
           type: string
       additionalProperties: false
@@ -1476,8 +1472,6 @@ components:
           type: string
         offset:
           type: string
-    EnvironmentApi.FindTransactionSubDeploymentLog.Response:
-      $ref: '#/components/schemas/EnvironmentApi.DeploymentLog'
     EnvironmentApi.FindSubDeploymentLog.Response:
       $ref: '#/components/schemas/EnvironmentApi.DeploymentLog'
     EnvironmentApi.FindById.Response:
@@ -4795,35 +4789,6 @@ paths:
               schema:
                 $ref: >-
                   #/components/schemas/EnvironmentApi.FindDeploymentLogById.Response
-      tags:
-        - Environments
-  /transactions/{transactionId}/environments/{environmentId}:
-    get:
-      operationId: findTransactionSubDeploymentLog
-      summary: >-
-        Get Sub Deployment Log In A Transaction By Transaction Id And
-        Environment Id
-      parameters:
-        - name: transactionId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: environmentId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/EnvironmentApi.FindTransactionSubDeploymentLog.Response
       tags:
         - Environments
   /workflow-deployments/{workflowDeploymentId}/sub-environments/{subEnvironmentId}/deployment:
