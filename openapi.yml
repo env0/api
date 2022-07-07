@@ -2458,6 +2458,8 @@ components:
           type: string
         path:
           type: string
+        fileName:
+          type: string
         terragruntVersion:
           type: string
         pulumiVersion:
@@ -2544,6 +2546,8 @@ components:
           type: string
         path:
           type: string
+        fileName:
+          type: string
         terraformVersion:
           $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
           description: >-
@@ -2609,6 +2613,8 @@ components:
         revision:
           type: string
         path:
+          type: string
+        fileName:
           type: string
         terraformVersion:
           $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
@@ -2720,6 +2726,8 @@ components:
         revision:
           type: string
         path:
+          type: string
+        fileName:
           type: string
         terraformVersion:
           $ref: '#/components/schemas/BlueprintApi.TerraformVersion'
