@@ -3218,8 +3218,8 @@ components:
       $ref: '#/components/schemas/ProjectApi.Project'
     DashboardApi.Query.MaxActiveEnvironmentsPerDay.Response:
       $ref: >-
-        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7522-7553-api.d.ts-7507-7554-api.d.ts-7477-7555-api.d.ts-7320-7561-api.d.ts-7270-7561-api.d.ts-231-9986-api.d.ts-206-9986-api.d.ts-204-9988-api.d.ts-121-9988-api.d.ts-0-9989%3E
-    DashboardApi.Query.Base.Response<structure-api.d.ts-7522-7553-api.d.ts-7507-7554-api.d.ts-7477-7555-api.d.ts-7320-7561-api.d.ts-7270-7561-api.d.ts-231-9986-api.d.ts-206-9986-api.d.ts-204-9988-api.d.ts-121-9988-api.d.ts-0-9989>:
+        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7534-7565-api.d.ts-7519-7566-api.d.ts-7489-7567-api.d.ts-7332-7573-api.d.ts-7282-7573-api.d.ts-231-9998-api.d.ts-206-9998-api.d.ts-204-10000-api.d.ts-121-10000-api.d.ts-0-10001%3E
+    DashboardApi.Query.Base.Response<structure-api.d.ts-7534-7565-api.d.ts-7519-7566-api.d.ts-7489-7567-api.d.ts-7332-7573-api.d.ts-7282-7573-api.d.ts-231-9998-api.d.ts-206-9998-api.d.ts-204-10000-api.d.ts-121-10000-api.d.ts-0-10001>:
       type: array
       items:
         type: object
@@ -3234,8 +3234,8 @@ components:
         additionalProperties: false
     DashboardApi.Query.ActiveEnvironmentsPerDay.Response:
       $ref: >-
-        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7807-8143-api.d.ts-7792-8144-api.d.ts-7762-8145-api.d.ts-7608-8151-api.d.ts-7561-8151-api.d.ts-231-9986-api.d.ts-206-9986-api.d.ts-204-9988-api.d.ts-121-9988-api.d.ts-0-9989%3E
-    DashboardApi.Query.Base.Response<structure-api.d.ts-7807-8143-api.d.ts-7792-8144-api.d.ts-7762-8145-api.d.ts-7608-8151-api.d.ts-7561-8151-api.d.ts-231-9986-api.d.ts-206-9986-api.d.ts-204-9988-api.d.ts-121-9988-api.d.ts-0-9989>:
+        #/components/schemas/DashboardApi.Query.Base.Response%3Cstructure-api.d.ts-7819-8155-api.d.ts-7804-8156-api.d.ts-7774-8157-api.d.ts-7620-8163-api.d.ts-7573-8163-api.d.ts-231-9998-api.d.ts-206-9998-api.d.ts-204-10000-api.d.ts-121-10000-api.d.ts-0-10001%3E
+    DashboardApi.Query.Base.Response<structure-api.d.ts-7819-8155-api.d.ts-7804-8156-api.d.ts-7774-8157-api.d.ts-7620-8163-api.d.ts-7573-8163-api.d.ts-231-9998-api.d.ts-206-9998-api.d.ts-204-10000-api.d.ts-121-10000-api.d.ts-0-10001>:
       type: array
       items:
         type: object
