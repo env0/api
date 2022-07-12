@@ -6473,7 +6473,7 @@ tags:
   - name: Deployment Logs
     description: |
       env0 deployment consists of steps such as Init Variables
-      using this API you can reterive information about those steps
+      using this API you can retrieve information about those steps
   - name: Deployment Logs
     description: The Deployment Logs Endpoint by steps
   - name: Scheduling
