@@ -868,7 +868,22 @@ components:
         driftDetected:
           type: boolean
         plan:
-          $ref: '#/components/schemas/DeploymentApi.Plan.ParsedPlan'
+          type: object
+          properties:
+            resourceChanges:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeploymentApi.Plan.PlanResourceChange'
+            outputChanges:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeploymentApi.Plan.PlanOutputChange'
+          required:
+            - resourceChanges
+            - outputChanges
+          additionalProperties: false
+        planSummary:
+          $ref: '#/components/schemas/DeploymentApi.Plan.PlanSummary'
         isSkippedApply:
           type: boolean
         workflowDeploymentId:
@@ -1047,24 +1062,6 @@ components:
         - provider
         - type
         - name
-      additionalProperties: false
-    DeploymentApi.Plan.ParsedPlan:
-      type: object
-      properties:
-        resourceChanges:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeploymentApi.Plan.PlanResourceChange'
-        outputChanges:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeploymentApi.Plan.PlanOutputChange'
-        summary:
-          $ref: '#/components/schemas/DeploymentApi.Plan.PlanSummary'
-      required:
-        - resourceChanges
-        - outputChanges
-        - summary
       additionalProperties: false
     DeploymentApi.Plan.PlanResourceChange:
       type: object
