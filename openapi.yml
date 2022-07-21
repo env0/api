@@ -2995,28 +2995,6 @@ components:
       additionalProperties: false
     EnvironmentApi.FindDeploymentLogById.Response:
       $ref: '#/components/schemas/EnvironmentApi.DeploymentLog'
-    EnvironmentApi.FindDeploymentLogsForCost.Response:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: string
-          type:
-            $ref: '#/components/schemas/EnvironmentApi.DeploymentType'
-          startedAt:
-            type: string
-            format: date-time
-        required:
-          - type
-          - startedAt
-        additionalProperties: false
-    EnvironmentApi.FindDeploymentLogsForCost.Request.QueryParams:
-      type: object
-      properties:
-        startedAfter:
-          type: string
-      additionalProperties: false
     EnvironmentApi.FindDeploymentLogsByEnvironmentId.Response:
       type: array
       items:
@@ -5806,34 +5784,6 @@ paths:
               schema:
                 $ref: >-
                   #/components/schemas/EnvironmentApi.FindDeploymentLogById.Response
-      tags:
-        - Environments
-  /environments/{id}/deployments/cost:
-    get:
-      operationId: findDeploymentLogsForCost
-      summary: List Deployments For Cost Graph
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-        - name: startedAfter
-          in: query
-          description: ''
-          required: false
-          allowEmptyValue: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: >-
-                  #/components/schemas/EnvironmentApi.FindDeploymentLogsForCost.Response
       tags:
         - Environments
   /workflow-deployments/{workflowDeploymentId}/sub-environments/{subEnvironmentId}/deployment:
