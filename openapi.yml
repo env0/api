@@ -3651,6 +3651,20 @@ components:
       $ref: '#/components/schemas/CostApi.CostQueryResponse'
     CostApi.GetEnvironmentCosts.Request.QueryParams:
       $ref: '#/components/schemas/CostApi.GetCosts.Request.QueryParams'
+    CostApi.WeeklyCostsResponse:
+      type: object
+      additionalProperties:
+        type: number
+    CostApi.GetWeeklyCosts.Response:
+      $ref: '#/components/schemas/CostApi.WeeklyCostsResponse'
+    CostApi.GetWeeklyCosts.Request.QueryParams:
+      type: object
+      properties:
+        environmentIds:
+          type: string
+        projectIds:
+          type: string
+      additionalProperties: false
     CostApi.GetProjectCosts.Response:
       $ref: '#/components/schemas/CostApi.CostQueryResponse'
     CostApi.GetProjectCosts.Request.QueryParams:
@@ -6372,6 +6386,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CostApi.GetEnvironmentCosts.Response'
+      tags:
+        - Cost
+  /costs/weekly:
+    get:
+      operationId: getWeeklyCosts
+      summary: Get weekly costs for projects or environments
+      parameters:
+        - name: projectIds
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+        - name: environmentIds
+          in: query
+          description: ''
+          required: false
+          allowEmptyValue: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostApi.GetWeeklyCosts.Response'
       tags:
         - Cost
   /costs/projects/{projectId}:
